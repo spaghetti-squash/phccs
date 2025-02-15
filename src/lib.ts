@@ -10,6 +10,7 @@ import {
   getCampground,
   haveEffect,
   Item,
+  itemAmount,
   myMaxmp,
   myMp,
   restoreMp,
@@ -76,7 +77,8 @@ export function synthExp(): void {
     useSkill(1, $skill`Summon Crimbo Candy`);
   }
   for (const [candy1, candy2] of SYNTH_PAIRS) {
-    const enough = candy1 === candy2 ? have(candy1, 2) : have(candy1) && retrieveItem(candy2);
+    const enough =
+      candy1 === candy2 ? itemAmount(candy1) >= 2 : have(candy1) && retrieveItem(candy2);
     if (enough) {
       if (sweetSynthesis(candy1, candy2)) return;
     }
