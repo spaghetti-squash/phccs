@@ -11993,7 +11993,7 @@ function synthExp() {
   var _iterator = _createForOfIteratorHelper12(SYNTH_PAIRS), _step;
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done; ) {
-      var _step$value = _slicedToArray15(_step.value, 2), candy1 = _step$value[0], candy2 = _step$value[1], enough = candy1 === candy2 ? have(candy1, 2) : have(candy1) && (0, import_kolmafia33.retrieveItem)(candy2);
+      var _step$value = _slicedToArray15(_step.value, 2), candy1 = _step$value[0], candy2 = _step$value[1], enough = candy1 === candy2 ? (0, import_kolmafia33.itemAmount)(candy1) >= 2 : have(candy1) && (0, import_kolmafia33.retrieveItem)(candy2);
       if (enough && (0, import_kolmafia33.sweetSynthesis)(candy1, candy2))
         return;
     }
