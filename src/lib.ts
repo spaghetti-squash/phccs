@@ -37,7 +37,9 @@ import {
   get,
   getModifier,
   have,
+  Leprecondo,
   possibleLibramSummons,
+  Tuple,
   Witchess,
 } from "libram";
 import { NumericModifier } from "libram/dist/modifierTypes";
@@ -257,4 +259,25 @@ export const guildQuestZone = byStat({
   Mysticality: $location`The Haunted Pantry`,
   Moxie: $location`The Sleazy Back Alley`,
   Muscle: $location`The Outskirts of Cobb's Knob`,
+});
+
+export const LEPRECONDO_CONFIG: Tuple<Leprecondo.FurniturePiece, 4> = byStat({
+  Moxie: [
+    "internet-connected laptop",
+    "cupcake treadmill",
+    "four-poster bed",
+    "fully-stocked wet bar",
+  ],
+  Mysticality: [
+    "cupcake treadmill",
+    "gigantic chess set",
+    "couch and flatscreen",
+    "fully-stocked wet bar",
+  ],
+  Muscle: [
+    "four-poster bed",
+    "padded weight bench",
+    "UltraDance karaoke machine",
+    "fully-stocked wet bar",
+  ],
 });

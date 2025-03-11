@@ -1,6 +1,6 @@
 import { aprilTask, deckTask } from "./commons";
 import { CSQuest } from "./engine";
-import { tryUse } from "./lib";
+import { LEPRECONDO_CONFIG, tryUse } from "./lib";
 import {
   autosell,
   buy,
@@ -30,6 +30,7 @@ import {
   $location,
   $skill,
   $skills,
+  arrayEquals,
   AutumnAton,
   byClass,
   byStat,
@@ -38,6 +39,7 @@ import {
   get,
   have,
   Horsery,
+  Leprecondo,
   questStep,
   SongBoom,
   SourceTerminal,
@@ -349,6 +351,12 @@ const Prologue: CSQuest = {
       outfit: () => byStat({ Moxie: { pants: $item`tearaway pants` }, default: {} }),
     },
     aprilTask("Apriling Band Battle Cadence"),
+    {
+      name: "Leprecondo",
+      ready: () => Leprecondo.have(),
+      completed: () => arrayEquals(Leprecondo.installedFurniture(), LEPRECONDO_CONFIG),
+      do: () => Leprecondo.setFurniture(...LEPRECONDO_CONFIG),
+    },
   ],
 };
 
