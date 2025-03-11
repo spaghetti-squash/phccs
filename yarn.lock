@@ -2833,15 +2833,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"grimoire-kolmafia@npm:^0.3.26":
-  version: 0.3.26
-  resolution: "grimoire-kolmafia@npm:0.3.26"
+"grimoire-kolmafia@npm:^0.3.29":
+  version: 0.3.29
+  resolution: "grimoire-kolmafia@npm:0.3.29"
   dependencies:
     core-js: "npm:^3.16.4"
   peerDependencies:
-    kolmafia: ^5.27339.0
-    libram: ^0.8.4
-  checksum: 10c0/5a8fb291d8d63c110253ea90af534358e172bcb01f82d640bf032d9f705446e2a3d9f06e68370f13fcda2889be98dd6b2034b4ab9d1e364bbf5e8385f653e710
+    kolmafia: ^5.28100.0
+    libram: ^0.10.0
+  checksum: 10c0/9b34e4bfd44492e79c1c0105b42d159168115c98b01688ac949f066f7da7dba441e5a0159489b8cc56b871ba80918a797847ff7931f4da381811dba535896a46
   languageName: node
   linkType: hard
 
@@ -3064,10 +3064,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"kolmafia@npm:^5.28012.0":
-  version: 5.28012.0
-  resolution: "kolmafia@npm:5.28012.0"
-  checksum: 10c0/d89e169a9b480100caccc4409125f39de9349da2770a76f4a689eefbd69974f06e2af74482e1a7ddf99a3a3e3712f99c7f3f75ab091c7efc19f04142521786a4
+"kolmafia@npm:^5.28430.0":
+  version: 5.28430.0
+  resolution: "kolmafia@npm:5.28430.0"
+  checksum: 10c0/93eb52a31cc9fbce272b233b13ac486b9a326855c14f72e16cc05189977fcc0d022a3744ae243659ff75c94228b4a1238396139da35726f95c4961e87c2ace13
   languageName: node
   linkType: hard
 
@@ -3081,14 +3081,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"libram@npm:^0.9.24":
-  version: 0.9.24
-  resolution: "libram@npm:0.9.24"
+"libram@npm:^0.10.7":
+  version: 0.10.7
+  resolution: "libram@npm:0.10.7"
   dependencies:
     html-entities: "npm:^2.5.2"
   peerDependencies:
     kolmafia: ^5.28100.0
-  checksum: 10c0/eee208611ade6ee7da5eff4519e5c845097da26499968ab4f5b504b47f5a55fa4404b2a1f528d35e4a676fa95469a5a9eb9f547e98bad5209e340c24e5934d75
+  checksum: 10c0/d01032257b49ae458bdc27457cd049b1c8464d864c4319387b25a7f1f880b36c387fef779179b317bc603b063642f9273772f7b4ecceff196125c07b9f7689e0
   languageName: node
   linkType: hard
 
@@ -3325,9 +3325,9 @@ __metadata:
     eslint-config-prettier: "npm:^8.5.0"
     eslint-plugin-libram: "npm:^0.4.11"
     eslint-plugin-prettier: "npm:^4.2.1"
-    grimoire-kolmafia: "npm:^0.3.26"
-    kolmafia: "npm:^5.28012.0"
-    libram: "npm:^0.9.24"
+    grimoire-kolmafia: "npm:^0.3.29"
+    kolmafia: "npm:^5.28430.0"
+    libram: "npm:^0.10.7"
     prettier: "npm:^2.7.1"
     typescript: "npm:^4.7.4"
   languageName: unknown
