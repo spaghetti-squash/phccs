@@ -348,6 +348,12 @@ const Prologue: CSQuest = {
       do: () => visitUrl("guild.php?place=challenge"),
       outfit: () => byStat({ Moxie: { pants: $item`tearaway pants` }, default: {} }),
     },
+    {
+      name: "MC Hugelarge",
+      completed: () => have($item`McHugeLarge left ski`),
+      ready: () => have($item`McHugeLarge duffel bag`),
+      do: () => use($item`McHugeLarge duffel bag`),
+    },
     aprilTask("Apriling Band Battle Cadence"),
   ],
 };
