@@ -108,9 +108,10 @@ function chooseFamiliar(canAttack: boolean): Pick<OutfitSpec, "familiar" | "fame
   if (pick) {
     return {
       famequip: undelay(
-        pick.famequip ?? ToyCupidBow.familiarsToday().includes(pick.familiar)
-          ? $item`tiny stillsuit`
-          : $item`toy Cupid bow`
+        pick.famequip ??
+          (ToyCupidBow.familiarsToday().includes(pick.familiar)
+            ? $item`tiny stillsuit`
+            : $item`toy Cupid bow`)
       ),
       familiar: pick.familiar,
     };
