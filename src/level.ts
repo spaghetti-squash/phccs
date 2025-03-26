@@ -340,6 +340,7 @@ const Level: CSQuest = {
             shirt: $item`makeshift garbage shirt`,
             offhand: $item`familiar scrapbook`,
             familiar: $familiar`Shorter-Order Cook`,
+            famequip: $item`tiny stillsuit`,
           },
         });
       },
@@ -366,6 +367,7 @@ const Level: CSQuest = {
             shirt: $item`makeshift garbage shirt`,
             offhand: $item`familiar scrapbook`,
             familiar: $familiar`Shorter-Order Cook`,
+            famequip: $item`tiny stillsuit`,
           },
         });
       },
@@ -408,6 +410,7 @@ const Level: CSQuest = {
             shirt: $item`makeshift garbage shirt`,
             offhand: $item`familiar scrapbook`,
             familiar: $familiar`Shorter-Order Cook`,
+            famequip: $item`tiny stillsuit`,
           },
         });
       },
