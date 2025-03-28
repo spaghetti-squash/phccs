@@ -11,6 +11,8 @@ import {
   DaylightShavings,
   get,
   have,
+  ToyCupidBow,
+  undelay,
 } from "libram";
 
 const UNCHANGING_OUTFIT: OutfitSpec = {
@@ -77,7 +79,7 @@ const FAMILIAR_PICKS = [
   },
   {
     familiar: $familiar`Melodramedary`,
-    famequip: $item`dromedary drinking helmet`,
+    famequip: () => $items`dromedary drinking helmet`.find((i) => have(i)),
     condition: () => get("camelSpit") < 100 && !have($effect`Spit Upon`),
   },
   {
@@ -104,7 +106,15 @@ function chooseFamiliar(canAttack: boolean): Pick<OutfitSpec, "familiar" | "fame
       (canAttack || !(familiar.elementalDamage || familiar.physicalDamage))
   );
   if (pick) {
-    return { famequip: pick.famequip ?? $item`tiny stillsuit`, familiar: pick.familiar };
+    return {
+      famequip: undelay(
+        pick.famequip ??
+          (ToyCupidBow.familiarsToday().includes(pick.familiar)
+            ? $item`tiny stillsuit`
+            : $item`toy Cupid bow`)
+      ),
+      familiar: pick.familiar,
+    };
   }
   return {
     famequip: $item`tiny stillsuit`,
@@ -114,6 +124,12 @@ function chooseFamiliar(canAttack: boolean): Pick<OutfitSpec, "familiar" | "fame
 }
 
 export default function uniform({ changes = {} as OutfitSpec, canAttack = true } = {}): OutfitSpec {
-  if ("familiar" in changes && !("famequip" in changes)) changes.famequip = $item`tiny stillsuit`;
+  if ("familiar" in changes && !("famequip" in changes) && changes.familiar) {
+    if (ToyCupidBow.familiarsToday().includes(changes.familiar)) {
+      changes.famequip = $item`tiny stillsuit`;
+    } else {
+      changes.famequip = $item`toy Cupid bow`;
+    }
+  }
   return { ...DEFAULT_UNIFORM(), ...chooseFamiliar(canAttack), ...changes };
 }

@@ -257,17 +257,6 @@ const Prologue: CSQuest = {
       },
     },
     {
-      name: "Drinking Helmet",
-      completed: () => have($item`dromedary drinking helmet`),
-      do: (): void => {
-        useFamiliar($familiar`Melodramedary`);
-        if (!have($item`box of Familiar Jacks`)) {
-          create(1, $item`box of Familiar Jacks`);
-        }
-        use(1, $item`box of Familiar Jacks`);
-      },
-    },
-    {
       name: "Mummery",
       completed: () => get("_mummeryMods").includes(myPrimestat().toString()),
       do: (): void => {
