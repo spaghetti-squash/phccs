@@ -12,6 +12,7 @@ import {
   getWorkshed,
   itemAmount,
   knollAvailable,
+  myHash,
   myPrimestat,
   runChoice,
   storageAmount,
@@ -343,7 +344,7 @@ const Prologue: CSQuest = {
       name: "MC Hugelarge",
       completed: () => have($item`McHugeLarge left ski`),
       ready: () => have($item`McHugeLarge duffel bag`),
-      do: () => use($item`McHugeLarge duffel bag`),
+      do: () => visitUrl(`inventory.php?action=skiduffel&pwd=${myHash()}`, false),
     },
     aprilTask("Apriling Band Battle Cadence"),
     {
