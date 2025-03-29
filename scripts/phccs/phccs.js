@@ -12589,9 +12589,9 @@ function chooseFamiliar(canAttack) {
     return condition() && have(familiar2) && (canAttack || !(familiar2.elementalDamage || familiar2.physicalDamage));
   });
   if (pick) {
-    var _pick$famequip;
+    var _undelay;
     return {
-      famequip: undelay((_pick$famequip = pick.famequip) !== null && _pick$famequip !== void 0 ? _pick$famequip : ToyCupidBow_exports.familiarsToday().includes(pick.familiar) ? $item(_templateObject3212 || (_templateObject3212 = _taggedTemplateLiteral32(["tiny stillsuit"]))) : $item(_templateObject337 || (_templateObject337 = _taggedTemplateLiteral32(["toy Cupid bow"])))),
+      famequip: (_undelay = undelay(pick.famequip)) !== null && _undelay !== void 0 ? _undelay : ToyCupidBow_exports.familiarsToday().includes(pick.familiar) ? $item(_templateObject3212 || (_templateObject3212 = _taggedTemplateLiteral32(["tiny stillsuit"]))) : $item(_templateObject337 || (_templateObject337 = _taggedTemplateLiteral32(["toy Cupid bow"]))),
       familiar: pick.familiar
     };
   }
