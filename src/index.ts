@@ -12,7 +12,7 @@ import StatTests from "./stattests";
 import Weapon from "./weapon";
 import { sinceKolmafiaRevision } from "libram";
 
-sinceKolmafiaRevision(27102);
+sinceKolmafiaRevision(28481);
 CSEngine.runTests(
   Prologue,
   CoilWire,

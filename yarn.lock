@@ -2472,13 +2472,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-libram@npm:^0.4.24":
-  version: 0.4.24
-  resolution: "eslint-plugin-libram@npm:0.4.24"
+"eslint-plugin-libram@npm:^0.4.25":
+  version: 0.4.25
+  resolution: "eslint-plugin-libram@npm:0.4.25"
   dependencies:
     html-entities: "npm:^2.5.2"
     requireindex: "npm:~1.2.0"
-  checksum: 10c0/6e3e918102ead7b3185de26b19b0cca89a5c8fdd47e9d7c9f3bb885a76f4a0f3a538dab3bad3d45a852795befbe5ee47010edc8c6e8736cb07ed176dc1ac693a
+  checksum: 10c0/087525f6f7d982bff21a4c6c92633ea8127cbf07ecee32f05d753641c9f57b5d3f1c1f0e7e22de8d0028c1a788518b18277c11bb24c94dc2a85f2ed3a9a9ca78
   languageName: node
   linkType: hard
 
@@ -3064,10 +3064,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"kolmafia@npm:^5.28430.0":
-  version: 5.28430.0
-  resolution: "kolmafia@npm:5.28430.0"
-  checksum: 10c0/93eb52a31cc9fbce272b233b13ac486b9a326855c14f72e16cc05189977fcc0d022a3744ae243659ff75c94228b4a1238396139da35726f95c4961e87c2ace13
+"kolmafia@npm:^5.28481.0":
+  version: 5.28481.0
+  resolution: "kolmafia@npm:5.28481.0"
+  checksum: 10c0/057d8f9670a533c8c57c0b22c15788d96d54365a922bf66c73a277a665d3c322e41dc63e2176f929f84c793720797c4170a15624b93193966f3415c97d14ad0c
   languageName: node
   linkType: hard
 
@@ -3081,14 +3081,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"libram@npm:^0.10.7":
-  version: 0.10.7
-  resolution: "libram@npm:0.10.7"
+"libram@npm:^0.10.13":
+  version: 0.10.13
+  resolution: "libram@npm:0.10.13"
   dependencies:
     html-entities: "npm:^2.5.2"
   peerDependencies:
     kolmafia: ^5.28100.0
-  checksum: 10c0/d01032257b49ae458bdc27457cd049b1c8464d864c4319387b25a7f1f880b36c387fef779179b317bc603b063642f9273772f7b4ecceff196125c07b9f7689e0
+  checksum: 10c0/1aa5ca63239d4af2842ea8a437f7c738ff3d4bd06ca6900874134505e955987140f05248a2cd57cc0870eceace772d953867ae9a82b67e8698698546400cf365
   languageName: node
   linkType: hard
 
@@ -3323,11 +3323,11 @@ __metadata:
     esbuild-plugin-babel: "npm:^0.2.3"
     eslint: "npm:8.56.0"
     eslint-config-prettier: "npm:^8.5.0"
-    eslint-plugin-libram: "npm:^0.4.24"
+    eslint-plugin-libram: "npm:^0.4.25"
     eslint-plugin-prettier: "npm:^4.2.1"
     grimoire-kolmafia: "npm:^0.3.29"
-    kolmafia: "npm:^5.28430.0"
-    libram: "npm:^0.10.7"
+    kolmafia: "npm:^5.28481.0"
+    libram: "npm:^0.10.13"
     prettier: "npm:^2.7.1"
     typescript: "npm:^4.7.4"
   languageName: unknown
