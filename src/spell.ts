@@ -60,10 +60,9 @@ const Spell: CSQuest = {
     back: $items`Buddy Bjorn, protonic accelerator pack`,
     riders: { "buddy-bjorn": $familiar`Mechanical Songbird` },
   }),
-  turnsSpent: 1,
   maxTurns: 30,
   tasks: [
-    skillTask($skill`Simmer`),
+    skillTask($skill`Simmer`, true),
     {
       name: "Do You Crush What I Crush?",
       completed: () => have($effect`Do You Crush What I Crush?`),
@@ -91,6 +90,7 @@ const Spell: CSQuest = {
     potionTask($item`imported taffy`),
     songTask($effect`Jackasses' Symphony of Destruction`, $effect`The Sonata of Sneakiness`),
     ...restoreBuffTasks(buffs),
+    skillTask({ skill: $skill`Sauce Contemplation`, effect: $effect`Lubricating Sauce` }, true),
     beachTask($effect`We're All Made of Starfish`),
     potionTask($item`LOV Elixir #6`),
     {

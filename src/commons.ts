@@ -114,21 +114,29 @@ export function restore(effects: Effect[]): CSTask {
   };
 }
 
-export function skillTask(x: Skill | Effect): CSTask {
+export function skillTask(
+  x: Skill | Effect | { skill: Skill; effect: Effect },
+  includeAprilShield = false
+): CSTask {
   {
-    const skill = x instanceof Skill ? x : toSkill(x);
-    const effect = x instanceof Effect ? x : toEffect(x);
+    const { skill, effect } =
+      x instanceof Skill
+        ? { skill: x, effect: toEffect(x) }
+        : x instanceof Effect
+        ? { skill: toSkill(x), effect: x }
+        : x;
     return {
       name: skill.name,
       completed: () => have(effect),
       ready: () => myMp() >= mpCost(skill),
       do: () => useSkill(skill),
+      outfit: includeAprilShield ? { offhand: $item`April Shower Thoughts shield` } : {},
     };
   }
 }
 
-export function restoreBuffTasks(buffs: Effect[]): CSTask[] {
-  return [...buffs.map(skillTask), restore(buffs)];
+export function restoreBuffTasks(buffs: Effect[], includeAprilShield = false): CSTask[] {
+  return [...buffs.map((buff) => skillTask(buff, includeAprilShield)), restore(buffs)];
 }
 
 export function commonFamiliarWeightBuffs(): CSTask[] {
@@ -141,6 +149,7 @@ export function commonFamiliarWeightBuffs(): CSTask[] {
       completed: () => get("_witchessBuff"),
       do: () => cliExecute("witchess"),
     },
+    skillTask({ skill: $skill`Empathy of the Newt`, effect: $effect`Empathy` }, true),
     beachTask($effect`Do I Know You From Somewhere?`),
   ];
 }

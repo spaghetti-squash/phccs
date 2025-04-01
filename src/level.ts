@@ -6,6 +6,7 @@ import {
   potionTask,
   restore,
   restoreBuffTasks,
+  skillTask,
 } from "./commons";
 import { CSQuest } from "./engine";
 import {
@@ -73,7 +74,7 @@ const foldshirt = (): void => {
 
 let queenPrep = false;
 const CastSkills = [
-  ...$skills`Advanced Saucecrafting, Advanced Cocktailcrafting, Acquire Rhinestones, Prevent Scurvy and Sobriety, Stevedave's Shanty of Superiority, Fat Leon's Phat Loot Lyric, Paul's Passionate Pop Song, Leash of Linguini, Empathy of the Newt, Blood Bond, Blood Bubble, Song of Bravado, Get Big, Mathematical Precision, Ruthless Efficiency, Carol of the Bulls, Rage of the Reindeer`,
+  ...$skills`Advanced Saucecrafting, Advanced Cocktailcrafting, Acquire Rhinestones, Prevent Scurvy and Sobriety, Stevedave's Shanty of Superiority, Fat Leon's Phat Loot Lyric, Paul's Passionate Pop Song, Leash of Linguini, Blood Bond, Blood Bubble, Song of Bravado, Get Big, Mathematical Precision, Ruthless Efficiency, Carol of the Bulls, Rage of the Reindeer, Disco Aerobics, Manicotti Meditation, Moxie of the Mariachi, Patience of the Tortoise, Sauce Contemplation, Seal Clubbing Frenzy`,
   byStat({
     Mysticality: $skill`The Magical Mojomuscular Melody`,
     Muscle: $skill`The Power Ballad of the Arrowsmith`,
@@ -86,7 +87,7 @@ const CastSkills = [
   },
   completed: () => (s.buff ? have(toEffect(s)) : s.timescast >= s.dailylimit),
   ready: () => myMp() >= mpCost(s) && !queenPrep,
-  outfit: () => uniform({ changes: { offhand: $items`Abracandalabra, unbreakable umbrella` } }),
+  outfit: () => uniform({ changes: { offhand: $item`April Shower Thoughts shield` } }),
 }));
 
 const generalStoreItem = byStat({
@@ -254,6 +255,8 @@ const Level: CSQuest = {
         Muscle: $effects`Quiet Determination`,
       })
     ),
+    ...restoreBuffTasks($effects`Empathy`),
+    skillTask({ skill: $skill`Empathy of the Newt`, effect: $effect`Thoughtful Empathy` }, true),
     {
       name: "Get Range",
       completed: () => get("hasRange"),
