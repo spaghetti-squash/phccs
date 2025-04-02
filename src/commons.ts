@@ -29,6 +29,7 @@ import {
   $effects,
   $familiar,
   $item,
+  $items,
   $location,
   $skill,
   AprilingBandHelmet,
@@ -130,7 +131,9 @@ export function skillTask(
       completed: () => have(effect),
       ready: () => myMp() >= mpCost(skill),
       do: () => useSkill(skill),
-      outfit: includeAprilShield ? { offhand: $item`April Shower Thoughts shield` } : {},
+      outfit: includeAprilShield
+        ? { offhand: $item`April Shower Thoughts shield` }
+        : { avoid: $items`April Shower Thoughts shield` },
     };
   }
 }
@@ -140,7 +143,7 @@ export function restoreBuffTasks(buffs: Effect[], includeAprilShield = false): C
 }
 
 export function commonFamiliarWeightBuffs(): CSTask[] {
-  const buffs = $effects`Empathy, Leash of Linguini, Blood Bond`;
+  const buffs = $effects`Leash of Linguini, Blood Bond`;
   return [
     potionTask($item`green candy heart`),
     ...restoreBuffTasks(buffs),
