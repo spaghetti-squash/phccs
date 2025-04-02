@@ -281,3 +281,9 @@ export const LEPRECONDO_CONFIG: Tuple<Leprecondo.FurniturePiece, 4> = byStat({
     "fully-stocked wet bar",
   ],
 });
+
+export const aprilShowerPaperPotion = byStat({
+  Moxie: $item`wet paper cup`,
+  Muscle: $item`wet paper weights`,
+  Mysticality: $item`wet paperback`,
+});

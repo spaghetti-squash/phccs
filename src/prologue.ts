@@ -1,6 +1,6 @@
 import { aprilTask, deckTask } from "./commons";
 import { CSQuest } from "./engine";
-import { LEPRECONDO_CONFIG, tryUse } from "./lib";
+import { aprilShowerPaperPotion, LEPRECONDO_CONFIG, tryUse } from "./lib";
 import {
   autosell,
   buy,
@@ -352,6 +352,18 @@ const Prologue: CSQuest = {
       ready: () => Leprecondo.have(),
       completed: () => arrayEquals(Leprecondo.installedFurniture(), LEPRECONDO_CONFIG),
       do: () => Leprecondo.setFurniture(...LEPRECONDO_CONFIG),
+    },
+    {
+      name: "Collect Wet Paper",
+      ready: () => have($item`April Shower Thoughts shield`),
+      completed: () => have($item`glob of wet paper`),
+      do: () => visitUrl(`inventory.php?action=shower&pwd=${myHash()}`, false),
+    },
+    {
+      name: "Buy Wet Paper Potion",
+      ready: () => have($item`glob of wet paper`),
+      completed: () => have(aprilShowerPaperPotion),
+      do: () => buy($coinmaster`Using your Shower Thoughts`, 1, aprilShowerPaperPotion),
     },
   ],
 };

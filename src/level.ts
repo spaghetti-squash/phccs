@@ -10,6 +10,7 @@ import {
 } from "./commons";
 import { CSQuest } from "./engine";
 import {
+  aprilShowerPaperPotion,
   burnLibrams,
   currentBirdHas,
   favouriteBirdHas,
@@ -210,6 +211,7 @@ const Level: CSQuest = {
       do: () => buy(1, generalStoreItem),
     },
     potionTask(generalStoreItem),
+    potionTask(aprilShowerPaperPotion),
     {
       name: "Triple-Sized",
       completed: () => have($effect`Triple-Sized`),
