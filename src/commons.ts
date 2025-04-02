@@ -143,7 +143,7 @@ export function restoreBuffTasks(buffs: Effect[], includeAprilShield = false): C
 }
 
 export function commonFamiliarWeightBuffs(): CSTask[] {
-  const buffs = $effects`Leash of Linguini, Blood Bond`;
+  const buffs = $effects`Empathy, Leash of Linguini, Blood Bond`;
   return [
     potionTask($item`green candy heart`),
     ...restoreBuffTasks(buffs),
@@ -152,7 +152,7 @@ export function commonFamiliarWeightBuffs(): CSTask[] {
       completed: () => get("_witchessBuff"),
       do: () => cliExecute("witchess"),
     },
-    skillTask({ skill: $skill`Empathy of the Newt`, effect: $effect`Empathy` }, true),
+    skillTask({ skill: $skill`Empathy of the Newt`, effect: $effect`Thoughtful Empathy` }, true),
     beachTask($effect`Do I Know You From Somewhere?`),
   ];
 }
