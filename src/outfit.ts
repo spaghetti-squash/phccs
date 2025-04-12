@@ -92,6 +92,15 @@ const FAMILIAR_PICKS = [
     familiar: $familiar`Garbage Fire`,
     condition: () => $familiar`Garbage Fire`.dropsToday < 1,
   },
+  {
+    familiar: $familiar`Cornbeefadon`,
+    condition: () => {
+      if (ToyCupidBow.doneToday($familiar`Cornbeefadon`)) return false;
+      const currentCupidFamiliar = ToyCupidBow.currentFamiliar();
+      if (!currentCupidFamiliar || currentCupidFamiliar === $familiar`Cornbeefadon`) return true;
+      return ToyCupidBow.doneToday(currentCupidFamiliar);
+    },
+  },
 ];
 
 function findFirstFamiliar(fams: Familiar[]) {
