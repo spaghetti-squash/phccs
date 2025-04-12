@@ -4,6 +4,7 @@ import {
   availableAmount,
   Class,
   eat,
+  effectModifier,
   equip,
   equippedAmount,
   equippedItem,
@@ -18,7 +19,6 @@ import {
   Skill,
   Slot,
   sweetSynthesis,
-  toEffect,
   use,
   useSkill,
   visitUrl,
@@ -126,7 +126,7 @@ function canCastLibrams(): boolean {
 }
 
 function totalDuration(item: Item): number {
-  const effect = toEffect(getModifier("Effect", item));
+  const effect = effectModifier(item, "Effect");
   return haveEffect(effect) + getModifier("Effect Duration", item) * availableAmount(item);
 }
 
