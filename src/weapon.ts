@@ -3,9 +3,11 @@ import {
   beachTask,
   birdTask,
   favouriteBirdTask,
+  incrementShowers,
   innerElf,
   potionTask,
   restoreBuffTasks,
+  showers,
   skillTask,
   songTask,
 } from "./commons";
@@ -43,7 +45,6 @@ import {
 
 const buffs = $effects`Carol of the Bulls, Song of the North, Rage of the Reindeer, Scowl of the Auk, Disdain of the War Snapper, Tenacity of the Snapper`;
 
-let meteors: number;
 const Weapon: CSQuest = {
   name: "Weapon Damage",
   type: "SERVICE",
@@ -113,7 +114,6 @@ const Weapon: CSQuest = {
       name: "Spit Ungulith",
       completed: () => have($item`corrupted marrow`) || have($effect`Cowrruption`),
       do: (): void => {
-        meteors = get("_meteorShowerUses");
         CombatLoversLocket.reminisce($monster`ungulith`);
         if (handlingChoice()) runChoice(-1);
       },
@@ -128,7 +128,8 @@ const Weapon: CSQuest = {
       post: (): void => {
         if (myFamiliar() === $familiar`Melodramedary` && have($effect`Spit Upon`, 15))
           set("camelSpit", 0);
-        if (meteors && have($effect`Meteor Showered`)) set("_meteorShowerUses", meteors + 1);
+        if (have($effect`Meteor Showered`)) incrementShowers();
+        set("_meteorShowerUses", showers);
 
         const ungId = $monster`ungulith`.id.toFixed(0);
         const locketIdStrings = get("_locketMonstersFought")

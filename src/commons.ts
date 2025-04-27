@@ -195,7 +195,8 @@ export function asdonTask(style: Effect | keyof typeof AsdonMartin.Driving): CST
   };
 }
 
-let showers = get("_meteorShowerUses");
+export let showers = get("_meteorShowerUses");
+export const incrementShowers = () => showers++;
 export function meteorShower(): CSTask {
   return {
     name: "Meteor Showered",
@@ -219,12 +220,12 @@ export function meteorShower(): CSTask {
       }),
     choices: { [1387]: 3, [1324]: 5 },
     combat: new CSStrategy(() =>
-      Macro.skill($skill`Turbo`)
+      Macro.externalIf(have($effect`Overheated`), new Macro(), Macro.skill($skill`Turbo`))
         .skill($skill`Meteor Shower`)
         .skill($skill`Use the Force`)
     ),
     post: () => {
-      if (have($effect`Meteor Showered`)) showers++;
+      if (have($effect`Meteor Showered`)) incrementShowers();
       set("_meteorShowerUses", showers);
 
       SourceTerminal.educate([$skill`Extract`, $skill`Portscan`]);
