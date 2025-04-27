@@ -12638,7 +12638,7 @@ function uniform() {
 
 // src/commons.ts
 var import_kolmafia37 = require("kolmafia");
-var _templateObject130, _templateObject250, _templateObject338, _templateObject431, _templateObject527, _templateObject625, _templateObject723, _templateObject818, _templateObject915, _templateObject1013, _templateObject1113, _templateObject1213, _templateObject1313, _templateObject1413, _templateObject1512, _templateObject1612, _templateObject1712, _templateObject1812, _templateObject1911, _templateObject2010, _templateObject2115, _templateObject2214, _templateObject2312, _templateObject2410, _templateObject259, _templateObject269, _templateObject279, _templateObject288, _templateObject298, _templateObject308, _templateObject3114, _templateObject3213, _templateObject339, _templateObject347, _templateObject357, _templateObject367, _templateObject376, _templateObject386, _templateObject396, _templateObject406, _templateObject4113, _templateObject4210, _templateObject435, _templateObject445, _templateObject454;
+var _templateObject130, _templateObject250, _templateObject338, _templateObject431, _templateObject527, _templateObject625, _templateObject723, _templateObject818, _templateObject915, _templateObject1013, _templateObject1113, _templateObject1213, _templateObject1313, _templateObject1413, _templateObject1512, _templateObject1612, _templateObject1712, _templateObject1812, _templateObject1911, _templateObject2010, _templateObject2115, _templateObject2214, _templateObject2312, _templateObject2410, _templateObject259, _templateObject269, _templateObject279, _templateObject288, _templateObject298, _templateObject308, _templateObject3114, _templateObject3213, _templateObject339, _templateObject347, _templateObject357, _templateObject367, _templateObject376, _templateObject386, _templateObject396, _templateObject406, _templateObject4113, _templateObject4210, _templateObject435, _templateObject445, _templateObject454, _templateObject464;
 function _toConsumableArray10(arr) {
   return _arrayWithoutHoles10(arr) || _iterableToArray10(arr) || _unsupportedIterableToArray21(arr) || _nonIterableSpread10();
 }
@@ -12850,7 +12850,9 @@ function asdonTask(style) {
     }
   };
 }
-var showers = get("_meteorShowerUses");
+var showers = get("_meteorShowerUses"), incrementShowers = function() {
+  return showers++;
+};
 function meteorShower() {
   var _choices2;
   return {
@@ -12878,10 +12880,10 @@ function meteorShower() {
     },
     choices: (_choices2 = {}, _defineProperty14(_choices2, 1387, 3), _defineProperty14(_choices2, 1324, 5), _choices2),
     combat: new CSStrategy(function() {
-      return Macro2.skill($skill(_templateObject376 || (_templateObject376 = _taggedTemplateLiteral33(["Turbo"])))).skill($skill(_templateObject386 || (_templateObject386 = _taggedTemplateLiteral33(["Meteor Shower"])))).skill($skill(_templateObject396 || (_templateObject396 = _taggedTemplateLiteral33(["Use the Force"]))));
+      return Macro2.externalIf(have($effect(_templateObject376 || (_templateObject376 = _taggedTemplateLiteral33(["Overheated"])))), new Macro2(), Macro2.skill($skill(_templateObject386 || (_templateObject386 = _taggedTemplateLiteral33(["Turbo"]))))).skill($skill(_templateObject396 || (_templateObject396 = _taggedTemplateLiteral33(["Meteor Shower"])))).skill($skill(_templateObject406 || (_templateObject406 = _taggedTemplateLiteral33(["Use the Force"]))));
     }),
     post: function() {
-      have($effect(_templateObject406 || (_templateObject406 = _taggedTemplateLiteral33(["Meteor Showered"])))) && showers++, _set("_meteorShowerUses", showers), SourceTerminal_exports.educate([$skill(_templateObject4113 || (_templateObject4113 = _taggedTemplateLiteral33(["Extract"]))), $skill(_templateObject4210 || (_templateObject4210 = _taggedTemplateLiteral33(["Portscan"])))]);
+      have($effect(_templateObject4113 || (_templateObject4113 = _taggedTemplateLiteral33(["Meteor Showered"])))) && incrementShowers(), _set("_meteorShowerUses", showers), SourceTerminal_exports.educate([$skill(_templateObject4210 || (_templateObject4210 = _taggedTemplateLiteral33(["Extract"]))), $skill(_templateObject435 || (_templateObject435 = _taggedTemplateLiteral33(["Portscan"])))]);
     }
   };
 }
@@ -12890,13 +12892,13 @@ function birdTask(modifier) {
   return {
     name: "Regular Bird",
     completed: function() {
-      return have($effect(_templateObject435 || (_templateObject435 = _taggedTemplateLiteral33(["Blessing of the Bird"]))));
+      return have($effect(_templateObject445 || (_templateObject445 = _taggedTemplateLiteral33(["Blessing of the Bird"]))));
     },
     ready: function() {
       return currentBirdHas(modifier, positive) && get("_birdsSoughtToday") < 6;
     },
     do: function() {
-      return (0, import_kolmafia37.useSkill)($skill(_templateObject445 || (_templateObject445 = _taggedTemplateLiteral33(["Seek out a Bird"]))));
+      return (0, import_kolmafia37.useSkill)($skill(_templateObject454 || (_templateObject454 = _taggedTemplateLiteral33(["Seek out a Bird"]))));
     }
   };
 }
@@ -12911,7 +12913,7 @@ function favouriteBirdTask(modifier) {
       return favouriteBirdHas(modifier, positive);
     },
     do: function() {
-      return (0, import_kolmafia37.useSkill)($skill(_templateObject454 || (_templateObject454 = _taggedTemplateLiteral33(["Visit your Favorite Bird"]))));
+      return (0, import_kolmafia37.useSkill)($skill(_templateObject464 || (_templateObject464 = _taggedTemplateLiteral33(["Visit your Favorite Bird"]))));
     }
   };
 }
@@ -13676,7 +13678,7 @@ _defineProperty16(CSEngine, "core_", (0, import_kolmafia42.inHardcore)() ? "hard
 // src/familiarweight.ts
 init_kolmafia_polyfill();
 var import_kolmafia43 = require("kolmafia");
-var _templateObject160, _templateObject280, _templateObject360, _templateObject440, _templateObject534, _templateObject630, _templateObject728, _templateObject823, _templateObject920, _templateObject1017, _templateObject1117, _templateObject1217, _templateObject1317, _templateObject1416, _templateObject1515, _templateObject1615, _templateObject1715, _templateObject1815, _templateObject1914, _templateObject2013, _templateObject2118, _templateObject2217, _templateObject2315, _templateObject2413, _templateObject2512, _templateObject2612, _templateObject2712, _templateObject2811, _templateObject2911, _templateObject3011, _templateObject3117, _templateObject3216, _templateObject3312, _templateObject3410, _templateObject3510, _templateObject3610, _templateObject378, _templateObject388, _templateObject397, _templateObject407, _templateObject4114, _templateObject4211, _templateObject4310, _templateObject446, _templateObject455, _templateObject464, _templateObject474, _templateObject485, _templateObject495, _templateObject505, _templateObject5112, _templateObject5210, _templateObject535, _templateObject544, _templateObject554, _templateObject564, _templateObject574, _templateObject584;
+var _templateObject160, _templateObject280, _templateObject360, _templateObject440, _templateObject534, _templateObject630, _templateObject728, _templateObject823, _templateObject920, _templateObject1017, _templateObject1117, _templateObject1217, _templateObject1317, _templateObject1416, _templateObject1515, _templateObject1615, _templateObject1715, _templateObject1815, _templateObject1914, _templateObject2013, _templateObject2118, _templateObject2217, _templateObject2315, _templateObject2413, _templateObject2512, _templateObject2612, _templateObject2712, _templateObject2811, _templateObject2911, _templateObject3011, _templateObject3117, _templateObject3216, _templateObject3312, _templateObject3410, _templateObject3510, _templateObject3610, _templateObject378, _templateObject388, _templateObject397, _templateObject407, _templateObject4114, _templateObject4211, _templateObject4310, _templateObject446, _templateObject455, _templateObject465, _templateObject474, _templateObject485, _templateObject495, _templateObject505, _templateObject5112, _templateObject5210, _templateObject535, _templateObject544, _templateObject554, _templateObject564, _templateObject574, _templateObject584;
 function _toConsumableArray13(arr) {
   return _arrayWithoutHoles13(arr) || _iterableToArray13(arr) || _unsupportedIterableToArray24(arr) || _nonIterableSpread13();
 }
@@ -13883,7 +13885,7 @@ var familiar = have($familiar(_templateObject160 || (_templateObject160 = _tagge
       return $familiar(_templateObject455 || (_templateObject455 = _taggedTemplateLiteral39(["Garbage Fire"]))).dropsToday > 0;
     },
     ready: function() {
-      return availableFights() >= 30 - get("garbageFireProgress") && have($item(_templateObject464 || (_templateObject464 = _taggedTemplateLiteral39(["BRICKO eye brick"]))));
+      return availableFights() >= 30 - get("garbageFireProgress") && have($item(_templateObject465 || (_templateObject465 = _taggedTemplateLiteral39(["BRICKO eye brick"]))));
     },
     do: function() {
       have($item(_templateObject474 || (_templateObject474 = _taggedTemplateLiteral39(["BRICKO ooze"])))) || (0, import_kolmafia43.create)($item(_templateObject485 || (_templateObject485 = _taggedTemplateLiteral39(["BRICKO ooze"])))), (0, import_kolmafia43.use)($item(_templateObject495 || (_templateObject495 = _taggedTemplateLiteral39(["BRICKO ooze"])))), (0, import_kolmafia43.runCombat)();
@@ -14121,7 +14123,7 @@ var buffs2 = $effects(_templateObject161 || (_templateObject161 = _taggedTemplat
 // src/level.ts
 init_kolmafia_polyfill();
 var import_kolmafia45 = require("kolmafia");
-var _templateObject170, _templateObject290, _templateObject370, _templateObject447, _templateObject537, _templateObject633, _templateObject730, _templateObject825, _templateObject922, _templateObject1019, _templateObject1119, _templateObject1219, _templateObject1319, _templateObject1418, _templateObject1517, _templateObject1617, _templateObject1717, _templateObject1817, _templateObject1916, _templateObject2015, _templateObject2120, _templateObject2219, _templateObject2317, _templateObject2415, _templateObject2514, _templateObject2614, _templateObject2714, _templateObject2813, _templateObject2913, _templateObject3013, _templateObject3119, _templateObject3218, _templateObject3314, _templateObject3412, _templateObject3512, _templateObject3612, _templateObject3710, _templateObject3810, _templateObject398, _templateObject408, _templateObject4115, _templateObject4212, _templateObject4311, _templateObject448, _templateObject456, _templateObject465, _templateObject475, _templateObject486, _templateObject496, _templateObject506, _templateObject5113, _templateObject5211, _templateObject538, _templateObject545, _templateObject555, _templateObject565, _templateObject575, _templateObject585, _templateObject594, _templateObject604, _templateObject6112, _templateObject6210, _templateObject634, _templateObject643, _templateObject653, _templateObject663, _templateObject673, _templateObject683, _templateObject693, _templateObject703, _templateObject7111, _templateObject7210, _templateObject733, _templateObject742, _templateObject752, _templateObject762, _templateObject772, _templateObject782, _templateObject792, _templateObject802, _templateObject8110, _templateObject826, _templateObject832, _templateObject842, _templateObject852, _templateObject862, _templateObject872, _templateObject882, _templateObject892, _templateObject902, _templateObject9110, _templateObject923, _templateObject932, _templateObject942, _templateObject952, _templateObject962, _templateObject972, _templateObject982, _templateObject992, _templateObject1002, _templateObject10110, _templateObject1022, _templateObject1032, _templateObject1042, _templateObject1052, _templateObject1062, _templateObject1072, _templateObject1082, _templateObject1092, _templateObject1102, _templateObject11110, _templateObject1122, _templateObject1132, _templateObject1142, _templateObject1152, _templateObject1162, _templateObject1172, _templateObject1182, _templateObject1192, _templateObject1202, _templateObject12110, _templateObject1222, _templateObject1232, _templateObject1242, _templateObject1252, _templateObject1262, _templateObject1272, _templateObject1282, _templateObject1292, _templateObject1302, _templateObject13110, _templateObject1322, _templateObject1332, _templateObject1342, _templateObject1352, _templateObject1362, _templateObject1372, _templateObject1382, _templateObject1392, _templateObject1402, _templateObject1419, _templateObject1422, _templateObject1432, _templateObject1442, _templateObject1452, _templateObject1462, _templateObject1472, _templateObject1482, _templateObject1492, _templateObject1502, _templateObject1518, _templateObject1522, _templateObject1532, _templateObject1542, _templateObject1552, _templateObject1562, _templateObject1572, _templateObject1582, _templateObject1592, _templateObject1602, _templateObject1618, _templateObject1622, _templateObject1632, _templateObject1642, _templateObject1652, _templateObject1662, _templateObject1672, _templateObject1682, _templateObject1692, _templateObject1702, _templateObject171, _templateObject1722, _templateObject1732, _templateObject1742, _templateObject1752, _templateObject1762, _templateObject1772, _templateObject1782, _templateObject1792, _templateObject180, _templateObject181, _templateObject1822, _templateObject1832;
+var _templateObject170, _templateObject290, _templateObject370, _templateObject447, _templateObject537, _templateObject633, _templateObject730, _templateObject825, _templateObject922, _templateObject1019, _templateObject1119, _templateObject1219, _templateObject1319, _templateObject1418, _templateObject1517, _templateObject1617, _templateObject1717, _templateObject1817, _templateObject1916, _templateObject2015, _templateObject2120, _templateObject2219, _templateObject2317, _templateObject2415, _templateObject2514, _templateObject2614, _templateObject2714, _templateObject2813, _templateObject2913, _templateObject3013, _templateObject3119, _templateObject3218, _templateObject3314, _templateObject3412, _templateObject3512, _templateObject3612, _templateObject3710, _templateObject3810, _templateObject398, _templateObject408, _templateObject4115, _templateObject4212, _templateObject4311, _templateObject448, _templateObject456, _templateObject466, _templateObject475, _templateObject486, _templateObject496, _templateObject506, _templateObject5113, _templateObject5211, _templateObject538, _templateObject545, _templateObject555, _templateObject565, _templateObject575, _templateObject585, _templateObject594, _templateObject604, _templateObject6112, _templateObject6210, _templateObject634, _templateObject643, _templateObject653, _templateObject663, _templateObject673, _templateObject683, _templateObject693, _templateObject703, _templateObject7111, _templateObject7210, _templateObject733, _templateObject742, _templateObject752, _templateObject762, _templateObject772, _templateObject782, _templateObject792, _templateObject802, _templateObject8110, _templateObject826, _templateObject832, _templateObject842, _templateObject852, _templateObject862, _templateObject872, _templateObject882, _templateObject892, _templateObject902, _templateObject9110, _templateObject923, _templateObject932, _templateObject942, _templateObject952, _templateObject962, _templateObject972, _templateObject982, _templateObject992, _templateObject1002, _templateObject10110, _templateObject1022, _templateObject1032, _templateObject1042, _templateObject1052, _templateObject1062, _templateObject1072, _templateObject1082, _templateObject1092, _templateObject1102, _templateObject11110, _templateObject1122, _templateObject1132, _templateObject1142, _templateObject1152, _templateObject1162, _templateObject1172, _templateObject1182, _templateObject1192, _templateObject1202, _templateObject12110, _templateObject1222, _templateObject1232, _templateObject1242, _templateObject1252, _templateObject1262, _templateObject1272, _templateObject1282, _templateObject1292, _templateObject1302, _templateObject13110, _templateObject1322, _templateObject1332, _templateObject1342, _templateObject1352, _templateObject1362, _templateObject1372, _templateObject1382, _templateObject1392, _templateObject1402, _templateObject1419, _templateObject1422, _templateObject1432, _templateObject1442, _templateObject1452, _templateObject1462, _templateObject1472, _templateObject1482, _templateObject1492, _templateObject1502, _templateObject1518, _templateObject1522, _templateObject1532, _templateObject1542, _templateObject1552, _templateObject1562, _templateObject1572, _templateObject1582, _templateObject1592, _templateObject1602, _templateObject1618, _templateObject1622, _templateObject1632, _templateObject1642, _templateObject1652, _templateObject1662, _templateObject1672, _templateObject1682, _templateObject1692, _templateObject1702, _templateObject171, _templateObject1722, _templateObject1732, _templateObject1742, _templateObject1752, _templateObject1762, _templateObject1772, _templateObject1782, _templateObject1792, _templateObject180, _templateObject181, _templateObject1822, _templateObject1832;
 function ownKeys13(object, enumerableOnly) {
   var keys = Object.keys(object);
   if (Object.getOwnPropertySymbols) {
@@ -14436,7 +14438,7 @@ var levellingComplete = (0, import_kolmafia45.myLevel)() >= 13 && get("_neverend
         return get("hasRange");
       },
       do: function() {
-        have($item(_templateObject465 || (_templateObject465 = _taggedTemplateLiteral41(["Dramatic\u2122 range"])))) || (0, import_kolmafia45.buy)(1, $item(_templateObject475 || (_templateObject475 = _taggedTemplateLiteral41(["Dramatic\u2122 range"])))), (0, import_kolmafia45.use)(1, $item(_templateObject486 || (_templateObject486 = _taggedTemplateLiteral41(["Dramatic\u2122 range"]))));
+        have($item(_templateObject466 || (_templateObject466 = _taggedTemplateLiteral41(["Dramatic\u2122 range"])))) || (0, import_kolmafia45.buy)(1, $item(_templateObject475 || (_templateObject475 = _taggedTemplateLiteral41(["Dramatic\u2122 range"])))), (0, import_kolmafia45.use)(1, $item(_templateObject486 || (_templateObject486 = _taggedTemplateLiteral41(["Dramatic\u2122 range"]))));
       }
     },
     {
@@ -15039,7 +15041,7 @@ var Noncombat = {
 // src/prologue.ts
 init_kolmafia_polyfill();
 var import_kolmafia47 = require("kolmafia");
-var _templateObject191, _templateObject2100, _templateObject380, _templateObject450, _templateObject540, _templateObject636, _templateObject734, _templateObject828, _templateObject925, _templateObject1021, _templateObject1121, _templateObject1221, _templateObject1321, _templateObject1421, _templateObject1520, _templateObject1620, _templateObject1719, _templateObject1819, _templateObject1918, _templateObject2016, _templateObject2121, _templateObject2220, _templateObject2318, _templateObject2416, _templateObject2515, _templateObject2615, _templateObject2715, _templateObject2814, _templateObject2914, _templateObject3014, _templateObject3120, _templateObject3219, _templateObject3315, _templateObject3413, _templateObject3513, _templateObject3613, _templateObject3711, _templateObject3811, _templateObject399, _templateObject409, _templateObject4116, _templateObject4213, _templateObject4312, _templateObject4410, _templateObject457, _templateObject466, _templateObject476, _templateObject487, _templateObject497, _templateObject507, _templateObject5114, _templateObject5212, _templateObject5310, _templateObject546, _templateObject556, _templateObject566, _templateObject576, _templateObject586, _templateObject595, _templateObject605, _templateObject6113, _templateObject6211, _templateObject637;
+var _templateObject191, _templateObject2100, _templateObject380, _templateObject450, _templateObject540, _templateObject636, _templateObject734, _templateObject828, _templateObject925, _templateObject1021, _templateObject1121, _templateObject1221, _templateObject1321, _templateObject1421, _templateObject1520, _templateObject1620, _templateObject1719, _templateObject1819, _templateObject1918, _templateObject2016, _templateObject2121, _templateObject2220, _templateObject2318, _templateObject2416, _templateObject2515, _templateObject2615, _templateObject2715, _templateObject2814, _templateObject2914, _templateObject3014, _templateObject3120, _templateObject3219, _templateObject3315, _templateObject3413, _templateObject3513, _templateObject3613, _templateObject3711, _templateObject3811, _templateObject399, _templateObject409, _templateObject4116, _templateObject4213, _templateObject4312, _templateObject4410, _templateObject457, _templateObject467, _templateObject476, _templateObject487, _templateObject497, _templateObject507, _templateObject5114, _templateObject5212, _templateObject5310, _templateObject546, _templateObject556, _templateObject566, _templateObject576, _templateObject586, _templateObject595, _templateObject605, _templateObject6113, _templateObject6211, _templateObject637;
 function ownKeys14(object, enumerableOnly) {
   var keys = Object.keys(object);
   if (Object.getOwnPropertySymbols) {
@@ -15340,7 +15342,7 @@ var PULLS = [$items(_templateObject191 || (_templateObject191 = _taggedTemplateL
       return have($skill(_templateObject457 || (_templateObject457 = _taggedTemplateLiteral43(["Summon Tasteful Items"]))));
     },
     do: function() {
-      (0, import_kolmafia47.useSkill)(1, $skill(_templateObject466 || (_templateObject466 = _taggedTemplateLiteral43(["Summon Tasteful Items"])))), $items(_templateObject476 || (_templateObject476 = _taggedTemplateLiteral43(["black-and-blue light, blue plasma ball, cheap studded belt, flavored foot massage oil, foam dart, Loudmouth Larry Lamprey, personal massager, personalized coffee mug, stick-on eyebrow piercing"]))).forEach(function(item6) {
+      (0, import_kolmafia47.useSkill)(1, $skill(_templateObject467 || (_templateObject467 = _taggedTemplateLiteral43(["Summon Tasteful Items"])))), $items(_templateObject476 || (_templateObject476 = _taggedTemplateLiteral43(["black-and-blue light, blue plasma ball, cheap studded belt, flavored foot massage oil, foam dart, Loudmouth Larry Lamprey, personal massager, personalized coffee mug, stick-on eyebrow piercing"]))).forEach(function(item6) {
         return (0, import_kolmafia47.autosell)((0, import_kolmafia47.itemAmount)(item6), item6);
       });
     }
@@ -15485,7 +15487,7 @@ var PULLS = [$items(_templateObject191 || (_templateObject191 = _taggedTemplateL
 // src/spell.ts
 init_kolmafia_polyfill();
 var import_kolmafia48 = require("kolmafia");
-var _templateObject200, _templateObject2101, _templateObject381, _templateObject451, _templateObject541, _templateObject638, _templateObject735, _templateObject829, _templateObject926, _templateObject1023, _templateObject1123, _templateObject1223, _templateObject1323, _templateObject1423, _templateObject1521, _templateObject1621, _templateObject1720, _templateObject1820, _templateObject1919, _templateObject2017, _templateObject2122, _templateObject2221, _templateObject2319, _templateObject2417, _templateObject2516, _templateObject2616, _templateObject2716, _templateObject2815, _templateObject2915, _templateObject3015, _templateObject3121, _templateObject3220, _templateObject3316, _templateObject3414, _templateObject3514, _templateObject3614, _templateObject3712, _templateObject3812, _templateObject3910, _templateObject4010, _templateObject4117, _templateObject4214, _templateObject4313, _templateObject4411, _templateObject458, _templateObject467, _templateObject477, _templateObject488, _templateObject498, _templateObject508, _templateObject5115, _templateObject5213, _templateObject5311, _templateObject547, _templateObject557, _templateObject567;
+var _templateObject200, _templateObject2101, _templateObject381, _templateObject451, _templateObject541, _templateObject638, _templateObject735, _templateObject829, _templateObject926, _templateObject1023, _templateObject1123, _templateObject1223, _templateObject1323, _templateObject1423, _templateObject1521, _templateObject1621, _templateObject1720, _templateObject1820, _templateObject1919, _templateObject2017, _templateObject2122, _templateObject2221, _templateObject2319, _templateObject2417, _templateObject2516, _templateObject2616, _templateObject2716, _templateObject2815, _templateObject2915, _templateObject3015, _templateObject3121, _templateObject3220, _templateObject3316, _templateObject3414, _templateObject3514, _templateObject3614, _templateObject3712, _templateObject3812, _templateObject3910, _templateObject4010, _templateObject4117, _templateObject4214, _templateObject4313, _templateObject4411, _templateObject458, _templateObject468, _templateObject477, _templateObject488, _templateObject498, _templateObject508, _templateObject5115, _templateObject5213, _templateObject5311, _templateObject547, _templateObject557, _templateObject567;
 function _toConsumableArray18(arr) {
   return _arrayWithoutHoles18(arr) || _iterableToArray18(arr) || _unsupportedIterableToArray29(arr) || _nonIterableSpread18();
 }
@@ -15669,7 +15671,7 @@ var buffs3 = $effects(_templateObject200 || (_templateObject200 = _taggedTemplat
       });
     },
     combat: new CSStrategy(function() {
-      return Macro2.trySkill($skill(_templateObject4411 || (_templateObject4411 = _taggedTemplateLiteral44(["Asdon Martin: Spring-Loaded Front Bumper"])))).trySkill($skill(_templateObject458 || (_templateObject458 = _taggedTemplateLiteral44(["Feel Hatred"])))).trySkill($skill(_templateObject467 || (_templateObject467 = _taggedTemplateLiteral44(["Snokebomb"])))).abort();
+      return Macro2.trySkill($skill(_templateObject4411 || (_templateObject4411 = _taggedTemplateLiteral44(["Asdon Martin: Spring-Loaded Front Bumper"])))).trySkill($skill(_templateObject458 || (_templateObject458 = _taggedTemplateLiteral44(["Feel Hatred"])))).trySkill($skill(_templateObject468 || (_templateObject468 = _taggedTemplateLiteral44(["Snokebomb"])))).abort();
     }),
     choices: _defineProperty22({}, 768, 4)
   }, innerElf(), meteorShower(), {
@@ -15727,7 +15729,7 @@ var buffs3 = $effects(_templateObject200 || (_templateObject200 = _taggedTemplat
 // src/stattests.ts
 init_kolmafia_polyfill();
 var import_kolmafia49 = require("kolmafia");
-var _templateObject201, _templateObject2102, _templateObject390, _templateObject459, _templateObject548, _templateObject639, _templateObject736, _templateObject830, _templateObject927, _templateObject1024, _templateObject1124, _templateObject1224, _templateObject1324, _templateObject1424, _templateObject1523, _templateObject1623, _templateObject1721, _templateObject1821, _templateObject1920, _templateObject2018, _templateObject2123, _templateObject2222, _templateObject2320, _templateObject2418, _templateObject2517, _templateObject2617, _templateObject2717, _templateObject2816, _templateObject2916, _templateObject3016, _templateObject3122, _templateObject3221, _templateObject3317, _templateObject3415, _templateObject3515, _templateObject3615, _templateObject3713, _templateObject3813, _templateObject3911, _templateObject4011, _templateObject4118, _templateObject4215, _templateObject4314, _templateObject4412, _templateObject4510, _templateObject468, _templateObject478, _templateObject489, _templateObject499, _templateObject509, _templateObject5116, _templateObject5214, _templateObject5312, _templateObject549, _templateObject558, _templateObject568, _templateObject577, _templateObject587, _templateObject596, _templateObject606, _templateObject6114, _templateObject6212, _templateObject6310, _templateObject644, _templateObject654, _templateObject664, _templateObject674, _templateObject684, _templateObject694, _templateObject704, _templateObject7112, _templateObject7211, _templateObject737, _templateObject743, _templateObject753;
+var _templateObject201, _templateObject2102, _templateObject390, _templateObject459, _templateObject548, _templateObject639, _templateObject736, _templateObject830, _templateObject927, _templateObject1024, _templateObject1124, _templateObject1224, _templateObject1324, _templateObject1424, _templateObject1523, _templateObject1623, _templateObject1721, _templateObject1821, _templateObject1920, _templateObject2018, _templateObject2123, _templateObject2222, _templateObject2320, _templateObject2418, _templateObject2517, _templateObject2617, _templateObject2717, _templateObject2816, _templateObject2916, _templateObject3016, _templateObject3122, _templateObject3221, _templateObject3317, _templateObject3415, _templateObject3515, _templateObject3615, _templateObject3713, _templateObject3813, _templateObject3911, _templateObject4011, _templateObject4118, _templateObject4215, _templateObject4314, _templateObject4412, _templateObject4510, _templateObject469, _templateObject478, _templateObject489, _templateObject499, _templateObject509, _templateObject5116, _templateObject5214, _templateObject5312, _templateObject549, _templateObject558, _templateObject568, _templateObject577, _templateObject587, _templateObject596, _templateObject606, _templateObject6114, _templateObject6212, _templateObject6310, _templateObject644, _templateObject654, _templateObject664, _templateObject674, _templateObject684, _templateObject694, _templateObject704, _templateObject7112, _templateObject7211, _templateObject737, _templateObject743, _templateObject753;
 function _toConsumableArray19(arr) {
   return _arrayWithoutHoles19(arr) || _iterableToArray19(arr) || _unsupportedIterableToArray30(arr) || _nonIterableSpread19();
 }
@@ -15921,7 +15923,7 @@ var Muscle = {
   outfit: function() {
     return {
       hat: $item(_templateObject4510 || (_templateObject4510 = _taggedTemplateLiteral45(["very pointy crown"]))),
-      shirt: $item(_templateObject468 || (_templateObject468 = _taggedTemplateLiteral45(["Jurassic Parka"]))),
+      shirt: $item(_templateObject469 || (_templateObject469 = _taggedTemplateLiteral45(["Jurassic Parka"]))),
       back: $item(_templateObject478 || (_templateObject478 = _taggedTemplateLiteral45(["unwrapped knock-off retro superhero cape"]))),
       weapon: $item(_templateObject489 || (_templateObject489 = _taggedTemplateLiteral45(["Fourth of May Cosplay Saber"]))),
       offhand: $item(_templateObject499 || (_templateObject499 = _taggedTemplateLiteral45(["unbreakable umbrella"]))),
@@ -15988,7 +15990,7 @@ var Muscle = {
 // src/weapon.ts
 init_kolmafia_polyfill();
 var import_kolmafia50 = require("kolmafia");
-var _templateObject300, _templateObject2103, _templateObject391, _templateObject460, _templateObject550, _templateObject640, _templateObject738, _templateObject831, _templateObject928, _templateObject1025, _templateObject1125, _templateObject1225, _templateObject1325, _templateObject1425, _templateObject1524, _templateObject1624, _templateObject1723, _templateObject1823, _templateObject1921, _templateObject2019, _templateObject2124, _templateObject2223, _templateObject2321, _templateObject2419, _templateObject2518, _templateObject2618, _templateObject2718, _templateObject2817, _templateObject2917, _templateObject3017, _templateObject3123, _templateObject3222, _templateObject3318, _templateObject3416, _templateObject3516, _templateObject3616, _templateObject3714, _templateObject3814, _templateObject3912, _templateObject4012, _templateObject4119, _templateObject4216, _templateObject4315, _templateObject4413, _templateObject4511, _templateObject469, _templateObject479, _templateObject4810, _templateObject4910, _templateObject5010, _templateObject5117, _templateObject5215;
+var _templateObject300, _templateObject2103, _templateObject391, _templateObject460, _templateObject550, _templateObject640, _templateObject738, _templateObject831, _templateObject928, _templateObject1025, _templateObject1125, _templateObject1225, _templateObject1325, _templateObject1425, _templateObject1524, _templateObject1624, _templateObject1723, _templateObject1823, _templateObject1921, _templateObject2019, _templateObject2124, _templateObject2223, _templateObject2321, _templateObject2419, _templateObject2518, _templateObject2618, _templateObject2718, _templateObject2817, _templateObject2917, _templateObject3017, _templateObject3123, _templateObject3222, _templateObject3318, _templateObject3416, _templateObject3516, _templateObject3616, _templateObject3714, _templateObject3814, _templateObject3912, _templateObject4012, _templateObject4119, _templateObject4216, _templateObject4315, _templateObject4413, _templateObject4511, _templateObject4610, _templateObject479, _templateObject4810, _templateObject4910, _templateObject5010, _templateObject5117, _templateObject5215;
 function _toConsumableArray20(arr) {
   return _arrayWithoutHoles20(arr) || _iterableToArray20(arr) || _unsupportedIterableToArray31(arr) || _nonIterableSpread20();
 }
@@ -16063,7 +16065,7 @@ function _toPrimitive28(input, hint) {
 function _taggedTemplateLiteral46(strings, raw) {
   return raw || (raw = strings.slice(0)), Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
-var buffs4 = $effects(_templateObject300 || (_templateObject300 = _taggedTemplateLiteral46(["Carol of the Bulls, Song of the North, Rage of the Reindeer, Scowl of the Auk, Disdain of the War Snapper, Tenacity of the Snapper"]))), meteors, Weapon = {
+var buffs4 = $effects(_templateObject300 || (_templateObject300 = _taggedTemplateLiteral46(["Carol of the Bulls, Song of the North, Rage of the Reindeer, Scowl of the Auk, Disdain of the War Snapper, Tenacity of the Snapper"]))), Weapon = {
   name: "Weapon Damage",
   type: "SERVICE",
   test: CommunityService.WeaponDamage,
@@ -16132,7 +16134,7 @@ var buffs4 = $effects(_templateObject300 || (_templateObject300 = _taggedTemplat
       return have($item(_templateObject3222 || (_templateObject3222 = _taggedTemplateLiteral46(["corrupted marrow"])))) || have($effect(_templateObject3318 || (_templateObject3318 = _taggedTemplateLiteral46(["Cowrruption"]))));
     },
     do: function() {
-      meteors = get("_meteorShowerUses"), CombatLoversLocket_exports.reminisce($monster(_templateObject3416 || (_templateObject3416 = _taggedTemplateLiteral46(["ungulith"])))), (0, import_kolmafia50.handlingChoice)() && (0, import_kolmafia50.runChoice)(-1);
+      CombatLoversLocket_exports.reminisce($monster(_templateObject3416 || (_templateObject3416 = _taggedTemplateLiteral46(["ungulith"])))), (0, import_kolmafia50.handlingChoice)() && (0, import_kolmafia50.runChoice)(-1);
     },
     choices: _defineProperty24({}, 1387, 3),
     outfit: function() {
@@ -16145,7 +16147,7 @@ var buffs4 = $effects(_templateObject300 || (_templateObject300 = _taggedTemplat
       });
     },
     post: function() {
-      (0, import_kolmafia50.myFamiliar)() === $familiar(_templateObject3714 || (_templateObject3714 = _taggedTemplateLiteral46(["Melodramedary"]))) && have($effect(_templateObject3814 || (_templateObject3814 = _taggedTemplateLiteral46(["Spit Upon"]))), 15) && _set("camelSpit", 0), meteors && have($effect(_templateObject3912 || (_templateObject3912 = _taggedTemplateLiteral46(["Meteor Showered"])))) && _set("_meteorShowerUses", meteors + 1);
+      (0, import_kolmafia50.myFamiliar)() === $familiar(_templateObject3714 || (_templateObject3714 = _taggedTemplateLiteral46(["Melodramedary"]))) && have($effect(_templateObject3814 || (_templateObject3814 = _taggedTemplateLiteral46(["Spit Upon"]))), 15) && _set("camelSpit", 0), have($effect(_templateObject3912 || (_templateObject3912 = _taggedTemplateLiteral46(["Meteor Showered"])))) && incrementShowers(), _set("_meteorShowerUses", showers);
       var ungId = $monster(_templateObject4012 || (_templateObject4012 = _taggedTemplateLiteral46(["ungulith"]))).id.toFixed(0), locketIdStrings = get("_locketMonstersFought").split(",").map(function(x) {
         return x.trim();
       }).filter(function(x) {
@@ -16168,7 +16170,7 @@ var buffs4 = $effects(_templateObject300 || (_templateObject300 = _taggedTemplat
       });
     },
     do: function() {
-      var meteor = $items(_templateObject469 || (_templateObject469 = _taggedTemplateLiteral46(["meteorite necklace, meteorite fragment, meteorite earring"]))).find(function(item6) {
+      var meteor = $items(_templateObject4610 || (_templateObject4610 = _taggedTemplateLiteral46(["meteorite necklace, meteorite fragment, meteorite earring"]))).find(function(item6) {
         return have(item6);
       });
       meteor && (unequip(meteor), (0, import_kolmafia50.retrieveItem)(1, $item(_templateObject479 || (_templateObject479 = _taggedTemplateLiteral46(["tenderizing hammer"])))), (0, import_kolmafia50.retrieveItem)(1, $item(_templateObject4810 || (_templateObject4810 = _taggedTemplateLiteral46(["jewelry-making pliers"])))), meteor !== $item(_templateObject4910 || (_templateObject4910 = _taggedTemplateLiteral46(["meteorite fragment"]))) && (0, import_kolmafia50.cliExecute)("smash ".concat(meteor)), (0, import_kolmafia50.cliExecute)("make ".concat($item(_templateObject5010 || (_templateObject5010 = _taggedTemplateLiteral46(["meteorite ring"]))))));
