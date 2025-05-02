@@ -9,14 +9,7 @@ import {
   skillTask,
 } from "./commons";
 import { CSQuest } from "./engine";
-import {
-  burnLibrams,
-  currentBirdHas,
-  favouriteBirdHas,
-  guildQuestZone,
-  SYNTH_EFFECT,
-  synthExp,
-} from "./lib";
+import { burnLibrams, guildQuestZone, SYNTH_EFFECT, synthExp } from "./lib";
 import uniform from "./outfit";
 import { OutfitSpec } from "grimoire-kolmafia";
 import {
@@ -566,9 +559,7 @@ const Level: CSQuest = {
     },
     {
       name: "God Lobster",
-      completed: () =>
-        get("_godLobsterFights") >=
-        (favouriteBirdHas("Combat Rate", false) && currentBirdHas("Combat Rate", false) ? 3 : 2),
+      completed: () => get("_godLobsterFights") >= 3,
       do: (): void => {
         visitUrl("main.php?fightgodlobster=1");
         runCombat();
@@ -584,8 +575,7 @@ const Level: CSQuest = {
       },
       choices: () => ({
         // Stats
-        1310:
-          favouriteBirdHas("Combat Rate", false) && currentBirdHas("Combat Rate", false) ? 3 : 1,
+        1310: 3,
       }),
       combat: new CSStrategy(),
     },
