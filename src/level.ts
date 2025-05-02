@@ -9,7 +9,7 @@ import {
   skillTask,
 } from "./commons";
 import { CSQuest } from "./engine";
-import { burnLibrams, guildQuestZone, SYNTH_EFFECT, synthExp } from "./lib";
+import { burnLibrams, guildQuestZone, peridotChoice, SYNTH_EFFECT, synthExp } from "./lib";
 import uniform from "./outfit";
 import { OutfitSpec } from "grimoire-kolmafia";
 import {
@@ -46,7 +46,6 @@ import {
   $stat,
   byStat,
   CampAway,
-  Cartography,
   Counter,
   get,
   getActiveSongs,
@@ -423,11 +422,15 @@ const Level: CSQuest = {
       completed: () => get("_sourceTerminalPortscanUses") > 0,
       do: $location`An Unusually Quiet Barroom Brawl`,
       outfit: () =>
-        uniform(
-          have($familiar`Nanorhino`) && get("_nanorhinoCharge") >= 100
-            ? { changes: { familiar: $familiar`Nanorhino` } }
-            : {}
-        ),
+        uniform({
+          changes: {
+            ...(have($familiar`Nanorhino`) && get("_nanorhinoCharge") >= 100
+              ? { familiar: $familiar`Nanorhino` }
+              : {}),
+            acc3: $item`Peridot of Peril`,
+          },
+        }),
+      choices: peridotChoice($monster`goblin flapper`),
       combat: new CSStrategy(
         () =>
           Macro.skill($skill`Portscan`)
@@ -441,6 +444,7 @@ const Level: CSQuest = {
                 })
               )
             )
+            .trySkill($skill`Feel Envy`)
             .defaultKill(),
         {
           fightHolidayWanderer: true,
@@ -454,7 +458,10 @@ const Level: CSQuest = {
       do: $location`An Unusually Quiet Barroom Brawl`,
       outfit: () =>
         uniform({
-          changes: { back: $item`vampyric cloake`, acc3: $item`Lil' Doctor™ bag` },
+          changes: {
+            back: $item`vampyric cloake`,
+            acc3: $item`Lil' Doctor™ bag`,
+          },
         }),
       combat: new CSStrategy(() =>
         Macro.skill($skill`Become a Bat`)
@@ -465,13 +472,16 @@ const Level: CSQuest = {
     {
       name: "Map Ninja",
       completed: () => have($item`li'l ninja costume`),
-      do: (): void => {
-        Cartography.mapMonster($location`The Haiku Dungeon`, $monster`amateur ninja`);
-      },
+      do: $location`The Haiku Dungeon`,
+      choices: peridotChoice($monster`amateur ninja`),
       combat: new CSStrategy(() =>
         Macro.if_($monster`amateur ninja`, Macro.skill($skill`Chest X-Ray`)).abort()
       ),
-      outfit: () => uniform({ canAttack: false, changes: { acc3: $item`Lil' Doctor™ bag` } }),
+      outfit: () =>
+        uniform({
+          canAttack: false,
+          changes: { acc3: $item`Lil' Doctor™ bag`, acc2: $item`Peridot of Peril` },
+        }),
     },
     {
       name: "LOV",

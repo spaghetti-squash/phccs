@@ -1,7 +1,7 @@
 import { CSStrategy, Macro } from "./combat";
 import { asdonTask } from "./commons";
 import { CSQuest } from "./engine";
-import { guildQuestZone } from "./lib";
+import { guildQuestZone, peridotChoice } from "./lib";
 import uniform from "./outfit";
 import { adv1, buy, create, eat, visitUrl } from "kolmafia";
 import {
@@ -13,7 +13,6 @@ import {
   $location,
   $monster,
   $skill,
-  Cartography,
   CombatLoversLocket,
   CommunityService,
   get,
@@ -79,14 +78,17 @@ const CoilWire: CSQuest = {
       class: $classes`Sauceror`,
       completed: () => have($item`cherry`),
       ready: () => !have($effect`Everything Looks Yellow`),
-      do: (): void => {
-        Cartography.mapMonster($location`The Skeleton Store`, $monster`novelty tropical skeleton`);
-      },
+      do: $location`The Skeleton Store`,
       outfit: () =>
         uniform({
           canAttack: false,
-          changes: { shirt: $item`Jurassic Parka`, modes: { parka: "dilophosaur" } },
+          changes: {
+            shirt: $item`Jurassic Parka`,
+            modes: { parka: "dilophosaur" },
+            acc3: $item`Peridot of Peril`,
+          },
         }),
+      choices: peridotChoice($monster`novelty tropical skeleton`),
       combat: new CSStrategy(() => Macro.skill($skill`Spit jurassic acid`)),
     },
     {

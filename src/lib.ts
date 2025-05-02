@@ -12,6 +12,7 @@ import {
   haveEffect,
   Item,
   itemAmount,
+  Monster,
   myMaxmp,
   myMp,
   restoreMp,
@@ -281,3 +282,5 @@ export const LEPRECONDO_CONFIG: Tuple<Leprecondo.FurniturePiece, 4> = byStat({
     "fully-stocked wet bar",
   ],
 });
+
+export const peridotChoice = (monster: Monster) => ({ 1557: `1&bandersnatch=${monster.id}` });
