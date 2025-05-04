@@ -16,7 +16,6 @@ import {
   canEquip,
   cliExecute,
   myLevel,
-  numericModifier,
   pullsRemaining,
   retrieveItem,
   storageAmount,
@@ -38,6 +37,7 @@ import {
   have,
   Horsery,
 } from "libram";
+import { printModtrace } from "libram/dist/modifier";
 
 const buffs = $effects`Carol of the Hells, Arched Eyebrow of the Archmage, Song of Sauce`;
 const chefstaves = $items`Staff of the Roaring Hearth, Staff of Simmering Hatred, Staff of Kitchen Royalty, Staff of the Deepest Freeze, Staff of Frozen Lard, Staff of the Peppermint Twist`;
@@ -51,7 +51,7 @@ const Spell: CSQuest = {
     weapon: [...chefstaves, $item`weeping willow wand`],
     offhand: $items`Abracandalabra, august scepter`,
     pants: $item`designer sweatpants`,
-    acc1: $items`meteorite necklace, Kremlin's Greatest Briefcase`,
+    acc1: $items`meteorite necklace, Powerful Glove`,
     acc2: $item`codpiece`,
     acc3: $item`battle broom`,
     ...(CSEngine.core === "soft"
@@ -59,6 +59,7 @@ const Spell: CSQuest = {
       : { familiar: $familiar`Left-Hand Man`, famequip: $item`astral statuette` }),
     back: $items`Buddy Bjorn, protonic accelerator pack`,
     riders: { "buddy-bjorn": $familiar`Mechanical Songbird` },
+    afterDress: [() => void printModtrace(["Spell Damage", "Spell Damage Percent"])],
   }),
   maxTurns: 30,
   tasks: [
@@ -70,7 +71,10 @@ const Spell: CSQuest = {
       do: $location`The Dire Warren`,
       outfit: () =>
         uniform({
-          changes: { familiar: $familiar`Ghost of Crimbo Carols`, famequip: $item.none },
+          changes: {
+            familiar: $familiar`Ghost of Crimbo Carols`,
+            famequip: $item.none,
+          },
         }),
       prepare: () => Horsery.current() === "pale" && Horsery.changeHorse("dark"),
       combat: new CSStrategy(() =>
@@ -103,16 +107,6 @@ const Spell: CSQuest = {
       do: () => cliExecute("cargo 177"),
     },
     potionTask($item`Yeg's Motel hand soap`),
-    {
-      name: "Briefcase",
-      ready: () =>
-        !$items`meteorite fragment, meteorite earring, meteorite necklace, meteorite ring`.some(
-          (item) => have(item)
-        ),
-      completed: () =>
-        numericModifier($item`Kremlin's Greatest Briefcase`, "Spell Damage Percent") > 0,
-      do: () => cliExecute("Briefcase.ash enchantment spell"),
-    },
     skillTask($skill`Spirit of Cayenne`),
     potionTask($item`flask of baconstone juice`),
     {
