@@ -1,4 +1,3 @@
-import { CSStrategy } from "./combat";
 import {
   aprilTask,
   asdonTask,
@@ -10,8 +9,7 @@ import {
   songTask,
 } from "./commons";
 import { CSQuest } from "./engine";
-import uniform from "./outfit";
-import { cliExecute, runChoice, runCombat, useSkill, visitUrl } from "kolmafia";
+import { cliExecute, useSkill } from "kolmafia";
 import {
   $effect,
   $effects,
@@ -67,25 +65,6 @@ const Noncombat: CSQuest = {
       do: () => cliExecute("swim sprints"),
     },
     asdonTask("Stealthily"),
-    {
-      name: "God Lobster",
-      completed: () => get("_godLobsterFights") >= 3,
-      do: (): void => {
-        visitUrl("main.php?fightgodlobster=1");
-        runCombat();
-        visitUrl("choice.php");
-        runChoice(-1);
-      },
-      outfit: () =>
-        uniform({
-          changes: {
-            familiar: $familiar`God Lobster`,
-            famequip: $item`God Lobster's Ring`,
-          },
-        }),
-      choices: { [1310]: 2 },
-      combat: new CSStrategy(),
-    },
     aprilTask("Apriling Band Patrol Beat"),
   ],
 };
