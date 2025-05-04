@@ -9,18 +9,8 @@ import {
   songTask,
 } from "./commons";
 import { CSQuest } from "./engine";
-import { cliExecute, useSkill } from "kolmafia";
-import {
-  $effect,
-  $effects,
-  $familiar,
-  $item,
-  $skill,
-  CommunityService,
-  get,
-  have,
-  Horsery,
-} from "libram";
+import { cliExecute } from "kolmafia";
+import { $effect, $effects, $familiar, $item, CommunityService, get, Horsery } from "libram";
 
 const Noncombat: CSQuest = {
   name: "Noncombat",
@@ -49,12 +39,6 @@ const Noncombat: CSQuest = {
     ...commonFamiliarWeightBuffs(),
     skillTask($effect`Smooth Movements`),
     skillTask($effect`Feeling Lonely`),
-    {
-      name: "Invisible Avatar",
-      completed: () => have($effect`Invisible Avatar`),
-      do: () => useSkill($skill`CHEAT CODE: Invisible Avatar`),
-      outfit: { acc3: $item`Powerful Glove` },
-    },
     birdTask("Combat Rate", false),
     favouriteBirdTask("Combat Rate", false),
     songTask($effect`The Sonata of Sneakiness`, $effect`Fat Leon's Phat Loot Lyric`),
