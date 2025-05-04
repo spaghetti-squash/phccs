@@ -70,7 +70,7 @@ export function smokeEmIfYouGotEm(): void {
   );
   const poemLine = (get("phccs_wasteLand", Number(myId())) + 1) % poemLines.length;
   set("phccs_wasteLand", poemLine);
-  const MESSAGE = poemLines[poemLine];
+  const MESSAGE = poemLines[poemLine] || "yeeeowch!";
 
   retrieveItem($item`campfire smoke`);
   withChoice(1394, `1&message=${urlEncode(MESSAGE)}`, () => use($item`campfire smoke`));
