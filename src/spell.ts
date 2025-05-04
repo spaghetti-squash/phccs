@@ -37,7 +37,6 @@ import {
   have,
   Horsery,
 } from "libram";
-import { printModtrace } from "libram/dist/modifier";
 
 const buffs = $effects`Carol of the Hells, Arched Eyebrow of the Archmage, Song of Sauce`;
 const chefstaves = $items`Staff of the Roaring Hearth, Staff of Simmering Hatred, Staff of Kitchen Royalty, Staff of the Deepest Freeze, Staff of Frozen Lard, Staff of the Peppermint Twist`;
@@ -59,7 +58,6 @@ const Spell: CSQuest = {
       : { familiar: $familiar`Left-Hand Man`, famequip: $item`astral statuette` }),
     back: $items`Buddy Bjorn, protonic accelerator pack`,
     riders: { "buddy-bjorn": $familiar`Mechanical Songbird` },
-    afterDress: [() => void printModtrace(["Spell Damage", "Spell Damage Percent"])],
   }),
   maxTurns: 30,
   tasks: [
