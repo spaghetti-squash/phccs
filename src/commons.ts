@@ -2,14 +2,17 @@ import { CSStrategy, Macro } from "./combat";
 import { CSTask, currentBirdHas, favouriteBirdHas } from "./lib";
 import uniform from "./outfit";
 import {
+  abort,
   adv1,
   availableAmount,
   buy,
+  canEquip,
   cliExecute,
   create,
   eat,
   Effect,
   effectModifier,
+  equippedItem,
   getFuel,
   getProperty,
   handlingChoice,
@@ -17,10 +20,12 @@ import {
   mpCost,
   myLevel,
   myMp,
+  npcPrice,
   runChoice,
   Skill,
   toEffect,
   toSkill,
+  toSlot,
   use,
   useSkill,
 } from "kolmafia";
@@ -266,5 +271,33 @@ export function aprilTask(song: AprilingBandHelmet.MarchingSong): CSTask {
     ready: () => AprilingBandHelmet.canChangeSong(),
     completed: () => have(Effect.get(song)),
     do: () => AprilingBandHelmet.changeSong(song),
+  };
+}
+
+export function buskTask(hat: Item, shirt: Item, pants: Item, index: number): CSTask {
+  return {
+    name: `Busk #${index + 1}: ${hat}. ${shirt}, and ${pants}`,
+    outfit: {
+      hat,
+      shirt,
+      pants,
+      ...(hat === $item`prismatic beret`
+        ? {}
+        : { familiar: $familiar`Mad Hatrack`, famequip: $item`prismatic beret` }),
+      beforeDress: [hat, shirt, pants].map((it) => () => {
+        if (!have(it)) {
+          if (!(npcPrice(it) > 0 && buy(it))) abort(`Failed to obtain ${it} for Busking!`);
+        }
+      }),
+    },
+    ready: () => [hat, shirt, pants].every((it) => (canEquip(it) && have(it)) || npcPrice(it) > 0),
+    completed: () => get("_beretBuskingUses") !== index,
+    do: () => {
+      for (const [slotName, item] of Object.entries({ hat, shirt, pants })) {
+        if (equippedItem(toSlot(slotName)) !== item)
+          abort(`Failed to equip ${item} to ${slotName} for Busking!`);
+      }
+      useSkill($skill`Beret Busking`);
+    },
   };
 }

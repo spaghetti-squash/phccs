@@ -1,6 +1,7 @@
 import { CSStrategy, Macro } from "./combat";
 import {
   beachTask,
+  buskTask,
   favouriteBirdTask,
   innerElf,
   potionTask,
@@ -113,6 +114,7 @@ const Level: CSQuest = {
   name: "Level",
   completed: () => levellingComplete,
   tasks: [
+    { ...buskTask($item`norwhal helmet`, $item.none, $item`repaid diaper`, 0), core: "soft" },
     innerElf(),
     {
       name: "That's Just Cloud Talk, Man",
@@ -613,39 +615,6 @@ const Level: CSQuest = {
         const choice = ["food", "booze"].includes(get("_questPartyFairQuest")) ? 1 : 2;
         runChoice(choice);
       },
-    },
-    {
-      name: "NEP Spit",
-      completed: () => have($effect`Spit Upon`),
-      ready: () =>
-        get("camelSpit") >= 100 &&
-        have($familiar`Comma Chameleon`) &&
-        get("_neverendingPartyFreeTurns") < 10,
-      do: $location`The Neverending Party`,
-      outfit: (): OutfitSpec => {
-        foldshirt();
-        return uniform({
-          changes: {
-            shirt: $items`makeshift garbage shirt`,
-            ...(get("_sausageFights") > 4 ? {} : { offhand: $item`Kramco Sausage-o-Matic™` }),
-            familiar: $familiar`Melodramedary`,
-          },
-        });
-      },
-      combat: new CSStrategy(() =>
-        Macro.trySkill($skill`%fn, spit on me!`)
-          .if_(
-            $effect`Inner Elf`,
-            Macro.if_(
-              `!hascombatitem ${$item`cosmic bowling ball`}`,
-              Macro.trySkill($skill`Feel Pride`)
-            )
-          )
-          .trySkill($skill`Bowl Sideways`)
-          .delevel()
-          .defaultKill()
-      ),
-      choices: { [1324]: 5 },
     },
     {
       name: "Purple Candle Kramco",

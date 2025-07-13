@@ -15,6 +15,7 @@ import {
   canadiaAvailable,
   canEquip,
   cliExecute,
+  Effect,
   myLevel,
   pullsRemaining,
   retrieveItem,
@@ -36,6 +37,7 @@ import {
   getSaleValue,
   have,
   Horsery,
+  PrismaticBeret,
 } from "libram";
 
 const buffs = $effects`Carol of the Hells, Arched Eyebrow of the Archmage, Song of Sauce`;
@@ -58,6 +60,15 @@ const Spell: CSQuest = {
       : { familiar: $familiar`Left-Hand Man`, famequip: $item`astral statuette` }),
     back: $items`Buddy Bjorn, protonic accelerator pack`,
     riders: { "buddy-bjorn": $familiar`Mechanical Songbird` },
+    afterDress: [
+      () => {
+        while (get("_beretBuskingUses") < 5)
+          PrismaticBeret.buskFor(
+            { "Spell Damage": 1, "Spell Damage Percent": 1 },
+            { buyItems: true, uselessEffects: Effect.all().filter((e) => have(e)) }
+          );
+      },
+    ],
   }),
   maxTurns: 30,
   tasks: [

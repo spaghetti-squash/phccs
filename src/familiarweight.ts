@@ -3,7 +3,7 @@ import { commonFamiliarWeightBuffs, meteorShower, potionTask } from "./commons";
 import { CSQuest } from "./engine";
 import { availableFights, unequip } from "./lib";
 import uniform from "./outfit";
-import { create, mySign, runCombat, toInt, use, visitUrl } from "kolmafia";
+import { buy, create, mySign, runCombat, toInt, use, visitUrl } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -137,6 +137,8 @@ const FamiliarWeight: CSQuest = {
       ready: () => mySign() !== "Platypus",
       completed: () => get("moonTuned"),
       do: (): void => {
+        buy(1, $item`frilly skirt`);
+        buy(1, $item`maiden wig`);
         unequip($item`hewn moon-rune spoon`);
         visitUrl("inv_use.php?whichitem=10254&pwd&doit=96&whichsign=4");
       },

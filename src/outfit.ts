@@ -1,5 +1,5 @@
 import { OutfitSpec } from "grimoire-kolmafia";
-import { Familiar, Item, totalTurnsPlayed } from "kolmafia";
+import { Familiar, inHardcore, Item, totalTurnsPlayed } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -80,7 +80,7 @@ const FAMILIAR_PICKS = [
   {
     familiar: $familiar`Melodramedary`,
     famequip: () => $items`dromedary drinking helmet`.find((i) => have(i)),
-    condition: () => get("camelSpit") < 100 && !have($effect`Spit Upon`),
+    condition: () => get("camelSpit") < 100 && !have($effect`Spit Upon`) && inHardcore(),
   },
   {
     familiar: $familiar`Shorter-Order Cook`,

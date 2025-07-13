@@ -10,19 +10,22 @@ import Prologue from "./prologue";
 import Spell from "./spell";
 import StatTests from "./stattests";
 import Weapon from "./weapon";
-import { sinceKolmafiaRevision } from "libram";
+import { logger, LogLevels, sinceKolmafiaRevision } from "libram";
 
-sinceKolmafiaRevision(28500);
-CSEngine.runTests(
-  Prologue,
-  CoilWire,
-  Level,
-  ...StatTests,
-  Drink,
-  HotRes,
-  Noncombat,
-  FamiliarWeight,
-  Weapon,
-  Spell,
-  BoozeDrop
-);
+export function main() {
+  sinceKolmafiaRevision(28500);
+  logger.setLevel(LogLevels.DEBUG);
+  CSEngine.runTests(
+    Prologue,
+    CoilWire,
+    Level,
+    ...StatTests,
+    Drink,
+    HotRes,
+    Noncombat,
+    FamiliarWeight,
+    Weapon,
+    Spell,
+    BoozeDrop
+  );
+}

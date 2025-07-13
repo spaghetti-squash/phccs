@@ -266,6 +266,7 @@ const Prologue: CSQuest = {
         useFamiliar($familiar`Melodramedary`);
         cliExecute(`mummery ${myPrimestat().toString().toLowerCase()}`);
       },
+      core: "hard",
     },
     {
       name: "Shortsuit",

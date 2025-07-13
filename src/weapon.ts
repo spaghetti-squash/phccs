@@ -122,7 +122,8 @@ const Weapon: CSQuest = {
         const changes: OutfitSpec = {
           weapon: $item`Fourth of May Cosplay Saber`,
         };
-        if (get("camelSpit") >= 100) changes.familiar = $familiar`Melodramedary`;
+        if (get("camelSpit") >= 100 && !have($effect`Spit Upon`))
+          changes.familiar = $familiar`Melodramedary`;
         return uniform({ changes, canAttack: false });
       },
       post: (): void => {
