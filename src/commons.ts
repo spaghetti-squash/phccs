@@ -299,5 +299,6 @@ export function buskTask(hat: Item, shirt: Item, pants: Item, index: number): CS
       }
       useSkill($skill`Beret Busking`);
     },
+    core: "soft",
   };
 }

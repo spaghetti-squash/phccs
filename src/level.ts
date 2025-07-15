@@ -14,6 +14,7 @@ import { burnLibrams, guildQuestZone, peridotChoice, SYNTH_EFFECT, synthExp } fr
 import uniform from "./outfit";
 import { OutfitSpec } from "grimoire-kolmafia";
 import {
+  abort,
   buy,
   cliExecute,
   create,
@@ -114,7 +115,21 @@ const Level: CSQuest = {
   name: "Level",
   completed: () => levellingComplete,
   tasks: [
-    { ...buskTask($item`norwhal helmet`, $item.none, $item`repaid diaper`, 0), core: "soft" },
+    buskTask($item`norwhal helmet`, $item.none, $item`repaid diaper`, 0),
+    buskTask($item`Apriling band helmet`, $item`shoe ad T-shirt`, $item`union scalemail pants`, 1),
+    buskTask($item`coconut shell`, $item`fresh coat of paint`, $item.none, 2),
+    buskTask($item`norwhal helmet`, $item`fresh coat of paint`, $item`union scalemail pants`, 3),
+    buskTask($item.none, $item.none, $item`repaid diaper`, 4),
+    {
+      name: "Slay Camel",
+      completed: () => get("_entauntaunedToday"),
+      ready: () => have($item`blue plate`),
+      outfit: () => ({
+        familiar: $familiar`Melodramedary`,
+        weapon: $item`Fourth of May Cosplay Saber`,
+      }),
+      do: () => abort(),
+    },
     innerElf(),
     {
       name: "That's Just Cloud Talk, Man",
@@ -534,14 +549,6 @@ const Level: CSQuest = {
         Moxie: $item`LOV Elixir #9`,
       })
     ),
-    {
-      name: "Snojo",
-      completed: () => get("_snojoFreeFights") >= 10,
-      ready: () => !!get("snojoSetting"),
-      outfit: uniform,
-      do: $location`The X-32-F Combat Training Snowman`,
-      combat: new CSStrategy(() => Macro.delevel().easyFight().attack().repeat()),
-    },
     {
       name: "Post-Snojo Hottub",
       completed: () =>
