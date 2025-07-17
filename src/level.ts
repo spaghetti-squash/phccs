@@ -673,41 +673,6 @@ const Level: CSQuest = {
       ),
       choices: { [1324]: 5 },
     },
-    {
-      name: "Freekill NEP",
-      completed: () =>
-        get("_shatteringPunchUsed") >= 3 &&
-        get("_gingerbreadMobHitUsed") &&
-        have($effect`Everything Looks Yellow`) &&
-        get("_chestXRayUsed") >= 3,
-      do: $location`The Neverending Party`,
-      outfit: (): OutfitSpec => {
-        foldshirt();
-        const killSource = !have($effect`Everything Looks Yellow`)
-          ? { shirt: $item`Jurassic Parka`, modes: { parka: "dilophosaur" as const } }
-          : get("_chestXRayUsed") < 3
-          ? { acc3: $item`Lil' Doctor™ bag` }
-          : {};
-        const enoughSausages = get("_sausageFights") > 4;
-        const changes = {
-          shirt: $items`makeshift garbage shirt`,
-          ...killSource,
-          ...(enoughSausages ? {} : { offhand: $item`Kramco Sausage-o-Matic™` }),
-        };
-        return uniform({ changes });
-      },
-      combat: new CSStrategy(() =>
-        Macro.if_($monster`sausage goblin`, Macro.defaultKill())
-          .trySkill($skill`Feel Pride`)
-          .trySkill($skill`Bowl Sideways`)
-          .trySkill($skill`Spit jurassic acid`)
-          .trySkill($skill`Chest X-Ray`)
-          .trySkill($skill`Shattering Punch`)
-          .trySkill($skill`Gingerbread Mob Hit`)
-          .abort()
-      ),
-      choices: { [1324]: 5 },
-    },
   ],
 };
 
