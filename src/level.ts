@@ -22,7 +22,6 @@ import {
   mpCost,
   myFamiliar,
   myHp,
-  myLevel,
   myMp,
   myPrimestat,
   numericModifier,
@@ -59,7 +58,7 @@ import {
   withProperties,
 } from "libram";
 
-const levellingComplete = myLevel() >= 13 && get("_neverendingPartyFreeTurns") >= 10;
+const levellingComplete = get("csServicesPerformed").split(",").length > 1;
 let lovePotionConsidered = false;
 
 const foldshirt = (): void => {
