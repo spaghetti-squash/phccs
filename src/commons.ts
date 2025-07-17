@@ -290,7 +290,7 @@ export function buskTask(hat: Item, shirt: Item, pants: Item, index: number): CS
         }
       }),
     },
-    ready: () => [hat, shirt, pants].every((it) => (canEquip(it) && have(it)) || npcPrice(it) > 0),
+    ready: () => [hat, shirt, pants].every((it) => canEquip(it) && (have(it) || npcPrice(it) > 0)),
     completed: () => get("_beretBuskingUses") !== index,
     do: () => {
       for (const [slotName, item] of Object.entries({ hat, shirt, pants })) {

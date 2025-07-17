@@ -52,6 +52,7 @@ import {
   getActiveSongs,
   getKramcoWandererChance,
   have,
+  PeridotOfPeril,
   TunnelOfLove,
   uneffect,
   Witchess,
@@ -643,6 +644,32 @@ const Level: CSQuest = {
           .skill($skill`Micrometeorite`)
           .attack()
           .repeat()
+      ),
+    },
+    {
+      name: "Peridot NEP",
+      completed: () => !PeridotOfPeril.canImperil($location`The Neverending Party`),
+      do: $location`The Neverending Party`,
+      choices: peridotChoice($monster`jock`),
+      outfit: () => {
+        foldshirt();
+        return uniform({
+          changes: {
+            acc3: $item`Peridot of Peril`,
+          },
+        });
+      },
+      combat: new CSStrategy(() =>
+        Macro.if_(
+          $effect`Inner Elf`,
+          Macro.if_(
+            `!hascombatitem ${$item`cosmic bowling ball`}`,
+            Macro.trySkill($skill`Feel Pride`)
+          )
+        )
+          .trySkill($skill`Bowl Sideways`)
+          .delevel()
+          .defaultKill()
       ),
     },
     {
