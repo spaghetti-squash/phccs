@@ -115,13 +115,24 @@ function chooseFamiliar(canAttack: boolean): Pick<OutfitSpec, "familiar" | "fame
       (canAttack || !(familiar.elementalDamage || familiar.physicalDamage))
   );
   if (pick) {
+    if (pick.famequip) {
+      return {
+        famequip: undelay(pick.famequip),
+        familiar: pick.familiar,
+      };
+    }
+    if (!ToyCupidBow.doneToday($familiar`Shorter-Order Cook`)) {
+      return {
+        familiar: pick.familiar,
+        famequip:
+          pick.familiar === $familiar`Shorter-Order Cook`
+            ? $item`toy Cupid bow`
+            : $item`tiny stillsuit`,
+      };
+    }
     return {
-      famequip:
-        undelay(pick.famequip) ??
-        (ToyCupidBow.familiarsToday().includes(pick.familiar)
-          ? $item`tiny stillsuit`
-          : $item`toy Cupid bow`),
       familiar: pick.familiar,
+      famequip: ToyCupidBow.doneToday(pick.familiar) ? $item`tiny stillsuit` : $item`toy Cupid bow`,
     };
   }
   return {
