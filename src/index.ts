@@ -1,6 +1,5 @@
 import BoozeDrop from "./boozedrop";
 import CoilWire from "./coilwire";
-import Drink from "./drinking";
 import { CSEngine } from "./engine";
 import FamiliarWeight from "./familiarweight";
 import HotRes from "./hotres";
@@ -20,7 +19,6 @@ export function main() {
     CoilWire,
     Level,
     ...StatTests,
-    Drink,
     HotRes,
     Noncombat,
     FamiliarWeight,

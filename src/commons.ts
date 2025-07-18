@@ -284,13 +284,15 @@ export function buskTask(hat: Item, shirt: Item, pants: Item, index: number): CS
       ...(hat === $item`prismatic beret`
         ? {}
         : { familiar: $familiar`Mad Hatrack`, famequip: $item`prismatic beret` }),
-      beforeDress: [hat, shirt, pants].map((it) => () => {
-        if (!have(it)) {
-          if (!(npcPrice(it) > 0 && buy(it))) abort(`Failed to obtain ${it} for Busking!`);
-        }
-      }),
     },
-    ready: () => [hat, shirt, pants].every((it) => canEquip(it) && (have(it) || npcPrice(it) > 0)),
+    acquire: () =>
+      [hat, pants, shirt]
+        .filter((i) => i !== $item.none && !have(i) && npcPrice(i) > 0)
+        .map((item) => ({ item })),
+    ready: () =>
+      [hat, shirt, pants].every(
+        (it) => it === $item.none || (canEquip(it) && (have(it) || npcPrice(it) > 0))
+      ),
     completed: () => get("_beretBuskingUses") !== index,
     do: () => {
       for (const [slotName, item] of Object.entries({ hat, shirt, pants })) {
