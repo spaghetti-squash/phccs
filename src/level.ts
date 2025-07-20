@@ -10,7 +10,14 @@ import {
   skillTask,
 } from "./commons";
 import { CSQuest } from "./engine";
-import { burnLibrams, guildQuestZone, peridotChoice, SYNTH_EFFECT, synthExp } from "./lib";
+import {
+  availableEmbers,
+  burnLibrams,
+  guildQuestZone,
+  peridotChoice,
+  SYNTH_EFFECT,
+  synthExp,
+} from "./lib";
 import uniform from "./outfit";
 import { OutfitSpec } from "grimoire-kolmafia";
 import {
@@ -35,6 +42,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import {
+  $coinmaster,
   $effect,
   $effects,
   $familiar,
@@ -68,7 +76,7 @@ const foldshirt = (): void => {
 
 let queenPrep = false;
 const CastSkills = [
-  ...$skills`Advanced Saucecrafting, Advanced Cocktailcrafting, Acquire Rhinestones, Prevent Scurvy and Sobriety, Stevedave's Shanty of Superiority, Fat Leon's Phat Loot Lyric, Paul's Passionate Pop Song, Leash of Linguini, Blood Bond, Blood Bubble, Song of Bravado, Get Big, Mathematical Precision, Ruthless Efficiency, Carol of the Bulls, Rage of the Reindeer, Disco Aerobics, Manicotti Meditation, Moxie of the Mariachi, Patience of the Tortoise, Sauce Contemplation, Seal Clubbing Frenzy`,
+  ...$skills`Advanced Saucecrafting, Advanced Cocktailcrafting, Acquire Rhinestones, Prevent Scurvy and Sobriety, Stevedave's Shanty of Superiority, Fat Leon's Phat Loot Lyric, Paul's Passionate Pop Song, Leash of Linguini, Blood Bond, Blood Bubble, Song of Bravado, Get Big, Mathematical Precision, Ruthless Efficiency, Carol of the Bulls, Rage of the Reindeer, Disco Aerobics, Manicotti Meditation, Moxie of the Mariachi, Patience of the Tortoise, Sauce Contemplation, Seal Clubbing Frenzy, Bend Hell`,
   byStat({
     Mysticality: $skill`The Magical Mojomuscular Melody`,
     Muscle: $skill`The Power Ballad of the Arrowsmith`,
@@ -121,6 +129,19 @@ const Level: CSQuest = {
     buskTask($item`norwhal helmet`, $item`fresh coat of paint`, $item`union scalemail pants`, 3),
     buskTask($item.none, $item.none, $item`repaid diaper`, 4),
     {
+      name: "Ember",
+      ready: () => get("_beretBuskingUses") >= 5 && have($item`LOV Eardigan`),
+      completed: () => availableEmbers() <= 0,
+      do: () => {
+        abort();
+        buy($coinmaster`Sept-Ember Censer`, 1, $item`Mmm-brr! brand mouthwash`);
+        use($item`Mmm-brr! brand mouthwash`);
+      },
+      outfit: {
+        shirt: $item`LOV Eardigan`,
+      },
+    },
+    {
       name: "Slay Camel",
       completed: () => get("_entauntaunedToday"),
       ready: () => have($item`blue plate`),
@@ -128,7 +149,8 @@ const Level: CSQuest = {
         familiar: $familiar`Melodramedary`,
         weapon: $item`Fourth of May Cosplay Saber`,
       }),
-      do: () => abort(),
+      do: () => visitUrl("main.php?action=camel", false),
+      choices: { 1418: 1 },
     },
     innerElf(),
     {
@@ -324,7 +346,7 @@ const Level: CSQuest = {
       completed: () => have($effect`Giant Growth`),
       ready: () => have($item`green mana`) && get("_snojoFreeFights") < 10,
       do: $location`The X-32-F Combat Training Snowman`,
-      outfit: uniform,
+      outfit: () => uniform(),
       combat: new CSStrategy(() =>
         Macro.externalIf(
           !have($effect`Cosmic Ball in the Air`),
@@ -573,7 +595,7 @@ const Level: CSQuest = {
             }
           }
         }),
-      outfit: uniform,
+      outfit: () => uniform(),
       combat: new CSStrategy(() => Macro.delevel().candyblast().defaultKill()),
     },
     {
@@ -672,7 +694,7 @@ const Level: CSQuest = {
           .defaultKill()
       ),
     },
-    {
+    /*{
       name: "Regular NEP",
       completed: () => get("_neverendingPartyFreeTurns") >= 10,
       do: $location`The Neverending Party`,
@@ -698,7 +720,7 @@ const Level: CSQuest = {
           .defaultKill()
       ),
       choices: { [1324]: 5 },
-    },
+    },*/
   ],
 };
 
