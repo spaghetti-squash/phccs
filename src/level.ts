@@ -26,6 +26,7 @@ import {
   cliExecute,
   create,
   effectModifier,
+  equip,
   mpCost,
   myFamiliar,
   myHp,
@@ -138,7 +139,25 @@ const Level: CSQuest = {
         use($item`Mmm-brr! brand mouthwash`);
       },
       outfit: {
-        shirt: $item`LOV Eardigan`,
+        hat: $item`prismatic beret`,
+        weapon: $item`McHugeLarge right pole`,
+        offhand: $item`McHugeLarge left pole`,
+        back: $item`McHugeLarge duffel bag`,
+        shirt: $item`Jurassic Parka`,
+        modes: { parka: "kachungasaur" },
+        pants: $item`repaid diaper`,
+        acc1: $item`your cowboy boots`,
+        acc2: $item`McHugeLarge left ski`,
+        acc3: $item`McHugeLarge right ski`,
+        // eslint-disable-next-line libram/verify-constants
+        familiar: $familiar`cooler yeti`,
+        famequip: $item`tiny stillsuit`,
+        beforeDress: [() => equip($familiar`Shorter-Order Cook`, $item`blue plate`)],
+        ...byStat({
+          Muscle: { shirt: $item`LOV Eardigan` },
+          Moxie: { acc1: $item`LOV Earrings` },
+          Mysticality: { back: $item`LOV Epaulettes` },
+        }),
       },
     },
     {
