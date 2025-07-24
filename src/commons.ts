@@ -152,13 +152,7 @@ export function commonFamiliarWeightBuffs(): CSTask[] {
   return [
     potionTask($item`green candy heart`),
     ...restoreBuffTasks(buffs),
-    {
-      name: "Witchess",
-      completed: () => get("_witchessBuff"),
-      do: () => cliExecute("witchess"),
-    },
     skillTask({ skill: $skill`Empathy of the Newt`, effect: $effect`Thoughtful Empathy` }, true),
-    beachTask($effect`Do I Know You From Somewhere?`),
   ];
 }
 

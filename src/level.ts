@@ -21,7 +21,6 @@ import {
 import uniform from "./outfit";
 import { OutfitSpec } from "grimoire-kolmafia";
 import {
-  abort,
   buy,
   cliExecute,
   create,
@@ -61,7 +60,6 @@ import {
   getActiveSongs,
   getKramcoWandererChance,
   have,
-  PeridotOfPeril,
   TunnelOfLove,
   uneffect,
   Witchess,
@@ -71,13 +69,9 @@ import {
 const levellingComplete = get("csServicesPerformed").split(",").length > 1;
 let lovePotionConsidered = false;
 
-const foldshirt = (): void => {
-  if (!have($item`makeshift garbage shirt`)) cliExecute("fold makeshift garbage shirt");
-};
-
 let queenPrep = false;
 const CastSkills = [
-  ...$skills`Advanced Saucecrafting, Advanced Cocktailcrafting, Acquire Rhinestones, Prevent Scurvy and Sobriety, Stevedave's Shanty of Superiority, Fat Leon's Phat Loot Lyric, Paul's Passionate Pop Song, Leash of Linguini, Blood Bond, Blood Bubble, Song of Bravado, Get Big, Mathematical Precision, Ruthless Efficiency, Carol of the Bulls, Rage of the Reindeer, Disco Aerobics, Manicotti Meditation, Moxie of the Mariachi, Patience of the Tortoise, Sauce Contemplation, Seal Clubbing Frenzy, Bend Hell`,
+  ...$skills`Advanced Saucecrafting, Advanced Cocktailcrafting, Acquire Rhinestones, Prevent Scurvy and Sobriety, Stevedave's Shanty of Superiority, Fat Leon's Phat Loot Lyric, Paul's Passionate Pop Song, Leash of Linguini, Blood Bond, Blood Bubble, Song of Bravado, Get Big, Mathematical Precision, Ruthless Efficiency, Carol of the Bulls, Rage of the Reindeer, Disco Aerobics, Manicotti Meditation, Moxie of the Mariachi, Patience of the Tortoise, Sauce Contemplation, Seal Clubbing Frenzy, Bend Hell, Astral Shell, Elemental Saucesphere, Scarysauce`,
   byStat({
     Mysticality: $skill`The Magical Mojomuscular Melody`,
     Muscle: $skill`The Power Ballad of the Arrowsmith`,
@@ -124,17 +118,27 @@ const Level: CSQuest = {
   name: "Level",
   completed: () => levellingComplete,
   tasks: [
+    {
+      name: "Fold Shirt",
+      completed: () => have($item`makeshift garbage shirt`),
+      do: () => cliExecute("fold makeshift garbage shirt"),
+    },
     buskTask($item`norwhal helmet`, $item.none, $item`repaid diaper`, 0),
-    buskTask($item`Apriling band helmet`, $item`shoe ad T-shirt`, $item`union scalemail pants`, 1),
+    buskTask(
+      $item`Apriling band helmet`,
+      $item`makeshift garbage shirt`,
+      $item`union scalemail pants`,
+      1
+    ),
     buskTask($item`coconut shell`, $item`fresh coat of paint`, $item.none, 2),
     buskTask($item`norwhal helmet`, $item`fresh coat of paint`, $item`union scalemail pants`, 3),
     buskTask($item.none, $item.none, $item`repaid diaper`, 4),
     {
       name: "Ember",
-      ready: () => get("_beretBuskingUses") >= 5 && have($item`LOV Eardigan`),
+      ready: () =>
+        get("_beretBuskingUses") >= 5 && have($item`LOV Eardigan`) && have($effect`Entauntauned`),
       completed: () => availableEmbers() <= 0,
       do: () => {
-        abort();
         buy($coinmaster`Sept-Ember Censer`, 1, $item`Mmm-brr! brand mouthwash`);
         use($item`Mmm-brr! brand mouthwash`);
       },
@@ -168,8 +172,10 @@ const Level: CSQuest = {
         familiar: $familiar`Melodramedary`,
         weapon: $item`Fourth of May Cosplay Saber`,
       }),
-      do: () => visitUrl("main.php?action=camel", false),
-      choices: { 1418: 1 },
+      do: () => {
+        visitUrl("main.php?action=camel", false);
+        runChoice(1);
+      },
     },
     innerElf(),
     {
@@ -307,6 +313,13 @@ const Level: CSQuest = {
     ),
     ...restoreBuffTasks($effects`Empathy`),
     skillTask({ skill: $skill`Empathy of the Newt`, effect: $effect`Thoughtful Empathy` }, true),
+    potionTask($item`green candy heart`),
+    {
+      name: "Witchess",
+      completed: () => get("_witchessBuff"),
+      do: () => cliExecute("witchess"),
+    },
+    beachTask($effect`Do I Know You From Somewhere?`),
     {
       name: "Get Range",
       completed: () => get("hasRange"),
@@ -383,7 +396,6 @@ const Level: CSQuest = {
       name: "Witch",
       completed: () => have($item`battle broom`),
       outfit: (): OutfitSpec => {
-        foldshirt();
         return uniform({
           changes: {
             weapon: byStat({
@@ -410,7 +422,6 @@ const Level: CSQuest = {
       do: () => Witchess.fightPiece($monster`Witchess King`),
       ready: () => Witchess.fightsDone() < 5,
       outfit: (): OutfitSpec => {
-        foldshirt();
         return uniform({
           changes: {
             weapon: byStat({
@@ -453,7 +464,6 @@ const Level: CSQuest = {
       do: () => Witchess.fightPiece($monster`Witchess Queen`),
       ready: () => Witchess.fightsDone() < 5,
       outfit: (): OutfitSpec => {
-        foldshirt();
         return uniform({
           changes: {
             weapon: byStat({
@@ -545,7 +555,6 @@ const Level: CSQuest = {
       name: "LOV",
       completed: () => get("_loveTunnelUsed"),
       outfit: (): OutfitSpec => {
-        foldshirt();
         return uniform({
           changes: {
             weapon: byStat({
@@ -645,7 +654,6 @@ const Level: CSQuest = {
       completed: () => get("_machineTunnelsAdv") >= 5,
       do: $location`The Deep Machine Tunnels`,
       outfit: (): OutfitSpec => {
-        foldshirt();
         return uniform({
           changes: {
             shirt: $item`makeshift garbage shirt`,
@@ -669,7 +677,6 @@ const Level: CSQuest = {
       completed: () => getKramcoWandererChance() < 1,
       do: guildQuestZone,
       outfit: (): OutfitSpec => {
-        foldshirt();
         return uniform({
           changes: {
             shirt: $item`makeshift garbage shirt`,
@@ -687,13 +694,13 @@ const Level: CSQuest = {
           .repeat()
       ),
     },
-    {
+    /*{
       name: "Peridot NEP",
       completed: () => !PeridotOfPeril.canImperil($location`The Neverending Party`),
       do: $location`The Neverending Party`,
       choices: peridotChoice($monster`jock`),
       outfit: () => {
-        foldshirt();
+
         return uniform({
           changes: {
             acc3: $item`Peridot of Peril`,
@@ -701,24 +708,19 @@ const Level: CSQuest = {
         });
       },
       combat: new CSStrategy(() =>
-        Macro.if_(
-          $effect`Inner Elf`,
-          Macro.if_(
-            `!hascombatitem ${$item`cosmic bowling ball`}`,
-            Macro.trySkill($skill`Feel Pride`)
-          )
-        )
+        Macro.trySkill($skill`Feel Pride`)
+          .trySkill($skill`Feel Envy`)
           .trySkill($skill`Bowl Sideways`)
           .delevel()
           .defaultKill()
       ),
     },
-    /*{
+    {
       name: "Regular NEP",
       completed: () => get("_neverendingPartyFreeTurns") >= 10,
       do: $location`The Neverending Party`,
       outfit: (): OutfitSpec => {
-        foldshirt();
+
         return uniform({
           changes: {
             shirt: $items`makeshift garbage shirt`,
