@@ -136,7 +136,7 @@ const Level: CSQuest = {
     {
       name: "Ember",
       ready: () =>
-        get("_beretBuskingUses") >= 5 && have($item`LOV Eardigan`) && have($effect`Entauntauned`),
+        get("_beretBuskingUses") >= 5 && get("_loveTunnelUsed") && have($effect`Entauntauned`),
       completed: () => availableEmbers() <= 0,
       do: () => {
         buy($coinmaster`Sept-Ember Censer`, 1, $item`Mmm-brr! brand mouthwash`);
