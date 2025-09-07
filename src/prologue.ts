@@ -324,7 +324,8 @@ const Prologue: CSQuest = {
     },
     {
       name: "Unlock Bird",
-      completed: () => !!get("_birdOfTheDay"),
+      completed: () => have($skill`Seek out a Bird`) || get("_canSeekBirds"),
+      ready: () => have($item`Bird-a-Day calendar`),
       do: () => use($item`Bird-a-Day calendar`),
     },
     {
