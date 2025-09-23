@@ -236,7 +236,10 @@ export function birdTask(modifier: NumericModifier, positive = true): CSTask {
   return {
     name: "Regular Bird",
     completed: () => have($effect`Blessing of the Bird`),
-    ready: () => currentBirdHas(modifier, positive) && get("_birdsSoughtToday") < 6,
+    ready: () =>
+      have($skill`Seek out a Bird`) &&
+      currentBirdHas(modifier, positive) &&
+      get("_birdsSoughtToday") < 6,
     do: () => useSkill($skill`Seek out a Bird`),
   };
 }
@@ -245,7 +248,7 @@ export function favouriteBirdTask(modifier: NumericModifier, positive = true): C
   return {
     name: "Favourite Bird",
     completed: () => get("_favoriteBirdVisited"),
-    ready: () => favouriteBirdHas(modifier, positive),
+    ready: () => have($skill`Visit your Favorite Bird`) && favouriteBirdHas(modifier, positive),
     do: () => useSkill($skill`Visit your Favorite Bird`),
   };
 }
