@@ -1,5 +1,12 @@
 import { OutfitSpec } from "grimoire-kolmafia";
-import { Familiar, Item, totalTurnsPlayed } from "kolmafia";
+import {
+  equip,
+  Familiar,
+  familiarEquippedEquipment,
+  inHardcore,
+  Item,
+  totalTurnsPlayed,
+} from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -80,7 +87,7 @@ const FAMILIAR_PICKS = [
   {
     familiar: $familiar`Melodramedary`,
     famequip: () => $items`dromedary drinking helmet`.find((i) => have(i)),
-    condition: () => get("camelSpit") < 100 && !have($effect`Spit Upon`),
+    condition: () => get("camelSpit") < 100 && !have($effect`Spit Upon`) && inHardcore(),
   },
   {
     familiar: $familiar`Shorter-Order Cook`,
@@ -115,13 +122,24 @@ function chooseFamiliar(canAttack: boolean): Pick<OutfitSpec, "familiar" | "fame
       (canAttack || !(familiar.elementalDamage || familiar.physicalDamage))
   );
   if (pick) {
+    if (pick.famequip) {
+      return {
+        famequip: undelay(pick.famequip),
+        familiar: pick.familiar,
+      };
+    }
+    if (!ToyCupidBow.doneToday($familiar`Shorter-Order Cook`)) {
+      return {
+        familiar: pick.familiar,
+        famequip:
+          pick.familiar === $familiar`Shorter-Order Cook`
+            ? $item`toy Cupid bow`
+            : $item`tiny stillsuit`,
+      };
+    }
     return {
-      famequip:
-        undelay(pick.famequip) ??
-        (ToyCupidBow.familiarsToday().includes(pick.familiar)
-          ? $item`tiny stillsuit`
-          : $item`toy Cupid bow`),
       familiar: pick.familiar,
+      famequip: ToyCupidBow.doneToday(pick.familiar) ? $item`tiny stillsuit` : $item`toy Cupid bow`,
     };
   }
   return {
@@ -139,5 +157,14 @@ export default function uniform({ changes = {} as OutfitSpec, canAttack = true }
       changes.famequip = $item`toy Cupid bow`;
     }
   }
-  return { ...DEFAULT_UNIFORM(), ...chooseFamiliar(canAttack), ...changes };
+  const spec: OutfitSpec = { ...DEFAULT_UNIFORM(), ...chooseFamiliar(canAttack), ...changes };
+  if (spec.familiar?.experience === 0)
+    spec.beforeDress = [
+      () =>
+        have($item`blue plate`) &&
+        familiarEquippedEquipment($familiar`Shorter-Order Cook`) !== $item`blue plate` &&
+        equip($familiar`Shorter-Order Cook`, $item`blue plate`),
+    ];
+
+  return spec;
 }

@@ -1,5 +1,5 @@
 import { CSStrategy, Macro } from "./combat";
-import { aprilTask, asdonTask, deckTask, potionTask, skillTask, songTask } from "./commons";
+import { aprilTask, asdonTask, deckTask, potionTask, skillTask } from "./commons";
 import { CSQuest } from "./engine";
 import uniform from "./outfit";
 import { OutfitSpec } from "grimoire-kolmafia";
@@ -64,7 +64,6 @@ const BoozeDrop: CSQuest = {
       class: $classes`Sauceror, Turtle Tamer`,
       core: "hard",
     },
-    songTask($effect`Fat Leon's Phat Loot Lyric`, $effect`Ode to Booze`),
     {
       name: "Items.enh",
       completed: () => have($effect`items.enh`),

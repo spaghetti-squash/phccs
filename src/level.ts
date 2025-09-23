@@ -1,6 +1,7 @@
 import { CSStrategy, Macro } from "./combat";
 import {
   beachTask,
+  buskTask,
   favouriteBirdTask,
   innerElf,
   potionTask,
@@ -9,7 +10,14 @@ import {
   skillTask,
 } from "./commons";
 import { CSQuest } from "./engine";
-import { burnLibrams, guildQuestZone, peridotChoice, SYNTH_EFFECT, synthExp } from "./lib";
+import {
+  availableEmbers,
+  burnLibrams,
+  guildQuestZone,
+  peridotChoice,
+  SYNTH_EFFECT,
+  synthExp,
+} from "./lib";
 import uniform from "./outfit";
 import { OutfitSpec } from "grimoire-kolmafia";
 import {
@@ -17,10 +25,10 @@ import {
   cliExecute,
   create,
   effectModifier,
+  equip,
   mpCost,
   myFamiliar,
   myHp,
-  myLevel,
   myMp,
   myPrimestat,
   numericModifier,
@@ -34,6 +42,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import {
+  $coinmaster,
   $effect,
   $effects,
   $familiar,
@@ -57,16 +66,12 @@ import {
   withProperties,
 } from "libram";
 
-const levellingComplete = myLevel() >= 13 && get("_neverendingPartyFreeTurns") >= 10;
+const levellingComplete = get("csServicesPerformed").split(",").length > 1;
 let lovePotionConsidered = false;
-
-const foldshirt = (): void => {
-  if (!have($item`makeshift garbage shirt`)) cliExecute("fold makeshift garbage shirt");
-};
 
 let queenPrep = false;
 const CastSkills = [
-  ...$skills`Advanced Saucecrafting, Advanced Cocktailcrafting, Acquire Rhinestones, Prevent Scurvy and Sobriety, Stevedave's Shanty of Superiority, Fat Leon's Phat Loot Lyric, Paul's Passionate Pop Song, Leash of Linguini, Blood Bond, Blood Bubble, Song of Bravado, Get Big, Mathematical Precision, Ruthless Efficiency, Carol of the Bulls, Rage of the Reindeer, Disco Aerobics, Manicotti Meditation, Moxie of the Mariachi, Patience of the Tortoise, Sauce Contemplation, Seal Clubbing Frenzy`,
+  ...$skills`Advanced Saucecrafting, Advanced Cocktailcrafting, Acquire Rhinestones, Prevent Scurvy and Sobriety, Stevedave's Shanty of Superiority, Fat Leon's Phat Loot Lyric, Paul's Passionate Pop Song, Leash of Linguini, Blood Bond, Blood Bubble, Song of Bravado, Get Big, Mathematical Precision, Ruthless Efficiency, Carol of the Bulls, Rage of the Reindeer, Disco Aerobics, Manicotti Meditation, Moxie of the Mariachi, Patience of the Tortoise, Sauce Contemplation, Seal Clubbing Frenzy, Bend Hell, Astral Shell, Elemental Saucesphere, Scarysauce`,
   byStat({
     Mysticality: $skill`The Magical Mojomuscular Melody`,
     Muscle: $skill`The Power Ballad of the Arrowsmith`,
@@ -113,6 +118,65 @@ const Level: CSQuest = {
   name: "Level",
   completed: () => levellingComplete,
   tasks: [
+    {
+      name: "Fold Shirt",
+      completed: () => have($item`makeshift garbage shirt`),
+      do: () => cliExecute("fold makeshift garbage shirt"),
+    },
+    buskTask($item`norwhal helmet`, $item.none, $item`repaid diaper`, 0),
+    buskTask(
+      $item`Apriling band helmet`,
+      $item`makeshift garbage shirt`,
+      $item`union scalemail pants`,
+      1
+    ),
+    buskTask($item`coconut shell`, $item`fresh coat of paint`, $item.none, 2),
+    buskTask($item`norwhal helmet`, $item`fresh coat of paint`, $item`union scalemail pants`, 3),
+    buskTask($item.none, $item.none, $item`repaid diaper`, 4),
+    {
+      name: "Ember",
+      ready: () =>
+        get("_beretBuskingUses") >= 5 && get("_loveTunnelUsed") && have($effect`Entauntauned`),
+      completed: () => availableEmbers() <= 0,
+      do: () => {
+        buy($coinmaster`Sept-Ember Censer`, 1, $item`Mmm-brr! brand mouthwash`);
+        use($item`Mmm-brr! brand mouthwash`);
+      },
+      outfit: {
+        hat: $item`prismatic beret`,
+        weapon: $item`McHugeLarge right pole`,
+        offhand: $item`McHugeLarge left pole`,
+        back: $item`McHugeLarge duffel bag`,
+        shirt: $item`Jurassic Parka`,
+        modes: { parka: "kachungasaur" },
+        pants: $item`repaid diaper`,
+        acc1: $item`your cowboy boots`,
+        acc2: $item`McHugeLarge left ski`,
+        acc3: $item`McHugeLarge right ski`,
+        // eslint-disable-next-line libram/verify-constants
+        familiar: $familiar`cooler yeti`,
+        famequip: $item`tiny stillsuit`,
+        beforeDress: [() => equip($familiar`Shorter-Order Cook`, $item`blue plate`)],
+        ...byStat({
+          Muscle: { shirt: $item`LOV Eardigan` },
+          Moxie: { acc1: $item`LOV Earrings` },
+          Mysticality: { back: $item`LOV Epaulettes` },
+        }),
+      },
+    },
+    {
+      name: "Slay Camel",
+      completed: () => get("_entauntaunedToday"),
+      ready: () => have($item`blue plate`),
+      outfit: () => ({
+        familiar: $familiar`Melodramedary`,
+        weapon: $item`Fourth of May Cosplay Saber`,
+      }),
+      do: () => {
+        visitUrl("main.php?action=camel", false);
+        runChoice(1);
+      },
+    },
     innerElf(),
     {
       name: "That's Just Cloud Talk, Man",
@@ -249,6 +313,13 @@ const Level: CSQuest = {
     ),
     ...restoreBuffTasks($effects`Empathy`),
     skillTask({ skill: $skill`Empathy of the Newt`, effect: $effect`Thoughtful Empathy` }, true),
+    potionTask($item`green candy heart`),
+    {
+      name: "Witchess",
+      completed: () => get("_witchessBuff"),
+      do: () => cliExecute("witchess"),
+    },
+    beachTask($effect`Do I Know You From Somewhere?`),
     {
       name: "Get Range",
       completed: () => get("hasRange"),
@@ -307,7 +378,7 @@ const Level: CSQuest = {
       completed: () => have($effect`Giant Growth`),
       ready: () => have($item`green mana`) && get("_snojoFreeFights") < 10,
       do: $location`The X-32-F Combat Training Snowman`,
-      outfit: uniform,
+      outfit: () => uniform(),
       combat: new CSStrategy(() =>
         Macro.externalIf(
           !have($effect`Cosmic Ball in the Air`),
@@ -325,7 +396,6 @@ const Level: CSQuest = {
       name: "Witch",
       completed: () => have($item`battle broom`),
       outfit: (): OutfitSpec => {
-        foldshirt();
         return uniform({
           changes: {
             weapon: byStat({
@@ -335,7 +405,7 @@ const Level: CSQuest = {
             shirt: $item`makeshift garbage shirt`,
             offhand: $item`familiar scrapbook`,
             familiar: $familiar`Shorter-Order Cook`,
-            famequip: $item`tiny stillsuit`,
+            famequip: $item`toy Cupid bow`,
           },
         });
       },
@@ -352,7 +422,6 @@ const Level: CSQuest = {
       do: () => Witchess.fightPiece($monster`Witchess King`),
       ready: () => Witchess.fightsDone() < 5,
       outfit: (): OutfitSpec => {
-        foldshirt();
         return uniform({
           changes: {
             weapon: byStat({
@@ -362,7 +431,7 @@ const Level: CSQuest = {
             shirt: $item`makeshift garbage shirt`,
             offhand: $item`familiar scrapbook`,
             familiar: $familiar`Shorter-Order Cook`,
-            famequip: $item`tiny stillsuit`,
+            famequip: $item`toy Cupid bow`,
           },
         });
       },
@@ -395,7 +464,6 @@ const Level: CSQuest = {
       do: () => Witchess.fightPiece($monster`Witchess Queen`),
       ready: () => Witchess.fightsDone() < 5,
       outfit: (): OutfitSpec => {
-        foldshirt();
         return uniform({
           changes: {
             weapon: byStat({
@@ -405,7 +473,7 @@ const Level: CSQuest = {
             shirt: $item`makeshift garbage shirt`,
             offhand: $item`familiar scrapbook`,
             familiar: $familiar`Shorter-Order Cook`,
-            famequip: $item`tiny stillsuit`,
+            famequip: $item`toy Cupid bow`,
           },
         });
       },
@@ -487,7 +555,6 @@ const Level: CSQuest = {
       name: "LOV",
       completed: () => get("_loveTunnelUsed"),
       outfit: (): OutfitSpec => {
-        foldshirt();
         return uniform({
           changes: {
             weapon: byStat({
@@ -533,14 +600,6 @@ const Level: CSQuest = {
       })
     ),
     {
-      name: "Snojo",
-      completed: () => get("_snojoFreeFights") >= 10,
-      ready: () => !!get("snojoSetting"),
-      outfit: uniform,
-      do: $location`The X-32-F Combat Training Snowman`,
-      combat: new CSStrategy(() => Macro.delevel().easyFight().attack().repeat()),
-    },
-    {
       name: "Post-Snojo Hottub",
       completed: () =>
         $effects`Snowballed, Half-Blooded, Half-Drained, Bruised, Relaxed Muscles, Hypnotized, Bad Haircut`.every(
@@ -564,7 +623,7 @@ const Level: CSQuest = {
             }
           }
         }),
-      outfit: uniform,
+      outfit: () => uniform(),
       combat: new CSStrategy(() => Macro.delevel().candyblast().defaultKill()),
     },
     {
@@ -595,7 +654,6 @@ const Level: CSQuest = {
       completed: () => get("_machineTunnelsAdv") >= 5,
       do: $location`The Deep Machine Tunnels`,
       outfit: (): OutfitSpec => {
-        foldshirt();
         return uniform({
           changes: {
             shirt: $item`makeshift garbage shirt`,
@@ -615,44 +673,10 @@ const Level: CSQuest = {
       },
     },
     {
-      name: "NEP Spit",
-      completed: () => have($effect`Spit Upon`),
-      ready: () =>
-        get("camelSpit") >= 100 &&
-        have($familiar`Comma Chameleon`) &&
-        get("_neverendingPartyFreeTurns") < 10,
-      do: $location`The Neverending Party`,
-      outfit: (): OutfitSpec => {
-        foldshirt();
-        return uniform({
-          changes: {
-            shirt: $items`makeshift garbage shirt`,
-            ...(get("_sausageFights") > 4 ? {} : { offhand: $item`Kramco Sausage-o-Matic™` }),
-            familiar: $familiar`Melodramedary`,
-          },
-        });
-      },
-      combat: new CSStrategy(() =>
-        Macro.trySkill($skill`%fn, spit on me!`)
-          .if_(
-            $effect`Inner Elf`,
-            Macro.if_(
-              `!hascombatitem ${$item`cosmic bowling ball`}`,
-              Macro.trySkill($skill`Feel Pride`)
-            )
-          )
-          .trySkill($skill`Bowl Sideways`)
-          .delevel()
-          .defaultKill()
-      ),
-      choices: { [1324]: 5 },
-    },
-    {
       name: "Purple Candle Kramco",
       completed: () => getKramcoWandererChance() < 1,
       do: guildQuestZone,
       outfit: (): OutfitSpec => {
-        foldshirt();
         return uniform({
           changes: {
             shirt: $item`makeshift garbage shirt`,
@@ -670,12 +694,33 @@ const Level: CSQuest = {
           .repeat()
       ),
     },
+    /*{
+      name: "Peridot NEP",
+      completed: () => !PeridotOfPeril.canImperil($location`The Neverending Party`),
+      do: $location`The Neverending Party`,
+      choices: peridotChoice($monster`jock`),
+      outfit: () => {
+
+        return uniform({
+          changes: {
+            acc3: $item`Peridot of Peril`,
+          },
+        });
+      },
+      combat: new CSStrategy(() =>
+        Macro.trySkill($skill`Feel Pride`)
+          .trySkill($skill`Feel Envy`)
+          .trySkill($skill`Bowl Sideways`)
+          .delevel()
+          .defaultKill()
+      ),
+    },
     {
       name: "Regular NEP",
       completed: () => get("_neverendingPartyFreeTurns") >= 10,
       do: $location`The Neverending Party`,
       outfit: (): OutfitSpec => {
-        foldshirt();
+
         return uniform({
           changes: {
             shirt: $items`makeshift garbage shirt`,
@@ -696,42 +741,7 @@ const Level: CSQuest = {
           .defaultKill()
       ),
       choices: { [1324]: 5 },
-    },
-    {
-      name: "Freekill NEP",
-      completed: () =>
-        get("_shatteringPunchUsed") >= 3 &&
-        get("_gingerbreadMobHitUsed") &&
-        have($effect`Everything Looks Yellow`) &&
-        get("_chestXRayUsed") >= 3,
-      do: $location`The Neverending Party`,
-      outfit: (): OutfitSpec => {
-        foldshirt();
-        const killSource = !have($effect`Everything Looks Yellow`)
-          ? { shirt: $item`Jurassic Parka`, modes: { parka: "dilophosaur" as const } }
-          : get("_chestXRayUsed") < 3
-          ? { acc3: $item`Lil' Doctor™ bag` }
-          : {};
-        const enoughSausages = get("_sausageFights") > 4;
-        const changes = {
-          shirt: $items`makeshift garbage shirt`,
-          ...killSource,
-          ...(enoughSausages ? {} : { offhand: $item`Kramco Sausage-o-Matic™` }),
-        };
-        return uniform({ changes });
-      },
-      combat: new CSStrategy(() =>
-        Macro.if_($monster`sausage goblin`, Macro.defaultKill())
-          .trySkill($skill`Feel Pride`)
-          .trySkill($skill`Bowl Sideways`)
-          .trySkill($skill`Spit jurassic acid`)
-          .trySkill($skill`Chest X-Ray`)
-          .trySkill($skill`Shattering Punch`)
-          .trySkill($skill`Gingerbread Mob Hit`)
-          .abort()
-      ),
-      choices: { [1324]: 5 },
-    },
+    },*/
   ],
 };
 

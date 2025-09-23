@@ -84,14 +84,7 @@ const SPECIAL_REQUIREMENTS: Record<
     bootRequirement($item`mountain lion skin`),
   ],
   Muscle: [bootRequirement($item`grizzled bearskin`)],
-  Mysticality: [
-    {
-      name: "Meteor Necklace",
-      meets: () => !args.softcore || have($item`meteorite necklace`),
-      reason: "we don't start in a canadian moonsign!",
-    },
-    bootRequirement($item`frontwinder skin`),
-  ],
+  Mysticality: [bootRequirement($item`frontwinder skin`)],
 };
 
 export function main(input = ""): void {

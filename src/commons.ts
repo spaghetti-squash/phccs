@@ -2,14 +2,17 @@ import { CSStrategy, Macro } from "./combat";
 import { CSTask, currentBirdHas, favouriteBirdHas } from "./lib";
 import uniform from "./outfit";
 import {
+  abort,
   adv1,
   availableAmount,
   buy,
+  canEquip,
   cliExecute,
   create,
   eat,
   Effect,
   effectModifier,
+  equippedItem,
   getFuel,
   getProperty,
   handlingChoice,
@@ -17,10 +20,12 @@ import {
   mpCost,
   myLevel,
   myMp,
+  npcPrice,
   runChoice,
   Skill,
   toEffect,
   toSkill,
+  toSlot,
   use,
   useSkill,
 } from "kolmafia";
@@ -147,13 +152,7 @@ export function commonFamiliarWeightBuffs(): CSTask[] {
   return [
     potionTask($item`green candy heart`),
     ...restoreBuffTasks(buffs),
-    {
-      name: "Witchess",
-      completed: () => get("_witchessBuff"),
-      do: () => cliExecute("witchess"),
-    },
     skillTask({ skill: $skill`Empathy of the Newt`, effect: $effect`Thoughtful Empathy` }, true),
-    beachTask($effect`Do I Know You From Somewhere?`),
   ];
 }
 
@@ -266,5 +265,36 @@ export function aprilTask(song: AprilingBandHelmet.MarchingSong): CSTask {
     ready: () => AprilingBandHelmet.canChangeSong(),
     completed: () => have(Effect.get(song)),
     do: () => AprilingBandHelmet.changeSong(song),
+  };
+}
+
+export function buskTask(hat: Item, shirt: Item, pants: Item, index: number): CSTask {
+  return {
+    name: `Busk #${index + 1}: ${hat}. ${shirt}, and ${pants}`,
+    outfit: {
+      hat,
+      shirt,
+      pants,
+      ...(hat === $item`prismatic beret`
+        ? {}
+        : { familiar: $familiar`Mad Hatrack`, famequip: $item`prismatic beret` }),
+    },
+    acquire: () =>
+      [hat, pants, shirt]
+        .filter((i) => i !== $item.none && !have(i) && npcPrice(i) > 0)
+        .map((item) => ({ item })),
+    ready: () =>
+      [hat, shirt, pants].every(
+        (it) => it === $item.none || (canEquip(it) && (have(it) || npcPrice(it) > 0))
+      ),
+    completed: () => get("_beretBuskingUses") !== index,
+    do: () => {
+      for (const [slotName, item] of Object.entries({ hat, shirt, pants })) {
+        if (equippedItem(toSlot(slotName)) !== item)
+          abort(`Failed to equip ${item} to ${slotName} for Busking!`);
+      }
+      useSkill($skill`Beret Busking`);
+    },
+    core: "soft",
   };
 }

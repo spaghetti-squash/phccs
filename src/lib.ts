@@ -45,7 +45,7 @@ import {
 } from "libram";
 import { NumericModifier } from "libram/dist/modifierTypes";
 
-export type CSTask = StrictCombatTask<never, CSStrategy> & {
+export type CSTask = StrictCombatTask<never, void, CSStrategy> & {
   core?: Delayed<"hard" | "soft">;
   class?: Delayed<Class[]>;
 };
@@ -284,3 +284,5 @@ export const LEPRECONDO_CONFIG: Tuple<Leprecondo.FurniturePiece, 4> = byStat({
 });
 
 export const peridotChoice = (monster: Monster) => ({ 1557: `1&bandersnatch=${monster.id}` });
+
+export const availableEmbers = () => Math.floor(get("availableSeptEmbers") / 2);

@@ -130,7 +130,9 @@ export class CSEngine extends Engine<never, CSTask> {
           Outfit.from(
             spec,
             new Error(
-              `Failed to equip outfit for ${this.name}. Also, that outfit is ${toJson(spec)}`
+              `Failed to equip outfit for ${this.name}. Also, that outfit is ${toJson(
+                Object.fromEntries(Object.entries(spec).filter(([key]) => key !== "afterDress"))
+              )}`
             )
           ).dress();
           burnLibrams();

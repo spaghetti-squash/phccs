@@ -2472,13 +2472,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-libram@npm:^0.4.27":
-  version: 0.4.27
-  resolution: "eslint-plugin-libram@npm:0.4.27"
+"eslint-plugin-libram@npm:^0.4.28":
+  version: 0.4.28
+  resolution: "eslint-plugin-libram@npm:0.4.28"
   dependencies:
     html-entities: "npm:^2.5.2"
     requireindex: "npm:~1.2.0"
-  checksum: 10c0/9e571eddc0ba1498c84a6945547f7289098cd93e96769821e6e2fd7261baa81b911567a9d2597f4cc690d4425ab29ac86036417e172128c2ac2385d65b73ff40
+  checksum: 10c0/5eb52d9043b71e78b1ea6be2a23eb503e8946be810c986a5f2c9260e643eed26dee00c71bbcb298e66c2be762374af0a0e140dfa5f378cb6ef87a7279d4c642d
   languageName: node
   linkType: hard
 
@@ -2833,15 +2833,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"grimoire-kolmafia@npm:^0.3.29":
-  version: 0.3.29
-  resolution: "grimoire-kolmafia@npm:0.3.29"
+"grimoire-kolmafia@npm:^0.3.33":
+  version: 0.3.33
+  resolution: "grimoire-kolmafia@npm:0.3.33"
   dependencies:
     core-js: "npm:^3.16.4"
   peerDependencies:
     kolmafia: ^5.28100.0
     libram: ^0.10.0
-  checksum: 10c0/9b34e4bfd44492e79c1c0105b42d159168115c98b01688ac949f066f7da7dba441e5a0159489b8cc56b871ba80918a797847ff7931f4da381811dba535896a46
+  checksum: 10c0/a29c53875e6aaa397567857818366237fd80f28e08f0cfc86cd5358de3b7c1e1cdd55d860ec522ce794a39d211eea960e78be781690d190846f0bbf9424490c1
   languageName: node
   linkType: hard
 
@@ -3081,14 +3081,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"libram@npm:^0.11.0":
-  version: 0.11.0
-  resolution: "libram@npm:0.11.0"
+"libram@npm:^0.11.6":
+  version: 0.11.6
+  resolution: "libram@npm:0.11.6"
   dependencies:
     html-entities: "npm:^2.5.2"
   peerDependencies:
     kolmafia: ^5.28100.0
-  checksum: 10c0/3af156ad5519e95862fdcc4abd061c920e513f1ac06af0f986c639af10d7ecd583efb6d9a8b40da56467e993fab57a77550e7e141212d0cfc7247469ddcba3f3
+  checksum: 10c0/6e77a0771f45e3f74148db97ab3a616818970f756bf01a596a85a979d7a4f3e081ab0f7363eb6d3b1d8ee59f7ead96d8b57ed70c06a2f7b348826c42fb0f098f
   languageName: node
   linkType: hard
 
@@ -3323,11 +3323,11 @@ __metadata:
     esbuild-plugin-babel: "npm:^0.2.3"
     eslint: "npm:8.56.0"
     eslint-config-prettier: "npm:^8.5.0"
-    eslint-plugin-libram: "npm:^0.4.27"
+    eslint-plugin-libram: "npm:^0.4.28"
     eslint-plugin-prettier: "npm:^4.2.1"
-    grimoire-kolmafia: "npm:^0.3.29"
+    grimoire-kolmafia: "npm:^0.3.33"
     kolmafia: "npm:^5.28481.0"
-    libram: "npm:^0.11.0"
+    libram: "npm:^0.11.6"
     prettier: "npm:^2.7.1"
     typescript: "npm:^4.7.4"
   languageName: unknown

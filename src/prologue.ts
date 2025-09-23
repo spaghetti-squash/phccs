@@ -48,7 +48,7 @@ import {
 
 const PULLS = [
   $items`repaid diaper, Great Wolf's beastly trousers`,
-  byStat({ Mysticality: $items`meteorite necklace`, default: $items`norwhal helmet` }),
+  $items`norwhal helmet`,
   $items`Stick-Knife of Loathing`,
   $items`Buddy Bjorn`,
 ];
@@ -266,6 +266,7 @@ const Prologue: CSQuest = {
         useFamiliar($familiar`Melodramedary`);
         cliExecute(`mummery ${myPrimestat().toString().toLowerCase()}`);
       },
+      core: "hard",
     },
     {
       name: "Shortsuit",

@@ -14,11 +14,11 @@ import {
 
 export class CSStrategy extends CombatStrategy {
   constructor(
-    macro: Delayed<Macro> = () => Macro.defaultKill(),
+    macro: Delayed<Macro, [void]> = () => Macro.defaultKill(),
     {
       fallthrough,
       fightHolidayWanderer,
-    }: { fallthrough?: Delayed<Macro>; fightHolidayWanderer?: boolean } = {}
+    }: { fallthrough?: Delayed<Macro, [void]>; fightHolidayWanderer?: boolean } = {}
   ) {
     super();
     this.macro(
