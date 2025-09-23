@@ -1,5 +1,12 @@
 import { OutfitSpec } from "grimoire-kolmafia";
-import { equip, Familiar, inHardcore, Item, totalTurnsPlayed } from "kolmafia";
+import {
+  equip,
+  Familiar,
+  familiarEquippedEquipment,
+  inHardcore,
+  Item,
+  totalTurnsPlayed,
+} from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -152,7 +159,12 @@ export default function uniform({ changes = {} as OutfitSpec, canAttack = true }
   }
   const spec: OutfitSpec = { ...DEFAULT_UNIFORM(), ...chooseFamiliar(canAttack), ...changes };
   if (spec.familiar?.experience === 0)
-    spec.beforeDress = [() => equip($familiar`Shorter-Order Cook`, $item`blue plate`)];
+    spec.beforeDress = [
+      () =>
+        have($item`blue plate`) &&
+        familiarEquippedEquipment($familiar`Shorter-Order Cook`) !== $item`blue plate` &&
+        equip($familiar`Shorter-Order Cook`, $item`blue plate`),
+    ];
 
   return spec;
 }
