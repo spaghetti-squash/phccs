@@ -48,7 +48,7 @@ import {
 
 const PULLS = [
   $items`repaid diaper, Great Wolf's beastly trousers`,
-  byStat({ Mysticality: $items`meteorite necklace`, default: $items`norwhal helmet` }),
+  $items`norwhal helmet`,
   $items`Stick-Knife of Loathing`,
   $items`Buddy Bjorn`,
 ];
