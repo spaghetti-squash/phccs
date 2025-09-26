@@ -13744,10 +13744,10 @@ var GLOBAL_TASKS = [{
 }, {
   name: "Numberology",
   ready: function() {
-    return Object.values((0, import_kolmafia40.reverseNumberology)()).includes(69) && get("skillLevel144") <= 3;
+    return Object.values((0, import_kolmafia40.reverseNumberology)()).includes(69);
   },
   completed: function() {
-    return get("_universeCalculated") >= get("skillLevel144");
+    return get("_universeCalculated") >= (get("skillLevel144") > 3 ? 2 : get("skillLevel144"));
   },
   do: function() {
     return (0, import_kolmafia40.cliExecute)("numberology 69");
