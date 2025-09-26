@@ -21,8 +21,9 @@ const GLOBAL_TASKS: CSTask[] = [
   },
   {
     name: "Numberology",
-    ready: () => Object.values(reverseNumberology()).includes(69) && get("skillLevel144") <= 3,
-    completed: () => get("_universeCalculated") >= get("skillLevel144"),
+    ready: () => Object.values(reverseNumberology()).includes(69),
+    completed: () =>
+      get("_universeCalculated") >= (get("skillLevel144") > 3 ? 2 : get("skillLevel144")),
     do: () => cliExecute("numberology 69"),
   },
   {
