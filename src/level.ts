@@ -18,7 +18,7 @@ import {
   SYNTH_EFFECT,
   synthExp,
 } from "./lib";
-import uniform from "./outfit";
+import uniform, { equipBluePlate } from "./outfit";
 import { OutfitSpec } from "grimoire-kolmafia";
 import {
   buy,
@@ -153,10 +153,9 @@ const Level: CSQuest = {
         acc1: $item`your cowboy boots`,
         acc2: $item`McHugeLarge left ski`,
         acc3: $item`McHugeLarge right ski`,
-        // eslint-disable-next-line libram/verify-constants
         familiar: $familiar`cooler yeti`,
         famequip: $item`tiny stillsuit`,
-        beforeDress: [() => equip($familiar`Shorter-Order Cook`, $item`blue plate`)],
+        beforeDress: [equipBluePlate],
         ...byStat({
           Muscle: { shirt: $item`LOV Eardigan` },
           Moxie: { acc1: $item`LOV Earrings` },

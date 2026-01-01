@@ -149,6 +149,11 @@ function chooseFamiliar(canAttack: boolean): Pick<OutfitSpec, "familiar" | "fame
   };
 }
 
+export const equipBluePlate =       () =>
+        have($item`blue plate`) &&
+        familiarEquippedEquipment($familiar`Shorter-Order Cook`) !== $item`blue plate` &&
+        equip($familiar`Shorter-Order Cook`, $item`blue plate`);
+
 export default function uniform({ changes = {} as OutfitSpec, canAttack = true } = {}): OutfitSpec {
   if ("familiar" in changes && !("famequip" in changes) && changes.familiar) {
     if (ToyCupidBow.familiarsToday().includes(changes.familiar)) {
@@ -160,10 +165,7 @@ export default function uniform({ changes = {} as OutfitSpec, canAttack = true }
   const spec: OutfitSpec = { ...DEFAULT_UNIFORM(), ...chooseFamiliar(canAttack), ...changes };
   if (spec.familiar?.experience === 0)
     spec.beforeDress = [
-      () =>
-        have($item`blue plate`) &&
-        familiarEquippedEquipment($familiar`Shorter-Order Cook`) !== $item`blue plate` &&
-        equip($familiar`Shorter-Order Cook`, $item`blue plate`),
+      equipBluePlate
     ];
 
   return spec;
