@@ -45,6 +45,11 @@ const args = Args.create(
       help: "Don't warn you when you are making a huge mistake",
       default: false,
     }),
+    skipperms: Args.flag({
+      setting: "phccs_skipPerms",
+      help: "Don't try to perm any skills",
+      default: false,
+    }),
   }
 );
 
@@ -161,7 +166,7 @@ export function main(input = ""): void {
     pet,
     permOptions: {
       neverAbort: true,
-      permSkills: getSkillsToPerm(),
+      permSkills: args.skipperms ? new Map() : getSkillsToPerm(),
     },
   });
 }
