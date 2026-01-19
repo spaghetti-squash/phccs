@@ -15,7 +15,6 @@ import {
   canadiaAvailable,
   canEquip,
   cliExecute,
-  Effect,
   myLevel,
   pullsRemaining,
   retrieveItem,
@@ -37,7 +36,6 @@ import {
   getSaleValue,
   have,
   Horsery,
-  PrismaticBeret,
 } from "libram";
 
 const buffs = $effects`Carol of the Hells, Arched Eyebrow of the Archmage, Song of Sauce`;

@@ -25,7 +25,6 @@ import {
   cliExecute,
   create,
   effectModifier,
-  equip,
   mpCost,
   myFamiliar,
   myHp,
@@ -153,7 +152,7 @@ const Level: CSQuest = {
         acc1: $item`your cowboy boots`,
         acc2: $item`McHugeLarge left ski`,
         acc3: $item`McHugeLarge right ski`,
-        familiar: $familiar`cooler yeti`,
+        familiar: $familiar`Cooler Yeti`,
         famequip: $item`tiny stillsuit`,
         beforeDress: [equipBluePlate],
         ...byStat({

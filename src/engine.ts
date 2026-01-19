@@ -74,7 +74,6 @@ export class CSEngine extends Engine<never, CSTask> {
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   initPropertiesManager(): void {}
   private static initiate(): void {
     CSEngine.propertyManager.set({
