@@ -39,11 +39,11 @@ import {
   getModifier,
   have,
   Leprecondo,
+  NumericModifier,
   possibleLibramSummons,
   Tuple,
   Witchess,
 } from "libram";
-import { NumericModifier } from "libram/dist/modifierTypes";
 
 export type CSTask = StrictCombatTask<never, void, CSStrategy> & {
   core?: Delayed<"hard" | "soft">;

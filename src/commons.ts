@@ -46,10 +46,10 @@ import {
   get,
   have,
   Horsery,
+  NumericModifier,
   set,
   SourceTerminal,
 } from "libram";
-import { NumericModifier } from "libram/dist/modifierTypes";
 
 export function beachTask(effect: Effect): CSTask {
   const num = 1 + BeachComb.headBuffs.indexOf(effect);
