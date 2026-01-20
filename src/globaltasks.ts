@@ -2,8 +2,24 @@ import { CSStrategy, Macro } from "./combat";
 import { CSTask } from "./lib";
 import uniform from "./outfit";
 import { Quest } from "grimoire-kolmafia";
-import { abort, adv1, cliExecute, myInebriety, reverseNumberology, useSkill } from "kolmafia";
-import { $effect, $item, $location, $skill, Counter, get, have, withProperty } from "libram";
+import {
+  abort,
+  adv1,
+  cliExecute,
+  myInebriety,
+  reverseNumberology,
+  useSkill,
+} from "kolmafia";
+import {
+  $effect,
+  $item,
+  $location,
+  $skill,
+  Counter,
+  get,
+  have,
+  withProperty,
+} from "libram";
 
 const GLOBAL_TASKS: CSTask[] = [
   {
@@ -23,7 +39,8 @@ const GLOBAL_TASKS: CSTask[] = [
     name: "Numberology",
     ready: () => Object.values(reverseNumberology()).includes(69),
     completed: () =>
-      get("_universeCalculated") >= (get("skillLevel144") > 3 ? 2 : get("skillLevel144")),
+      get("_universeCalculated") >=
+      (get("skillLevel144") > 3 ? 2 : get("skillLevel144")),
     do: () => cliExecute("numberology 69"),
   },
   {
@@ -33,7 +50,8 @@ const GLOBAL_TASKS: CSTask[] = [
     do: () =>
       withProperty("recoveryScript", "", () => {
         adv1($location`Noob Cave`, -1, "");
-        if (get("lastEncounter") === "Poetic Justice") useSkill($skill`Tongue of the Walrus`);
+        if (get("lastEncounter") === "Poetic Justice")
+          useSkill($skill`Tongue of the Walrus`);
       }),
     outfit: { weapon: $item`June cleaver` },
   },
@@ -45,7 +63,8 @@ const GLOBAL_TASKS: CSTask[] = [
       get("questPAGhost") !== "unstarted" &&
       !!get("ghostLocation") &&
       !have($effect`Meteor Showered`),
-    do: () => get("ghostLocation") ?? abort("Failed to identify ghost location"),
+    do: () =>
+      get("ghostLocation") ?? abort("Failed to identify ghost location"),
     combat: new CSStrategy(() =>
       Macro.delevel()
         .easyFight()
@@ -54,7 +73,8 @@ const GLOBAL_TASKS: CSTask[] = [
         .trySkill($skill`Shoot Ghost`)
         .trySkill($skill`Trap Ghost`)
     ),
-    outfit: () => uniform({ changes: { back: $item`protonic accelerator pack` } }),
+    outfit: () =>
+      uniform({ changes: { back: $item`protonic accelerator pack` } }),
   },
 ];
 

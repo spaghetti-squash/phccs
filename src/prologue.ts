@@ -56,7 +56,10 @@ const PULLS = [
 let codpieceAttempted = false;
 
 const MARKET_QUESTS = [
-  { pref: "questM23Meatsmith", url: "shop.php?whichshop=meatsmith&action=talk" },
+  {
+    pref: "questM23Meatsmith",
+    url: "shop.php?whichshop=meatsmith&action=talk",
+  },
   { pref: "questM24Doc", url: "shop.php?whichshop=doc&action=talk" },
   { pref: "questM25Armorer", url: "shop.php?whichshop=armory&action=talk" },
 ];
@@ -95,7 +98,8 @@ const Prologue: CSQuest = {
     {
       name: "Non-Staff Pulls",
       core: "soft",
-      ready: () => PULLS.some((pullSet) => pullSet.every((pull) => !have(pull))),
+      ready: () =>
+        PULLS.some((pullSet) => pullSet.every((pull) => !have(pull))),
       completed: () => get("_roninStoragePulls").split(",").length >= 4,
       do: (): void => {
         for (const pullSet of PULLS) {
@@ -114,7 +118,8 @@ const Prologue: CSQuest = {
     {
       name: "Learn About Bugs",
       ready: () => have($item`S.I.T. Course Completion Certificate`),
-      completed: () => get("_sitCourseCompleted") || have($skill`Insectologist`),
+      completed: () =>
+        get("_sitCourseCompleted") || have($skill`Insectologist`),
       do: () => use($item`S.I.T. Course Completion Certificate`),
       choices: { 1494: 2 },
     },
@@ -154,9 +159,11 @@ const Prologue: CSQuest = {
     },
     {
       name: "Sell Space Blanket",
-      completed: () => $items`space blanket, MayDay™ supply package`.every((i) => !have(i)),
+      completed: () =>
+        $items`space blanket, MayDay™ supply package`.every((i) => !have(i)),
       do: (): void => {
-        if (have($item`MayDay™ supply package`)) use($item`MayDay™ supply package`);
+        if (have($item`MayDay™ supply package`))
+          use($item`MayDay™ supply package`);
         autosell(1, $item`space blanket`);
       },
       class: $classes`Turtle Tamer, Sauceror`,
@@ -201,13 +208,15 @@ const Prologue: CSQuest = {
     {
       name: "Terminal Skills",
       completed: () =>
-        SourceTerminal.getSkills().every((skill) => $skills`Extract, Portscan`.includes(skill)) &&
-        !!SourceTerminal.getSkills().length,
+        SourceTerminal.getSkills().every((skill) =>
+          $skills`Extract, Portscan`.includes(skill)
+        ) && !!SourceTerminal.getSkills().length,
       do: () => SourceTerminal.educate([$skill`Extract`, $skill`Portscan`]),
     },
     {
       name: "Change Clan",
-      completed: () => getClanName() === get("phccs_mainClan", "Bonus Adventures from Hell"),
+      completed: () =>
+        getClanName() === get("phccs_mainClan", "Bonus Adventures from Hell"),
       do: () => Clan.join(get("phccs_mainClan", "Bonus Adventures from Hell")),
     },
     {
@@ -255,7 +264,10 @@ const Prologue: CSQuest = {
       ready: () => have($skill`Summon Alice's Army Cards`),
       do: (): void => {
         useSkill(1, $skill`Summon Alice's Army Cards`);
-        if (!have($item`tobiko marble soda`) && !CommunityService.SpellDamage.isDone())
+        if (
+          !have($item`tobiko marble soda`) &&
+          !CommunityService.SpellDamage.isDone()
+        )
           buy($coinmaster`Game Shoppe Snacks`, 1, $item`tobiko marble soda`);
       },
     },
@@ -297,13 +309,16 @@ const Prologue: CSQuest = {
     {
       name: "Detective Badge",
       completed: () => have($item`gold detective badge`),
-      do: () => visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct"),
+      do: () =>
+        visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct"),
     },
     {
       name: "Codpiece",
       completed: () => have($item`codpiece`) || codpieceAttempted,
       do: (): void => {
-        Clan.with(get("phccs_codClan", "Floundry"), () => cliExecute("acquire codpiece"));
+        Clan.with(get("phccs_codClan", "Floundry"), () =>
+          cliExecute("acquire codpiece")
+        );
         codpieceAttempted = true;
       },
     },
@@ -316,7 +331,9 @@ const Prologue: CSQuest = {
       name: "Scavenge",
       completed: () => !!get("_daycareGymScavenges"),
       do: (): void => {
-        visitUrl("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+        visitUrl(
+          "place.php?whichplace=town_wrong&action=townwrong_boxingdaycare"
+        );
         runChoice(3);
         runChoice(2);
         runChoice(5);
@@ -340,19 +357,22 @@ const Prologue: CSQuest = {
           })
         ) >= 0,
       do: () => visitUrl("guild.php?place=challenge"),
-      outfit: () => byStat({ Moxie: { pants: $item`tearaway pants` }, default: {} }),
+      outfit: () =>
+        byStat({ Moxie: { pants: $item`tearaway pants` }, default: {} }),
     },
     {
       name: "MC Hugelarge",
       completed: () => have($item`McHugeLarge left ski`),
       ready: () => have($item`McHugeLarge duffel bag`),
-      do: () => visitUrl(`inventory.php?action=skiduffel&pwd=${myHash()}`, false),
+      do: () =>
+        visitUrl(`inventory.php?action=skiduffel&pwd=${myHash()}`, false),
     },
     aprilTask("Apriling Band Battle Cadence"),
     {
       name: "Leprecondo",
       ready: () => Leprecondo.have(),
-      completed: () => arrayEquals(Leprecondo.installedFurniture(), LEPRECONDO_CONFIG),
+      completed: () =>
+        arrayEquals(Leprecondo.installedFurniture(), LEPRECONDO_CONFIG),
       do: () => Leprecondo.setFurniture(...LEPRECONDO_CONFIG),
     },
   ],

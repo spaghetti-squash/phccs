@@ -78,7 +78,10 @@ const SPECIAL_REQUIREMENTS: Record<
   Moxie: [
     {
       name: "Evil Olive in locket",
-      meets: () => CombatLoversLocket.unlockedLocketMonsters().includes($monster`Evil Olive`),
+      meets: () =>
+        CombatLoversLocket.unlockedLocketMonsters().includes(
+          $monster`Evil Olive`
+        ),
       reason: "we need to be able to make equalizer potions!",
     },
     {
@@ -105,7 +108,9 @@ export function main(input = ""): void {
   smokeEmIfYouGotEm();
 
   if (!ignorewarnings) {
-    for (const { name, reason, meets } of byAscendingStat(SPECIAL_REQUIREMENTS)) {
+    for (const { name, reason, meets } of byAscendingStat(
+      SPECIAL_REQUIREMENTS
+    )) {
       if (
         !meets() &&
         !userConfirm(
@@ -117,7 +122,9 @@ export function main(input = ""): void {
     }
 
     if (args.softcore) {
-      const missingItems = $items`Stick-Knife of Loathing, Buddy Bjorn`.filter((i) => !have(i));
+      const missingItems = $items`Stick-Knife of Loathing, Buddy Bjorn`.filter(
+        (i) => !have(i)
+      );
       if (
         missingItems.length &&
         !userConfirm(

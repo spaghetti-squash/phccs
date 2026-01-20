@@ -18,7 +18,10 @@ export class CSStrategy extends CombatStrategy {
     {
       fallthrough,
       fightHolidayWanderer,
-    }: { fallthrough?: Delayed<Macro, [void]>; fightHolidayWanderer?: boolean } = {}
+    }: {
+      fallthrough?: Delayed<Macro, [void]>;
+      fightHolidayWanderer?: boolean;
+    } = {}
   ) {
     super();
     this.macro(
@@ -36,7 +39,10 @@ export class CSStrategy extends CombatStrategy {
 
 export class Macro extends StrictMacro {
   tryBowl(): Macro {
-    return this.ifNot($item`cosmic bowling ball`, Macro.item($item`Time-Spinner`)).if_(
+    return this.ifNot(
+      $item`cosmic bowling ball`,
+      Macro.item($item`Time-Spinner`)
+    ).if_(
       $item`cosmic bowling ball`,
       Macro.item([$item`Time-Spinner`, $item`cosmic bowling ball`])
     );

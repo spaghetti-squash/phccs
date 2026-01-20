@@ -81,7 +81,9 @@ export function synthExp(): void {
   }
   for (const [candy1, candy2] of SYNTH_PAIRS) {
     const enough =
-      candy1 === candy2 ? itemAmount(candy1) >= 2 : have(candy1) && retrieveItem(candy2);
+      candy1 === candy2
+        ? itemAmount(candy1) >= 2
+        : have(candy1) && retrieveItem(candy2);
     if (enough) {
       if (sweetSynthesis(candy1, candy2)) return;
     }
@@ -109,7 +111,9 @@ export function ensureMp(mp: number): void {
   if (mp > myMaxmp()) throw `Insufficient maximum mp!`;
   while (
     have($item`magical sausage`) ||
-    (have($item`magical sausage casing`) && myMp() < mp && get("_sausagesEaten") < 23)
+    (have($item`magical sausage casing`) &&
+      myMp() < mp &&
+      get("_sausagesEaten") < 23)
   ) {
     retrieveItem($item`magical sausage`);
     eat($item`magical sausage`);
@@ -128,7 +132,10 @@ function canCastLibrams(): boolean {
 
 function totalDuration(item: Item): number {
   const effect = effectModifier(item, "Effect");
-  return haveEffect(effect) + getModifier("Effect Duration", item) * availableAmount(item);
+  return (
+    haveEffect(effect) +
+    getModifier("Effect Duration", item) * availableAmount(item)
+  );
 }
 
 export const availableFights: () => number = () =>
@@ -137,7 +144,11 @@ export const availableFights: () => number = () =>
 
 const potentialFights = () =>
   clamp(5 - Witchess.fightsDone(), 0, 5) +
-  clamp(availableAmount($item`BRICKO eye brick`), 0, 10 - get("_brickoFights")) +
+  clamp(
+    availableAmount($item`BRICKO eye brick`),
+    0,
+    10 - get("_brickoFights")
+  ) +
   clamp(3 - get("_brickoEyeSummons"), 0, 10 - get("_brickoFights"));
 
 function castPriciestLibram(): boolean {
@@ -148,8 +159,8 @@ function castPriciestLibram(): boolean {
 export function burnLibrams(): void {
   const testsDone = get("csServicesPerformed").split(",");
   if (
-    !$skills`Summon BRICKOs, Summon Taffy, Summon Love Song, Summon Candy Heart`.some((skill) =>
-      have(skill)
+    !$skills`Summon BRICKOs, Summon Taffy, Summon Love Song, Summon Candy Heart`.some(
+      (skill) => have(skill)
     )
   )
     return;
@@ -158,22 +169,36 @@ export function burnLibrams(): void {
       const libramPossibilities = possibleLibramSummons();
       const decisionMap = new Map<Skill, number>();
 
-      if (have($skill`Summon Candy Heart`) && totalDuration($item`green candy heart`) <= 0) {
+      if (
+        have($skill`Summon Candy Heart`) &&
+        totalDuration($item`green candy heart`) <= 0
+      ) {
         const probability =
-          libramPossibilities.get($skill`Summon Candy Heart`)?.get($item`green candy heart`) ?? 0;
+          libramPossibilities
+            .get($skill`Summon Candy Heart`)
+            ?.get($item`green candy heart`) ?? 0;
         decisionMap.set($skill`Summon Candy Heart`, 3 * probability);
       }
 
-      if (have($skill`Summon Taffy`) && totalDuration($item`pulled blue taffy`) < 50) {
+      if (
+        have($skill`Summon Taffy`) &&
+        totalDuration($item`pulled blue taffy`) < 50
+      ) {
         const probability =
-          libramPossibilities.get($skill`Summon Taffy`)?.get($item`pulled blue taffy`) ?? 0;
+          libramPossibilities
+            .get($skill`Summon Taffy`)
+            ?.get($item`pulled blue taffy`) ?? 0;
         decisionMap.set($skill`Summon Taffy`, 1 * probability);
       }
 
-      if (have($skill`Summon Love Song`) && totalDuration($item`love song of icy revenge`) < 20) {
+      if (
+        have($skill`Summon Love Song`) &&
+        totalDuration($item`love song of icy revenge`) < 20
+      ) {
         const probability =
-          libramPossibilities.get($skill`Summon Love Song`)?.get($item`love song of icy revenge`) ??
-          0;
+          libramPossibilities
+            .get($skill`Summon Love Song`)
+            ?.get($item`love song of icy revenge`) ?? 0;
         const currentWeightValue = clamp(
           Math.ceil(totalDuration($item`love song of icy revenge`) / 2),
           0,
@@ -196,7 +221,9 @@ export function burnLibrams(): void {
         testsDone.includes("Donate Blood")
       ) {
         const probability =
-          libramPossibilities.get($skill`Summon BRICKOs`)?.get($item`BRICKO eye brick`) ?? 0;
+          libramPossibilities
+            .get($skill`Summon BRICKOs`)
+            ?.get($item`BRICKO eye brick`) ?? 0;
         if (
           have($familiar`Shorter-Order Cook`) &&
           totalDuration($item`short stack of pancakes`) === 0 &&
@@ -205,7 +232,8 @@ export function burnLibrams(): void {
         ) {
           decisionMap.set(
             $skill`Summon BRICKOs`,
-            (probability * 11) / (11 - get("_shortOrderCookCharge") - availableFights())
+            (probability * 11) /
+              (11 - get("_shortOrderCookCharge") - availableFights())
           );
         }
 
@@ -216,7 +244,9 @@ export function burnLibrams(): void {
           availableFights() < 30 - get("garbageFireProgress") &&
           potentialFights() >= 30 - get("garbageFireProgress")
         ) {
-          const value = (5 / (30 - get("garbageFireProgress") - availableFights())) * probability;
+          const value =
+            (5 / (30 - get("garbageFireProgress") - availableFights())) *
+            probability;
           const otherBrickoValue = decisionMap.get($skill`Summon BRICKOs`) ?? 0;
           if (value > otherBrickoValue) {
             decisionMap.set($skill`Summon BRICKOs`, value);
@@ -236,20 +266,28 @@ export function burnLibrams(): void {
 
 export function unequip(item: Item): void {
   while (equippedAmount(item) > 0) {
-    const slot = Slot.all().find((equipmentSlot) => equippedItem(equipmentSlot) === item);
+    const slot = Slot.all().find(
+      (equipmentSlot) => equippedItem(equipmentSlot) === item
+    );
     if (!slot) return;
     equip(slot, $item`none`);
   }
 }
 
-export function favouriteBirdHas(modifier: NumericModifier, positive = true): boolean {
+export function favouriteBirdHas(
+  modifier: NumericModifier,
+  positive = true
+): boolean {
   const sign = positive ? "+" : "-";
   return get("yourFavoriteBirdMods")
     .split(",")
     .some((mod) => mod.includes(`${modifier}: ${sign}`));
 }
 
-export function currentBirdHas(modifier: NumericModifier, positive = true): boolean {
+export function currentBirdHas(
+  modifier: NumericModifier,
+  positive = true
+): boolean {
   const sign = positive ? "+" : "-";
   return get("_birdOfTheDayMods")
     .split(",")
@@ -283,6 +321,8 @@ export const LEPRECONDO_CONFIG: Tuple<Leprecondo.FurniturePiece, 4> = byStat({
   ],
 });
 
-export const peridotChoice = (monster: Monster) => ({ 1557: `1&bandersnatch=${monster.id}` });
+export const peridotChoice = (monster: Monster) => ({
+  1557: `1&bandersnatch=${monster.id}`,
+});
 
 export const availableEmbers = () => Math.floor(get("availableSeptEmbers") / 2);

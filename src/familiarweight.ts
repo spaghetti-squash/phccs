@@ -33,7 +33,9 @@ const FamiliarWeight: CSQuest = {
     acc2: $item`Brutal brogues`,
     acc3: $item`hewn moon-rune spoon`,
     familiar,
-    ...(familiar === $familiar`Comma Chameleon` ? $item.none : $item`overloaded Yule battery`),
+    ...(familiar === $familiar`Comma Chameleon`
+      ? $item.none
+      : $item`overloaded Yule battery`),
     back: $items`Buddy Bjorn, protonic accelerator pack`,
     riders: { "buddy-bjorn": $familiar`Misshapen Animal Skeleton` },
   }),
@@ -49,11 +51,15 @@ const FamiliarWeight: CSQuest = {
         have($item`homemade robot gear`) ||
         get("commaFamiliar") === $familiar`Homemade Robot`,
       do: (): void => {
-        if (!have($item`box of Familiar Jacks`)) create($item`box of Familiar Jacks`);
+        if (!have($item`box of Familiar Jacks`))
+          create($item`box of Familiar Jacks`);
         use($item`box of Familiar Jacks`);
       },
       outfit: {
-        familiar: familiar === $familiar`Comma Chameleon` ? $familiar`Homemade Robot` : familiar,
+        familiar:
+          familiar === $familiar`Comma Chameleon`
+            ? $familiar`Homemade Robot`
+            : familiar,
       },
     },
     {
@@ -62,7 +68,9 @@ const FamiliarWeight: CSQuest = {
       ready: () => have($familiar`Comma Chameleon`),
       do: (): void => {
         visitUrl(
-          `inv_equip.php?which=2&action=equip&whichitem=${toInt($item`homemade robot gear`)}&pwd`
+          `inv_equip.php?which=2&action=equip&whichitem=${toInt(
+            $item`homemade robot gear`
+          )}&pwd`
         );
         visitUrl("charpane.php");
       },
@@ -77,32 +85,41 @@ const FamiliarWeight: CSQuest = {
     {
       name: "Shorty Fights (Witchess)",
       completed: () =>
-        [$effect`Shortly Stacked`, $item`short stack of pancakes`].some((x) => have(x)),
+        [$effect`Shortly Stacked`, $item`short stack of pancakes`].some((x) =>
+          have(x)
+        ),
       ready: () =>
-        availableFights() >= 11 - get("_shortOrderCookCharge") && 5 > Witchess.fightsDone(),
+        availableFights() >= 11 - get("_shortOrderCookCharge") &&
+        5 > Witchess.fightsDone(),
       do: () => Witchess.fightPiece($monster`Witchess Bishop`),
-      outfit: () => uniform({ changes: { familiar: $familiar`Shorter-Order Cook` } }),
+      outfit: () =>
+        uniform({ changes: { familiar: $familiar`Shorter-Order Cook` } }),
       combat: new CSStrategy(() => Macro.defaultKill()),
     },
     {
       name: "Shorty Fights (BRICKO)",
       completed: () =>
-        [$effect`Shortly Stacked`, $item`short stack of pancakes`].some((x) => have(x)),
+        [$effect`Shortly Stacked`, $item`short stack of pancakes`].some((x) =>
+          have(x)
+        ),
       ready: () =>
-        availableFights() >= 11 - get("_shortOrderCookCharge") && have($item`BRICKO eye brick`),
+        availableFights() >= 11 - get("_shortOrderCookCharge") &&
+        have($item`BRICKO eye brick`),
       do: (): void => {
         if (!have($item`BRICKO ooze`)) create($item`BRICKO ooze`);
         use($item`BRICKO ooze`);
         runCombat();
       },
-      outfit: () => uniform({ changes: { familiar: $familiar`Shorter-Order Cook` } }),
+      outfit: () =>
+        uniform({ changes: { familiar: $familiar`Shorter-Order Cook` } }),
       combat: new CSStrategy(() => Macro.defaultKill()),
     },
     {
       name: "Garbage Fights (Witchess)",
       completed: () => $familiar`Garbage Fire`.dropsToday > 0,
       ready: () =>
-        availableFights() >= 30 - get("garbageFireProgress") && 5 > Witchess.fightsDone(),
+        availableFights() >= 30 - get("garbageFireProgress") &&
+        5 > Witchess.fightsDone(),
       do: () => Witchess.fightPiece($monster`Witchess Bishop`),
       outfit: () => uniform({ changes: { familiar: $familiar`Garbage Fire` } }),
       combat: new CSStrategy(() => Macro.defaultKill()),
@@ -111,7 +128,8 @@ const FamiliarWeight: CSQuest = {
       name: "Garbage Fights (BRICKO)",
       completed: () => $familiar`Garbage Fire`.dropsToday > 0,
       ready: () =>
-        availableFights() >= 30 - get("garbageFireProgress") && have($item`BRICKO eye brick`),
+        availableFights() >= 30 - get("garbageFireProgress") &&
+        have($item`BRICKO eye brick`),
       do: (): void => {
         if (!have($item`BRICKO ooze`)) create($item`BRICKO ooze`);
         use($item`BRICKO ooze`);

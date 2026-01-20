@@ -69,7 +69,10 @@ const CoilWire: CSQuest = {
       outfit: () =>
         uniform({
           canAttack: false,
-          changes: { acc1: $item`spring shoes`, hat: $item`sombrero-mounted sparkler` },
+          changes: {
+            acc1: $item`spring shoes`,
+            hat: $item`sombrero-mounted sparkler`,
+          },
         }),
       combat: new CSStrategy(() => Macro.trySkill($skill`Spring Away`)),
     },
@@ -100,7 +103,10 @@ const CoilWire: CSQuest = {
       outfit: () =>
         uniform({
           canAttack: false,
-          changes: { shirt: $item`Jurassic Parka`, modes: { parka: "dilophosaur" } },
+          changes: {
+            shirt: $item`Jurassic Parka`,
+            modes: { parka: "dilophosaur" },
+          },
         }),
       combat: new CSStrategy(() => Macro.skill($skill`Spit jurassic acid`)),
     },

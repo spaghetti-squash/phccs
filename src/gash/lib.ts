@@ -42,7 +42,10 @@ export function burnSafaris(): void {
     safariTargets[j] = temp;
   }
 
-  while ($skill`Experience Safari`.timescast < get("skillLevel180") && safariTargets.length) {
+  while (
+    $skill`Experience Safari`.timescast < get("skillLevel180") &&
+    safariTargets.length
+  ) {
     useSkill($skill`Experience Safari`, 1, safariTargets[0]);
     safariTargets.shift();
   }
@@ -59,19 +62,26 @@ export function getSkillsToPerm(): Map<Skill, Lifestyle> {
 }
 
 export function smokeEmIfYouGotEm(): void {
-  const fullText = visitUrl("https://www.gutenberg.org/cache/epub/1321/pg1321.txt");
+  const fullText = visitUrl(
+    "https://www.gutenberg.org/cache/epub/1321/pg1321.txt"
+  );
   const lines = fullText
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
   const poemLines = lines.slice(
-    lines.indexOf("*** START OF THE PROJECT GUTENBERG EBOOK THE WASTE LAND ***"),
+    lines.indexOf(
+      "*** START OF THE PROJECT GUTENBERG EBOOK THE WASTE LAND ***"
+    ),
     lines.indexOf("*** END OF THE PROJECT GUTENBERG EBOOK THE WASTE LAND ***")
   );
-  const poemLine = (get("phccs_wasteLand", Number(myId())) + 1) % poemLines.length;
+  const poemLine =
+    (get("phccs_wasteLand", Number(myId())) + 1) % poemLines.length;
   set("phccs_wasteLand", poemLine);
   const MESSAGE = poemLines[poemLine] || "yeeeowch!";
 
   retrieveItem($item`campfire smoke`);
-  withChoice(1394, `1&message=${urlEncode(MESSAGE)}`, () => use($item`campfire smoke`));
+  withChoice(1394, `1&message=${urlEncode(MESSAGE)}`, () =>
+    use($item`campfire smoke`)
+  );
 }

@@ -1,7 +1,15 @@
 import { burnSafaris, getSkillsToPerm, smokeEmIfYouGotEm } from "./lib";
 import { Args } from "grimoire-kolmafia";
 import { visitUrl } from "kolmafia";
-import { $class, $item, $path, ascend, Lifestyle, makeByXFunction, prepareAscension } from "libram";
+import {
+  $class,
+  $item,
+  $path,
+  ascend,
+  Lifestyle,
+  makeByXFunction,
+  prepareAscension,
+} from "libram";
 
 const args = Args.create(
   "smolbutt",

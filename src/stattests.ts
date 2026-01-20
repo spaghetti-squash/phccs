@@ -1,4 +1,10 @@
-import { birdTask, favouriteBirdTask, innerElf, potionTask, restoreBuffTasks } from "./commons";
+import {
+  birdTask,
+  favouriteBirdTask,
+  innerElf,
+  potionTask,
+  restoreBuffTasks,
+} from "./commons";
 import { CSQuest } from "./engine";
 import { CSTask } from "./lib";
 import {
@@ -61,7 +67,9 @@ function equalizeTasks(): CSTask[] {
     {
       name: `Create ${equalizerPotion}`,
       ready: () => have(equalizerFruit) && get("hasRange"),
-      completed: () => have(equalizerPotion) || have(effectModifier(equalizerPotion, "Effect")),
+      completed: () =>
+        have(equalizerPotion) ||
+        have(effectModifier(equalizerPotion, "Effect")),
       do: () => create(equalizerPotion),
       class: $classes`Seal Clubber, Turtle Tamer, Disco Bandit, Accordion Thief, Sauceror`,
     },
@@ -149,7 +157,10 @@ const Mysticality: CSQuest = {
     birdTask("Mysticality Percent"),
     favouriteBirdTask("Mysticality Percent"),
     ...equalizeTasks(),
-    { ...innerElf(), class: $classes`Seal Clubber, Turtle Tamer, Disco Bandit, Accordion Thief` },
+    {
+      ...innerElf(),
+      class: $classes`Seal Clubber, Turtle Tamer, Disco Bandit, Accordion Thief`,
+    },
   ],
 };
 
@@ -165,10 +176,16 @@ const Moxie: CSQuest = {
     offhand: $item`unbreakable umbrella`,
     pants: $items`astral shorts, Cargo Cultist Shorts`,
     acc1: $item`Cincho de Mayo`,
-    acc2: byStat({ Moxie: $item`your cowboy boots`, default: $item`Beach Comb` }),
+    acc2: byStat({
+      Moxie: $item`your cowboy boots`,
+      default: $item`Beach Comb`,
+    }),
     acc3: $items`meteorite necklace, spring shoes`,
     famequip: $item`miniature crystal ball`,
-    modes: { retrocape: ["robot", RetroCape.currentMode()], umbrella: "broken" },
+    modes: {
+      retrocape: ["robot", RetroCape.currentMode()],
+      umbrella: "broken",
+    },
   }),
   turnsSpent: 0,
   maxTurns: 1,
@@ -176,7 +193,9 @@ const Moxie: CSQuest = {
     ...skillBuffTasks("MOXIE"),
     birdTask("Moxie Percent"),
     favouriteBirdTask("Moxie Percent"),
-    ...$items`runproof mascara, confiscated love note, dollop of barbecue sauce`.map(potionTask),
+    ...$items`runproof mascara, confiscated love note, dollop of barbecue sauce`.map(
+      potionTask
+    ),
     {
       name: "Rhinestones",
       completed: () => !have($item`rhinestone`),
@@ -210,7 +229,10 @@ const Hitpoints: CSQuest = {
       acc3: $items`meteorite necklace, Retrospecs`,
       familiar: $familiar`Left-Hand Man`,
       famequip: $item`unbreakable umbrella`,
-      modes: { retrocape: ["vampire", RetroCape.currentMode()], parka: "kachungasaur" },
+      modes: {
+        retrocape: ["vampire", RetroCape.currentMode()],
+        parka: "kachungasaur",
+      },
     };
   },
   tasks: [
