@@ -4,6 +4,7 @@ import uniform from "./outfit";
 import {
   abort,
   adv1,
+  advCost,
   availableAmount,
   buy,
   canEquip,
@@ -18,6 +19,7 @@ import {
   handlingChoice,
   Item,
   mpCost,
+  myAdventures,
   myLevel,
   myMp,
   npcPrice,
@@ -138,7 +140,7 @@ export function skillTask(
     return {
       name: skill.name,
       completed: () => have(effect),
-      ready: () => myMp() >= mpCost(skill),
+      ready: () => myMp() >= mpCost(skill) && myAdventures() >= advCost(skill),
       do: () => useSkill(skill),
       outfit: includeAprilShield
         ? { offhand: $item`April Shower Thoughts shield` }
