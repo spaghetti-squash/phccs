@@ -157,7 +157,7 @@ const Level: CSQuest = {
         shirt: $item`Jurassic Parka`,
         modes: { parka: "kachungasaur" },
         pants: $item`repaid diaper`,
-        acc1: $item`your cowboy boots`,
+        acc1: $item`The Eternity Codpiece`,
         acc2: $item`McHugeLarge left ski`,
         acc3: $item`McHugeLarge right ski`,
         familiar: $familiar`Cooler Yeti`,
