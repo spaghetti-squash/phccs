@@ -2,8 +2,11 @@ import { burnSafaris, getSkillsToPerm, smokeEmIfYouGotEm } from "./lib";
 import { Args } from "grimoire-kolmafia";
 import {
   abort,
+  availableAmount,
+  equip,
   equippedItem,
   Item,
+  itemAmount,
   print,
   runChoice,
   StatType,
@@ -18,6 +21,7 @@ import {
   $monster,
   $path,
   $slot,
+  $slots,
   ascend,
   CombatLoversLocket,
   have,
@@ -71,7 +75,7 @@ const bootRequirement = (skin: Item) => ({
   reason: `we want to crank that mainstat for levelling reasons, so your bootskin must be ${skin}`,
 });
 
-const SPECIAL_REQUIREMENTS: Record<
+const MAINSTAT_BASED_REQUIREMENTS: Record<
   StatType,
   { name: string; meets: () => boolean; reason: string }[]
 > = {
@@ -95,6 +99,16 @@ const SPECIAL_REQUIREMENTS: Record<
   Mysticality: [bootRequirement($item`frontwinder skin`)],
 };
 
+const REGULAR_REQUIREMENTS = [
+  {
+    name: "Sapphire-laden codpiece",
+    meets: () =>
+      have($item`The Eternity Codpiece`) &&
+      availableAmount($item`glacial sapphire`) >= 5,
+    reason: "We use it for leveling!",
+  },
+];
+
 export function main(input = ""): void {
   Args.fill(args, input);
 
@@ -108,9 +122,10 @@ export function main(input = ""): void {
   smokeEmIfYouGotEm();
 
   if (!ignorewarnings) {
-    for (const { name, reason, meets } of byAscendingStat(
-      SPECIAL_REQUIREMENTS,
-    )) {
+    for (const { name, reason, meets } of [
+      ...byAscendingStat(MAINSTAT_BASED_REQUIREMENTS),
+      ...REGULAR_REQUIREMENTS,
+    ]) {
       if (
         !meets() &&
         !userConfirm(
@@ -138,6 +153,13 @@ export function main(input = ""): void {
     }
   }
 
+  for (const codslot of $slots`codpiece1, codpiece2, codpiece3, codpiece4, codpiece5`) {
+    if (equippedItem(codslot) !== $item`glacial sapphire`) {
+      if (!itemAmount($item`glacial sapphire`))
+        abort("We don't have enough sapphires!");
+      equip(codslot, $item`glacial sapphire`);
+    }
+  }
   prepareAscension({
     garden: "Peppermint Pip Packet",
     eudora: "Our Daily Candles™ order form",
