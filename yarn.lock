@@ -2384,7 +2384,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"create-kolmafia-script@npm:latest":
+"create-kolmafia-script@npm:^0.2.2":
   version: 0.2.2
   resolution: "create-kolmafia-script@npm:0.2.2"
   dependencies:
@@ -3281,10 +3281,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"kolmafia@npm:^5.28893.0":
-  version: 5.28893.0
-  resolution: "kolmafia@npm:5.28893.0"
-  checksum: 10c0/41afbf49fc50016f24f3b2ce59b7c06808601bd58b488e16d5a9cdb4e41649a3d8c519df4945f5def3e493183c252d4242d565f817d1ab327db519e3269668ac
+"kolmafia@npm:^5.28896.0":
+  version: 5.28896.0
+  resolution: "kolmafia@npm:5.28896.0"
+  checksum: 10c0/48dc9e51cba0174a325d49264affba5878292e2b849ea029ef713f6f807dab83f6f72d845292e7a008b55ad92aa79208b4263b4f5987608ee625aeeb6280c6c4
   languageName: node
   linkType: hard
 
@@ -3782,16 +3782,16 @@ __metadata:
     "@types/babel__core": "npm:^7.20.5"
     "@types/babel__preset-env": "npm:^7.10.0"
     "@types/node": "npm:^25.0.9"
-    create-kolmafia-script: "npm:latest"
+    create-kolmafia-script: "npm:^0.2.2"
     eslint: "npm:^9.39.2"
     eslint-config-prettier: "npm:^10.1.8"
     eslint-plugin-libram: "npm:^0.5.3"
     grimoire-kolmafia: "npm:^0.3.33"
     jiti: "npm:^2.6.1"
-    kolmafia: "npm:^5.28893.0"
+    kolmafia: "npm:^5.28896.0"
     libram: "npm:^0.11.16"
     prettier: "npm:^3.8.0"
-    rollup: "npm:^4.55.2"
+    rollup: "npm:^4.55.3"
     typescript: "npm:^5.9.3"
     typescript-eslint: "npm:^8.53.1"
   languageName: unknown
@@ -4013,7 +4013,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^4.55.2":
+"rollup@npm:^4.55.3":
   version: 4.55.3
   resolution: "rollup@npm:4.55.3"
   dependencies:
