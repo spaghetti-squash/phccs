@@ -50,7 +50,7 @@ const args = Args.create(
       help: "Don't try to perm any skills",
       default: false,
     }),
-  }
+  },
 );
 
 const byAscendingStat = makeByXFunction(() => args.class.primestat.toString());
@@ -80,7 +80,7 @@ const SPECIAL_REQUIREMENTS: Record<
       name: "Evil Olive in locket",
       meets: () =>
         CombatLoversLocket.unlockedLocketMonsters().includes(
-          $monster`Evil Olive`
+          $monster`Evil Olive`,
         ),
       reason: "we need to be able to make equalizer potions!",
     },
@@ -109,12 +109,12 @@ export function main(input = ""): void {
 
   if (!ignorewarnings) {
     for (const { name, reason, meets } of byAscendingStat(
-      SPECIAL_REQUIREMENTS
+      SPECIAL_REQUIREMENTS,
     )) {
       if (
         !meets() &&
         !userConfirm(
-          `We have failed to meet the requirement ${name} to ascend as a ${args.class}; this is important because ${reason}. Are you sure you wish to proceed?`
+          `We have failed to meet the requirement ${name} to ascend as a ${args.class}; this is important because ${reason}. Are you sure you wish to proceed?`,
         )
       ) {
         abort();
@@ -123,14 +123,14 @@ export function main(input = ""): void {
 
     if (args.softcore) {
       const missingItems = $items`Stick-Knife of Loathing, Buddy Bjorn`.filter(
-        (i) => !have(i)
+        (i) => !have(i),
       );
       if (
         missingItems.length &&
         !userConfirm(
           `You seem to be missing the following items required to run phccs in softcore: ${missingItems.join(
-            ", "
-          )}. Are you sure you wish to proceed?`
+            ", ",
+          )}. Are you sure you wish to proceed?`,
         )
       ) {
         abort();

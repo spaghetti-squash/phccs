@@ -194,7 +194,7 @@ const Moxie: CSQuest = {
     birdTask("Moxie Percent"),
     favouriteBirdTask("Moxie Percent"),
     ...$items`runproof mascara, confiscated love note, dollop of barbecue sauce`.map(
-      potionTask
+      potionTask,
     ),
     {
       name: "Rhinestones",

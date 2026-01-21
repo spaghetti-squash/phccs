@@ -21,16 +21,16 @@ export class CSStrategy extends CombatStrategy {
     }: {
       fallthrough?: Delayed<Macro, [void]>;
       fightHolidayWanderer?: boolean;
-    } = {}
+    } = {},
   ) {
     super();
     this.macro(
       fightHolidayWanderer ? macro : Macro.skill($skill`Feel Hatred`),
-      getTodaysHolidayWanderers()
+      getTodaysHolidayWanderers(),
     )
       .autoattack(
         fightHolidayWanderer ? macro : Macro.skill($skill`Feel Hatred`),
-        getTodaysHolidayWanderers()
+        getTodaysHolidayWanderers(),
       )
       .autoattack(macro)
       .macro(fallthrough ?? macro);
@@ -41,10 +41,10 @@ export class Macro extends StrictMacro {
   tryBowl(): Macro {
     return this.ifNot(
       $item`cosmic bowling ball`,
-      Macro.item($item`Time-Spinner`)
+      Macro.item($item`Time-Spinner`),
     ).if_(
       $item`cosmic bowling ball`,
-      Macro.item([$item`Time-Spinner`, $item`cosmic bowling ball`])
+      Macro.item([$item`Time-Spinner`, $item`cosmic bowling ball`]),
     );
   }
   static tryBowl(): Macro {
@@ -67,8 +67,8 @@ export class Macro extends StrictMacro {
       have($skill`Candyblast`),
       Macro.while_(
         '!match "Hey, some of it is even intact afterwards!"',
-        Macro.trySkill($skill`Candyblast`)
-      )
+        Macro.trySkill($skill`Candyblast`),
+      ),
     );
   }
   static candyblast(): Macro {
@@ -88,7 +88,7 @@ export class Macro extends StrictMacro {
       .externalIf(
         myClass() === $class`Sauceror`,
         Macro.skill($skill`Saucegeyser`).repeat(),
-        Macro.attack().repeat()
+        Macro.attack().repeat(),
       );
   }
   static defaultKill(): Macro {
