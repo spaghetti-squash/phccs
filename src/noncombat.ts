@@ -51,7 +51,7 @@ const Noncombat: CSQuest = {
     favouriteBirdTask("Combat Rate", false),
     songTask(
       $effect`The Sonata of Sneakiness`,
-      $effect`Fat Leon's Phat Loot Lyric`
+      $effect`Fat Leon's Phat Loot Lyric`,
     ),
     restore($effects`Smooth Movements, The Sonata of Sneakiness`),
     {

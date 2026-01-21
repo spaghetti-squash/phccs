@@ -69,8 +69,8 @@ const FamiliarWeight: CSQuest = {
       do: (): void => {
         visitUrl(
           `inv_equip.php?which=2&action=equip&whichitem=${toInt(
-            $item`homemade robot gear`
-          )}&pwd`
+            $item`homemade robot gear`,
+          )}&pwd`,
         );
         visitUrl("charpane.php");
       },
@@ -86,7 +86,7 @@ const FamiliarWeight: CSQuest = {
       name: "Shorty Fights (Witchess)",
       completed: () =>
         [$effect`Shortly Stacked`, $item`short stack of pancakes`].some((x) =>
-          have(x)
+          have(x),
         ),
       ready: () =>
         availableFights() >= 11 - get("_shortOrderCookCharge") &&
@@ -100,7 +100,7 @@ const FamiliarWeight: CSQuest = {
       name: "Shorty Fights (BRICKO)",
       completed: () =>
         [$effect`Shortly Stacked`, $item`short stack of pancakes`].some((x) =>
-          have(x)
+          have(x),
         ),
       ready: () =>
         availableFights() >= 11 - get("_shortOrderCookCharge") &&

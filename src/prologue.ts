@@ -109,8 +109,8 @@ const Prologue: CSQuest = {
           else
             throw new Error(
               `Failed to pull one of ${pullSet.join(
-                ", "
-              )}; are you rich enough to run this in softcore?`
+                ", ",
+              )}; are you rich enough to run this in softcore?`,
             );
         }
       },
@@ -200,7 +200,7 @@ const Prologue: CSQuest = {
       do: (): void => {
         visitUrl("place.php?whichplace=town_right&action=townright_vote");
         visitUrl(
-          `choice.php?option=1&whichchoice=1331&g=2&local%5B%5D=${BEST_INITIATIVE}&local%5B%5D=${BEST_INITIATIVE}`
+          `choice.php?option=1&whichchoice=1331&g=2&local%5B%5D=${BEST_INITIATIVE}&local%5B%5D=${BEST_INITIATIVE}`,
         );
         visitUrl("place.php?whichplace=town_right&action=townright_vote");
       },
@@ -209,7 +209,7 @@ const Prologue: CSQuest = {
       name: "Terminal Skills",
       completed: () =>
         SourceTerminal.getSkills().every((skill) =>
-          $skills`Extract, Portscan`.includes(skill)
+          $skills`Extract, Portscan`.includes(skill),
         ) && !!SourceTerminal.getSkills().length,
       do: () => SourceTerminal.educate([$skill`Extract`, $skill`Portscan`]),
     },
@@ -243,7 +243,7 @@ const Prologue: CSQuest = {
       do: (): void => {
         useSkill(1, $skill`Summon Confiscated Things`);
         $items`glow-in-the-dark necklace, "KICK ME" sign, LCD game: Burger Belt, LCD game: Food Eater, LCD game: Garbage River`.forEach(
-          (item) => autosell(itemAmount(item), item)
+          (item) => autosell(itemAmount(item), item),
         );
       },
     },
@@ -254,7 +254,7 @@ const Prologue: CSQuest = {
       do: (): void => {
         useSkill(1, $skill`Summon Tasteful Items`);
         $items`black-and-blue light, blue plasma ball, cheap studded belt, flavored foot massage oil, foam dart, Loudmouth Larry Lamprey, personal massager, personalized coffee mug, stick-on eyebrow piercing`.forEach(
-          (item) => autosell(itemAmount(item), item)
+          (item) => autosell(itemAmount(item), item),
         );
       },
     },
@@ -317,7 +317,7 @@ const Prologue: CSQuest = {
       completed: () => have($item`codpiece`) || codpieceAttempted,
       do: (): void => {
         Clan.with(get("phccs_codClan", "Floundry"), () =>
-          cliExecute("acquire codpiece")
+          cliExecute("acquire codpiece"),
         );
         codpieceAttempted = true;
       },
@@ -332,7 +332,7 @@ const Prologue: CSQuest = {
       completed: () => !!get("_daycareGymScavenges"),
       do: (): void => {
         visitUrl(
-          "place.php?whichplace=town_wrong&action=townwrong_boxingdaycare"
+          "place.php?whichplace=town_wrong&action=townwrong_boxingdaycare",
         );
         runChoice(3);
         runChoice(2);
@@ -354,7 +354,7 @@ const Prologue: CSQuest = {
             Mysticality: "questG07Myst",
             Moxie: "questG08Moxie",
             Muscle: "questG09Muscle",
-          })
+          }),
         ) >= 0,
       do: () => visitUrl("guild.php?place=challenge"),
       outfit: () =>

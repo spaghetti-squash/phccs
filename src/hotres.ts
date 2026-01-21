@@ -80,8 +80,8 @@ const HotRes: CSQuest = {
         }),
       combat: new CSStrategy(() =>
         Macro.skill($skill`Fire Extinguisher: Foam Yourself`).skill(
-          $skill`Use the Force`
-        )
+          $skill`Use the Force`,
+        ),
       ),
       post: () => examine($item`industrial fire extinguisher`),
     },

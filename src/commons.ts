@@ -88,7 +88,7 @@ export function innerElf(): CSTask {
       }),
     choices: { [326]: 1 },
     combat: new CSStrategy(() =>
-      Macro.trySkill($skill`KGB tranquilizer dart`).trySkill($skill`Snokebomb`)
+      Macro.trySkill($skill`KGB tranquilizer dart`).trySkill($skill`Snokebomb`),
     ),
   };
 }
@@ -128,15 +128,15 @@ export function restore(effects: Effect[]): CSTask {
 
 export function skillTask(
   x: Skill | Effect | { skill: Skill; effect: Effect },
-  includeAprilShield = false
+  includeAprilShield = false,
 ): CSTask {
   {
     const { skill, effect } =
       x instanceof Skill
         ? { skill: x, effect: toEffect(x) }
         : x instanceof Effect
-        ? { skill: toSkill(x), effect: x }
-        : x;
+          ? { skill: toSkill(x), effect: x }
+          : x;
     return {
       name: skill.name,
       completed: () => have(effect),
@@ -151,7 +151,7 @@ export function skillTask(
 
 export function restoreBuffTasks(
   buffs: Effect[],
-  includeAprilShield = false
+  includeAprilShield = false,
 ): CSTask[] {
   return [
     ...buffs.map((buff) => skillTask(buff, includeAprilShield)),
@@ -169,14 +169,14 @@ export function commonFamiliarWeightBuffs(): CSTask[] {
         skill: $skill`Empathy of the Newt`,
         effect: $effect`Thoughtful Empathy`,
       },
-      true
+      true,
     ),
   ];
 }
 
 export function songTask(
   song: Effect | Skill,
-  shrugSong: Effect | Skill
+  shrugSong: Effect | Skill,
 ): CSTask {
   const { wantedSongSkill, wantedSongEffect } =
     song instanceof Effect
@@ -196,7 +196,7 @@ export function songTask(
 }
 
 export function asdonTask(
-  style: Effect | keyof typeof AsdonMartin.Driving
+  style: Effect | keyof typeof AsdonMartin.Driving,
 ): CSTask {
   const effect = style instanceof Effect ? style : AsdonMartin.Driving[style];
   return {
@@ -210,7 +210,7 @@ export function asdonTask(
         create(availableAmount($item`wad of dough`), $item`loaf of soda bread`);
         AsdonMartin.insertFuel(
           $item`loaf of soda bread`,
-          availableAmount($item`loaf of soda bread`)
+          availableAmount($item`loaf of soda bread`),
         );
       }
       AsdonMartin.drive(effect);
@@ -246,10 +246,10 @@ export function meteorShower(): CSTask {
       Macro.externalIf(
         have($effect`Overheated`),
         new Macro(),
-        Macro.skill($skill`Turbo`)
+        Macro.skill($skill`Turbo`),
       )
         .skill($skill`Meteor Shower`)
-        .skill($skill`Use the Force`)
+        .skill($skill`Use the Force`),
     ),
     post: () => {
       if (have($effect`Meteor Showered`)) incrementShowers();
@@ -274,7 +274,7 @@ export function birdTask(modifier: NumericModifier, positive = true): CSTask {
 
 export function favouriteBirdTask(
   modifier: NumericModifier,
-  positive = true
+  positive = true,
 ): CSTask {
   return {
     name: "Favourite Bird",
@@ -309,7 +309,7 @@ export function buskTask(
   hat: Item,
   shirt: Item,
   pants: Item,
-  index: number
+  index: number,
 ): CSTask {
   return {
     name: `Busk #${index + 1}: ${hat}. ${shirt}, and ${pants}`,
@@ -331,7 +331,7 @@ export function buskTask(
     ready: () =>
       [hat, shirt, pants].every(
         (it) =>
-          it === $item.none || (canEquip(it) && (have(it) || npcPrice(it) > 0))
+          it === $item.none || (canEquip(it) && (have(it) || npcPrice(it) > 0)),
       ),
     completed: () => get("_beretBuskingUses") !== index,
     do: () => {

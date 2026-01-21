@@ -50,7 +50,7 @@ const CoilWire: CSQuest = {
           .trySkill($skill`Blow the Red Candle!`)
           .skill($skill`Micrometeorite`)
           .attack()
-          .repeat()
+          .repeat(),
       ),
     },
     {
