@@ -2,7 +2,7 @@
   "name": "phccs",
   "version": "2.0.0",
   "description": "A hardcore community service script that operates under the assumption that you are me",
-  "main": "phredhccs.js",
+  "main": "phccs.js",
   "type": "module",
   "scripts": {
     "build": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript",
@@ -40,17 +40,17 @@
     "kolmafia": "^5.28896.0",
     "libram": "^0.11.16"
   },
-  "author": "Phreddrickkv2",
+  "author": "spaghetti-squash",
   "license": "ISC",
-  "repository": "git+https://github.com/horrible-little-slime/phccs.git",
+  "repository": "git+https://github.com/spaghetti-squash/phccs.git",
   "keywords": [
     "KoLMafia",
     "JS",
     "TS"
   ],
   "bugs": {
-    "url": "https://github.com/horrible-little-slime/phccs/issues"
+    "url": "https://github.com/spaghetti-squash/phccs/issues"
   },
-  "homepage": "https://github.com/horrible-little-slime/phccs#readme",
+  "homepage": "https://github.com/spaghetti-squash/phccs#readme",
   "packageManager": "yarn@4.4.1"
 }
