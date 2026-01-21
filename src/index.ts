@@ -24,6 +24,6 @@ export function main() {
     FamiliarWeight,
     Weapon,
     Spell,
-    BoozeDrop
+    BoozeDrop,
   );
 }

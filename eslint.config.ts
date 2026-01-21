@@ -14,19 +14,6 @@ export default defineConfig(
   ...tseslint.configs.recommended,
   ...libram.configs.recommended,
   {
-    rules: {
-      "libram/verify-constants": [
-        "error",
-        {
-          data: {
-            items: [],
-            locations: [],
-          },
-        },
-      ],
-    },
-  },
-  {
     files: ["**/*.ts", "**/*.tsx"],
     rules: {
       "block-scoped-var": "error",
@@ -48,5 +35,5 @@ export default defineConfig(
       ],
     },
   },
-  prettier
+  prettier,
 );

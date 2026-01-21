@@ -147,7 +147,7 @@ const potentialFights = () =>
   clamp(
     availableAmount($item`BRICKO eye brick`),
     0,
-    10 - get("_brickoFights")
+    10 - get("_brickoFights"),
   ) +
   clamp(3 - get("_brickoEyeSummons"), 0, 10 - get("_brickoFights"));
 
@@ -160,7 +160,7 @@ export function burnLibrams(): void {
   const testsDone = get("csServicesPerformed").split(",");
   if (
     !$skills`Summon BRICKOs, Summon Taffy, Summon Love Song, Summon Candy Heart`.some(
-      (skill) => have(skill)
+      (skill) => have(skill),
     )
   )
     return;
@@ -202,16 +202,16 @@ export function burnLibrams(): void {
         const currentWeightValue = clamp(
           Math.ceil(totalDuration($item`love song of icy revenge`) / 2),
           0,
-          10
+          10,
         );
         const newWeightValue = clamp(
           Math.ceil((totalDuration($item`love song of icy revenge`) + 5) / 2),
           0,
-          10
+          10,
         );
         decisionMap.set(
           $skill`Summon Love Song`,
-          probability * (newWeightValue - currentWeightValue)
+          probability * (newWeightValue - currentWeightValue),
         );
       }
 
@@ -233,7 +233,7 @@ export function burnLibrams(): void {
           decisionMap.set(
             $skill`Summon BRICKOs`,
             (probability * 11) /
-              (11 - get("_shortOrderCookCharge") - availableFights())
+              (11 - get("_shortOrderCookCharge") - availableFights()),
           );
         }
 
@@ -267,7 +267,7 @@ export function burnLibrams(): void {
 export function unequip(item: Item): void {
   while (equippedAmount(item) > 0) {
     const slot = Slot.all().find(
-      (equipmentSlot) => equippedItem(equipmentSlot) === item
+      (equipmentSlot) => equippedItem(equipmentSlot) === item,
     );
     if (!slot) return;
     equip(slot, $item`none`);
@@ -276,7 +276,7 @@ export function unequip(item: Item): void {
 
 export function favouriteBirdHas(
   modifier: NumericModifier,
-  positive = true
+  positive = true,
 ): boolean {
   const sign = positive ? "+" : "-";
   return get("yourFavoriteBirdMods")
@@ -286,7 +286,7 @@ export function favouriteBirdHas(
 
 export function currentBirdHas(
   modifier: NumericModifier,
-  positive = true
+  positive = true,
 ): boolean {
   const sign = positive ? "+" : "-";
   return get("_birdOfTheDayMods")

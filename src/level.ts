@@ -128,14 +128,14 @@ const Level: CSQuest = {
       $item`Apriling band helmet`,
       $item`makeshift garbage shirt`,
       $item`union scalemail pants`,
-      1
+      1,
     ),
     buskTask($item`coconut shell`, $item`fresh coat of paint`, $item.none, 2),
     buskTask(
       $item`norwhal helmet`,
       $item`fresh coat of paint`,
       $item`union scalemail pants`,
-      3
+      3,
     ),
     buskTask($item.none, $item.none, $item`repaid diaper`, 4),
     {
@@ -231,7 +231,7 @@ const Level: CSQuest = {
         if (
           numericModifier(loveEffect, myPrimestat().toString()) > 10 &&
           Stat.all().every(
-            (stat) => numericModifier(loveEffect, stat.toString()) > -30
+            (stat) => numericModifier(loveEffect, stat.toString()) > -30,
           ) &&
           numericModifier(loveEffect, "Maximum HP Percent") > -0.001
         ) {
@@ -290,7 +290,7 @@ const Level: CSQuest = {
     },
 
     ...$items`votive of confidence, natural magick candle, MayDay™ supply package, Napalm In The Morning™ candle`.map(
-      potionTask
+      potionTask,
     ),
 
     {
@@ -307,7 +307,7 @@ const Level: CSQuest = {
       completed: () => $items`turtle totem, saucepan`.every((i) => have(i)),
       do: () =>
         $items`turtle totem, saucepan`.forEach(
-          (i) => !have(i) && cliExecute(`acquire ${i}`)
+          (i) => !have(i) && cliExecute(`acquire ${i}`),
         ),
     },
     ...CastSkills,
@@ -322,7 +322,7 @@ const Level: CSQuest = {
         Mysticality: $effects`Inscrutable Gaze`,
         Moxie: $effects`Quiet Desperation`,
         Muscle: $effects`Quiet Determination`,
-      })
+      }),
     ),
     ...restoreBuffTasks($effects`Empathy`),
     skillTask(
@@ -330,7 +330,7 @@ const Level: CSQuest = {
         skill: $skill`Empathy of the Newt`,
         effect: $effect`Thoughtful Empathy`,
       },
-      true
+      true,
     ),
     potionTask($item`green candy heart`),
     {
@@ -386,12 +386,12 @@ const Level: CSQuest = {
       combat: new CSStrategy(() =>
         Macro.externalIf(
           !have($effect`Cosmic Ball in the Air`),
-          Macro.trySkill($skill`Bowl Straight Up`)
+          Macro.trySkill($skill`Bowl Straight Up`),
         )
           .tryItem($item`blue rocket`)
           .trySkill($skill`Giant Growth`)
           .attack()
-          .repeat()
+          .repeat(),
       ),
     },
     {
@@ -404,12 +404,12 @@ const Level: CSQuest = {
       combat: new CSStrategy(() =>
         Macro.externalIf(
           !have($effect`Cosmic Ball in the Air`),
-          Macro.trySkill($skill`Bowl Straight Up`)
+          Macro.trySkill($skill`Bowl Straight Up`),
         )
           .tryItem($item`blue rocket`)
           .trySkill($skill`Giant Growth`)
           .attack()
-          .repeat()
+          .repeat(),
       ),
     },
     // A proton ghost should get fought here
@@ -505,7 +505,7 @@ const Level: CSQuest = {
         });
       },
       combat: new CSStrategy(() =>
-        Macro.tryBowl().throwLoveSongs().attack().repeat()
+        Macro.tryBowl().throwLoveSongs().attack().repeat(),
       ),
       post: () => {
         queenPrep = false;
@@ -538,14 +538,14 @@ const Level: CSQuest = {
                   Mysticality: $skill`Spaghetti Spear`,
                   Moxie: $skill`Suckerpunch`,
                   Muscle: $skill`Clobber`,
-                })
-              )
+                }),
+              ),
             )
             .trySkill($skill`Feel Envy`)
             .defaultKill(),
         {
           fightHolidayWanderer: true,
-        }
+        },
       ),
     },
     {
@@ -563,7 +563,7 @@ const Level: CSQuest = {
       combat: new CSStrategy(() =>
         Macro.skill($skill`Become a Bat`)
           .skill($skill`Otoscope`)
-          .defaultKill()
+          .defaultKill(),
       ),
     },
     {
@@ -574,8 +574,8 @@ const Level: CSQuest = {
       combat: new CSStrategy(() =>
         Macro.if_(
           $monster`amateur ninja`,
-          Macro.skill($skill`Chest X-Ray`)
-        ).abort()
+          Macro.skill($skill`Chest X-Ray`),
+        ).abort(),
       ),
       outfit: () =>
         uniform({
@@ -609,13 +609,13 @@ const Level: CSQuest = {
             Moxie: "LOV Earring",
           }),
           "Open Heart Surgery",
-          "LOV Extraterrestrial Chocolate"
+          "LOV Extraterrestrial Chocolate",
         ),
       combat: new CSStrategy(() =>
         Macro.if_($monster`LOV Enforcer`, Macro.attack().repeat())
           .if_(
             $monster`LOV Engineer`,
-            Macro.candyblast().trySkillRepeat($skill`Weapon of the Pastalord`)
+            Macro.candyblast().trySkillRepeat($skill`Weapon of the Pastalord`),
           )
           .if_(
             $monster`LOV Equivocator`,
@@ -623,8 +623,8 @@ const Level: CSQuest = {
               .delevel()
               .easyFight()
               .candyblast()
-              .defaultKill()
-          )
+              .defaultKill(),
+          ),
       ),
       post: (): void => {
         use(1, $item`LOV Extraterrestrial Chocolate`);
@@ -636,13 +636,13 @@ const Level: CSQuest = {
         Muscle: $item`LOV Elixir #3`,
         Mysticality: $item`LOV Elixir #6`,
         Moxie: $item`LOV Elixir #9`,
-      })
+      }),
     ),
     {
       name: "Post-Snojo Hottub",
       completed: () =>
         $effects`Snowballed, Half-Blooded, Half-Drained, Bruised, Relaxed Muscles, Hypnotized, Bad Haircut`.every(
-          (effect) => !have(effect)
+          (effect) => !have(effect),
         ),
       do: () => cliExecute("hottub"),
     },
@@ -667,7 +667,7 @@ const Level: CSQuest = {
                 cliExecute("hottub");
               }
             }
-          }
+          },
         ),
       outfit: () => uniform(),
       combat: new CSStrategy(() => Macro.delevel().candyblast().defaultKill()),
@@ -684,7 +684,7 @@ const Level: CSQuest = {
       outfit: (): OutfitSpec => {
         const gear =
           $items`God Lobster's Crown, God Lobster's Robe, God Lobster's Rod, God Lobster's Ring, God Lobster's Scepter`.find(
-            (it) => have(it)
+            (it) => have(it),
           ) ?? $item`tiny stillsuit`;
         return uniform({
           changes: { familiar: $familiar`God Lobster`, famequip: gear },
@@ -741,7 +741,7 @@ const Level: CSQuest = {
           .trySkill($skill`Blow the Red Candle!`)
           .skill($skill`Micrometeorite`)
           .attack()
-          .repeat()
+          .repeat(),
       ),
     },
     /*{

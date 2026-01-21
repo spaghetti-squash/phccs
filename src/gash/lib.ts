@@ -57,13 +57,13 @@ export function getSkillsToPerm(): Map<Skill, Lifestyle> {
   return new Map(
     Skill.all()
       .filter((s) => have(s) && !perms[s.name] && s.permable)
-      .map((s) => [s, Lifestyle.hardcore])
+      .map((s) => [s, Lifestyle.hardcore]),
   );
 }
 
 export function smokeEmIfYouGotEm(): void {
   const fullText = visitUrl(
-    "https://www.gutenberg.org/cache/epub/1321/pg1321.txt"
+    "https://www.gutenberg.org/cache/epub/1321/pg1321.txt",
   );
   const lines = fullText
     .split("\n")
@@ -71,9 +71,9 @@ export function smokeEmIfYouGotEm(): void {
     .filter(Boolean);
   const poemLines = lines.slice(
     lines.indexOf(
-      "*** START OF THE PROJECT GUTENBERG EBOOK THE WASTE LAND ***"
+      "*** START OF THE PROJECT GUTENBERG EBOOK THE WASTE LAND ***",
     ),
-    lines.indexOf("*** END OF THE PROJECT GUTENBERG EBOOK THE WASTE LAND ***")
+    lines.indexOf("*** END OF THE PROJECT GUTENBERG EBOOK THE WASTE LAND ***"),
   );
   const poemLine =
     (get("phccs_wasteLand", Number(myId())) + 1) % poemLines.length;
@@ -82,6 +82,6 @@ export function smokeEmIfYouGotEm(): void {
 
   retrieveItem($item`campfire smoke`);
   withChoice(1394, `1&message=${urlEncode(MESSAGE)}`, () =>
-    use($item`campfire smoke`)
+    use($item`campfire smoke`),
   );
 }

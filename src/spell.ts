@@ -86,7 +86,7 @@ const Spell: CSQuest = {
         Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`)
           .trySkill($skill`Feel Hatred`)
           .trySkill($skill`Snokebomb`)
-          .abort()
+          .abort(),
       ),
     },
     {
@@ -99,7 +99,7 @@ const Spell: CSQuest = {
     potionTask($item`imported taffy`),
     songTask(
       $effect`Jackasses' Symphony of Destruction`,
-      $effect`The Sonata of Sneakiness`
+      $effect`The Sonata of Sneakiness`,
     ),
     ...restoreBuffTasks(buffs),
     skillTask(
@@ -107,7 +107,7 @@ const Spell: CSQuest = {
         skill: $skill`Sauce Contemplation`,
         effect: $effect`Lubricating Sauce`,
       },
-      true
+      true,
     ),
     beachTask($effect`We're All Made of Starfish`),
     potionTask($item`LOV Elixir #6`),
@@ -116,7 +116,7 @@ const Spell: CSQuest = {
       completed: () => get("_cargoPocketEmptied"),
       ready: () =>
         $items`sizzling desk bell, frost-rimed desk bell, uncanny desk bell, nasty desk bell, greasy desk bell`.every(
-          (item) => getSaleValue(item) < 4 * get("valueOfAdventure")
+          (item) => getSaleValue(item) < 4 * get("valueOfAdventure"),
         ),
       do: () => cliExecute("cargo 177"),
     },
@@ -137,7 +137,7 @@ const Spell: CSQuest = {
         Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`)
           .trySkill($skill`Feel Hatred`)
           .trySkill($skill`Snokebomb`)
-          .abort()
+          .abort(),
       ),
       choices: { [768]: 4 },
     },
@@ -150,12 +150,12 @@ const Spell: CSQuest = {
       ready: () =>
         canadiaAvailable() &&
         $items`meteorite fragment, meteorite earring, meteorite ring`.some(
-          (item) => have(item)
+          (item) => have(item),
         ),
       do: (): void => {
         const meteor =
           $items`meteorite ring, meteorite fragment, meteorite earring`.find(
-            (item) => have(item)
+            (item) => have(item),
           );
         if (meteor) {
           unequip(meteor);
@@ -176,7 +176,7 @@ const Spell: CSQuest = {
       core: "soft",
       do: (): void => {
         const staff = chefstaves.find(
-          (s) => storageAmount(s) > 0 && canEquip(s)
+          (s) => storageAmount(s) > 0 && canEquip(s),
         );
         if (staff) takeStorage(staff, 1);
       },

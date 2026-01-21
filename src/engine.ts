@@ -139,10 +139,10 @@ export class CSEngine extends Engine<never, CSTask> {
                 this.name
               }. Also, that outfit is ${toJson(
                 Object.fromEntries(
-                  Object.entries(spec).filter(([key]) => key !== "afterDress")
-                )
-              )}`
-            )
+                  Object.entries(spec).filter(([key]) => key !== "afterDress"),
+                ),
+              )}`,
+            ),
           ).dress();
           burnLibrams();
         }
@@ -158,7 +158,7 @@ export class CSEngine extends Engine<never, CSTask> {
 
       if (result === "already completed")
         throw new Error(
-          `Libram thinks we already completed ${this.name} but we beg to differ`
+          `Libram thinks we already completed ${this.name} but we beg to differ`,
         );
     } finally {
       this.destruct();
@@ -190,8 +190,8 @@ export class CSEngine extends Engine<never, CSTask> {
       if (get("_cloudTalkSmoker")) {
         print(
           `${get("_cloudTalkSmoker").slice(10)} has a message for you: ${get(
-            "_cloudTalkMessage"
-          )}`
+            "_cloudTalkMessage",
+          )}`,
         );
       }
 

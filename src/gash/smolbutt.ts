@@ -19,7 +19,7 @@ const args = Args.create(
       help: "What class should we ascend as?",
       default: $class`Seal Clubber`,
     }),
-  }
+  },
 );
 
 const byAscendingStat = makeByXFunction(() => args.class.primestat.toString());

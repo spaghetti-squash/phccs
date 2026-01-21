@@ -99,7 +99,7 @@ const FAMILIAR_PICKS = [
     familiar: $familiar`Shorter-Order Cook`,
     condition: () =>
       ![$effect`Shortly Stacked`, $item`short stack of pancakes`].some((x) =>
-        have(x)
+        have(x),
       ) && !CommunityService.FamiliarWeight.isDone(),
   },
   {
@@ -126,13 +126,13 @@ function findFirstFamiliar(fams: Familiar[]) {
 }
 
 function chooseFamiliar(
-  canAttack: boolean
+  canAttack: boolean,
 ): Pick<OutfitSpec, "familiar" | "famequip"> {
   const pick = FAMILIAR_PICKS.find(
     ({ condition, familiar }) =>
       condition() &&
       have(familiar) &&
-      (canAttack || !(familiar.elementalDamage || familiar.physicalDamage))
+      (canAttack || !(familiar.elementalDamage || familiar.physicalDamage)),
   );
   if (pick) {
     if (pick.famequip) {

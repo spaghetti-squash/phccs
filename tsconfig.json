@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
-    "rootDir": "src",
     "noEmit": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "declaration": false,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["esnext"],
+    "lib": ["es2019"],
     "module": "esnext",
     "moduleResolution": "bundler",
     "noEmitOnError": true,
@@ -14,8 +13,7 @@
     "noImplicitReturns": true,
     "pretty": true,
     "strict": true,
-    "target": "esnext"
+    "target": "es2018"
   },
-  "include": ["src/**/*.ts", "test/**/*.ts"],
-  "isolatedModules": true /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
+  "include": ["src/**/*.ts", "test/**/*.ts", "*.ts"]
 }

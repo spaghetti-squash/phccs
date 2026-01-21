@@ -68,7 +68,9 @@ const BoozeDrop: CSQuest = {
           canAttack: false,
         }),
       combat: new CSStrategy(() =>
-        Macro.skill($skill`Become a Bat`).skill($skill`Throw Latte on Opponent`)
+        Macro.skill($skill`Become a Bat`).skill(
+          $skill`Throw Latte on Opponent`,
+        ),
       ),
     },
     {
@@ -110,7 +112,7 @@ const BoozeDrop: CSQuest = {
       do: () => cliExecute("barrelprayer buff"),
     },
     ...$items`Salsa Caliente™ candle, lavender candy heart, bag of grain, emergency glowstick, autumn leaf`.map(
-      potionTask
+      potionTask,
     ),
     {
       name: "Steely-Eyed Squint",
