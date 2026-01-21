@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  node-version: "20"
+  node-version: "22"
   path: "dist" # The directory where your assets are generated, should match build.mjs
 
 jobs:
