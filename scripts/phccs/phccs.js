@@ -11867,7 +11867,7 @@ var Level = {
         parka: "kachungasaur"
       },
       pants: $item(_templateObject39$4 || (_templateObject39$4 = _taggedTemplateLiteral(["repaid diaper"]))),
-      acc1: $item(_templateObject40$4 || (_templateObject40$4 = _taggedTemplateLiteral(["your cowboy boots"]))),
+      acc1: $item(_templateObject40$4 || (_templateObject40$4 = _taggedTemplateLiteral(["The Eternity Codpiece"]))),
       acc2: $item(_templateObject41$4 || (_templateObject41$4 = _taggedTemplateLiteral(["McHugeLarge left ski"]))),
       acc3: $item(_templateObject42$4 || (_templateObject42$4 = _taggedTemplateLiteral(["McHugeLarge right ski"]))),
       familiar: $familiar(_templateObject43$4 || (_templateObject43$4 = _taggedTemplateLiteral(["Cooler Yeti"]))),
