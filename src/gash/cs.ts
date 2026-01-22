@@ -28,6 +28,7 @@ import {
   Lifestyle,
   makeByXFunction,
   prepareAscension,
+  sum,
 } from "libram";
 
 const args = Args.create(
@@ -104,7 +105,12 @@ const REGULAR_REQUIREMENTS = [
     name: "Sapphire-laden codpiece",
     meets: () =>
       have($item`The Eternity Codpiece`) &&
-      availableAmount($item`glacial sapphire`) >= 5,
+      availableAmount($item`glacial sapphire`) +
+        sum(
+          $slots`codpiece1, codpiece2, codpiece3, codpiece4, codpiece5`,
+          (slot) => Number(equippedItem(slot) === $item`glacial sapphire`),
+        ) >=
+        5,
     reason: "We use it for leveling!",
   },
 ];
