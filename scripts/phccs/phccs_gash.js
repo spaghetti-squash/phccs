@@ -269,6 +269,738 @@ function _wrapNativeSuper(t) {
   }, _wrapNativeSuper(t);
 }
 
+var Args = /*#__PURE__*/function () {
+  function Args() {
+    _classCallCheck(this, Args);
+  }
+  return _createClass(Args, null, [{
+    key: "custom",
+    value: function custom(spec, _parser, valueHelpName) {
+      var _a, _b;
+      var raw_options = (_a = spec.options) === null || _a === void 0 ? void 0 : _a.map(option => option[0]);
+      // Check that the default value actually appears in the options.
+      if ("default" in spec && raw_options) {
+        if (!raw_options.includes(spec.default)) {
+          throw "Invalid default value ".concat(spec.default);
+        }
+      }
+      return _objectSpread2(_objectSpread2({}, spec), {}, {
+        valueHelpName: valueHelpName,
+        parser: value => {
+          var parsed_value = _parser(value);
+          if (parsed_value === undefined || parsed_value instanceof ParseError) return parsed_value;
+          if (raw_options) {
+            if (!raw_options.includes(parsed_value)) {
+              return new ParseError("received ".concat(value, " which was not in the allowed options"));
+            }
+          }
+          return parsed_value;
+        },
+        options: (_b = spec.options) === null || _b === void 0 ? void 0 : _b.map(a => ["".concat(a[0]), a[1]])
+      });
+    }
+  }, {
+    key: "arrayFromArg",
+    value: function arrayFromArg(spec, argFromSpec) {
+      var _a, _b, _c;
+      // First, construct a non-array version of this argument.
+      // We do this by calling argFromSpec in order to extract the parser and
+      // valueHelpName (to make it easier to define the functions below).
+      //
+      // The default argument of an ArraySpec is of type T[], which causes
+      // problems, so we must remove it.
+      var spec_without_default = _objectSpread2({}, spec); // Avoid "the operand of a 'delete' operator must be optional"
+      if ("default" in spec_without_default) delete spec_without_default["default"];
+      var arg = argFromSpec.call(this, spec_without_default);
+      // Next, check that all default values actually appear in the options.
+      var raw_options = (_a = spec.options) === null || _a === void 0 ? void 0 : _a.map(option => option[0]);
+      if ("default" in spec && raw_options) {
+        var _iterator = _createForOfIteratorHelper(spec.default),
+          _step;
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var default_entry = _step.value;
+            if (!raw_options.includes(default_entry)) throw "Invalid default value ".concat(spec.default);
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+      }
+      var separator = (_b = spec.separator) !== null && _b !== void 0 ? _b : ",";
+      var arrayParser = value => {
+        // Split the array
+        var values = value.split(separator);
+        if (!spec.noTrim) values = values.map(v => v.trim());
+        // Parse all values, return the first error found if any
+        var result = values.map(v => arg.parser(v));
+        var error = result.find(v => v instanceof ParseError);
+        if (error) return error;
+        var failure_index = result.indexOf(undefined);
+        if (failure_index !== -1) return new ParseError("components expected ".concat(arg.valueHelpName, " but could not parse ").concat(values[failure_index]));
+        // Otherwise, all values are good
+        return result;
+      };
+      return _objectSpread2(_objectSpread2({}, spec), {}, {
+        valueHelpName: "".concat(arg.valueHelpName).concat(separator, " ").concat(arg.valueHelpName).concat(separator, " ..."),
+        parser: arrayParser,
+        options: (_c = spec.options) === null || _c === void 0 ? void 0 : _c.map(a => ["".concat(a[0]), a[1]])
+      });
+    }
+  }, {
+    key: "string",
+    value: function string(spec) {
+      return this.custom(spec, value => value, "TEXT");
+    }
+  }, {
+    key: "strings",
+    value: function strings(spec) {
+      return this.arrayFromArg(spec, this.string);
+    }
+  }, {
+    key: "number",
+    value: function number(spec) {
+      return this.custom(spec, value => isNaN(Number(value)) ? undefined : Number(value), "NUMBER");
+    }
+  }, {
+    key: "numbers",
+    value: function numbers(spec) {
+      return this.arrayFromArg(spec, this.number);
+    }
+  }, {
+    key: "boolean",
+    value: function boolean(spec) {
+      return this.custom(spec, value => {
+        if (value.toLowerCase() === "true") return true;
+        if (value.toLowerCase() === "false") return false;
+        return undefined;
+      }, "BOOLEAN");
+    }
+  }, {
+    key: "booleans",
+    value: function booleans(spec) {
+      return this.arrayFromArg(spec, this.boolean);
+    }
+  }, {
+    key: "flag",
+    value: function flag(spec) {
+      return this.custom(spec, value => {
+        if (value.toLowerCase() === "true") return true;
+        if (value.toLowerCase() === "false") return false;
+        return undefined;
+      }, "FLAG");
+    }
+  }, {
+    key: "class",
+    value: function _class(spec) {
+      return this.custom(spec, value => {
+        var match = kolmafia.Class.get(value);
+        // Class.get does fuzzy matching:
+        //  e.g. Class.get("sc") returns disco bandit.
+        // To avoid this foot-gun, only return exact matches or id lookups.
+        if (match.toString().toUpperCase() === value.toString().toUpperCase()) return match;
+        if (!isNaN(Number(value))) return match;
+        return undefined;
+      }, "CLASS");
+    }
+  }, {
+    key: "classes",
+    value: function classes(spec) {
+      return this.arrayFromArg(spec, this.class);
+    }
+  }, {
+    key: "effect",
+    value: function effect(spec) {
+      return this.custom(spec, kolmafia.Effect.get, "EFFECT");
+    }
+  }, {
+    key: "effects",
+    value: function effects(spec) {
+      return this.arrayFromArg(spec, this.effect);
+    }
+  }, {
+    key: "familiar",
+    value: function familiar(spec) {
+      return this.custom(spec, kolmafia.Familiar.get, "FAMILIAR");
+    }
+  }, {
+    key: "familiars",
+    value: function familiars(spec) {
+      return this.arrayFromArg(spec, this.familiar);
+    }
+  }, {
+    key: "item",
+    value: function item(spec) {
+      return this.custom(spec, kolmafia.Item.get, "ITEM");
+    }
+  }, {
+    key: "items",
+    value: function items(spec) {
+      return this.arrayFromArg(spec, this.item);
+    }
+  }, {
+    key: "location",
+    value: function location(spec) {
+      return this.custom(spec, kolmafia.Location.get, "LOCATION");
+    }
+  }, {
+    key: "locations",
+    value: function locations(spec) {
+      return this.arrayFromArg(spec, this.location);
+    }
+  }, {
+    key: "monster",
+    value: function monster(spec) {
+      return this.custom(spec, kolmafia.Monster.get, "MONSTER");
+    }
+  }, {
+    key: "monsters",
+    value: function monsters(spec) {
+      return this.arrayFromArg(spec, this.monster);
+    }
+  }, {
+    key: "path",
+    value: function path(spec) {
+      return this.custom(spec, kolmafia.Path.get, "PATH");
+    }
+  }, {
+    key: "paths",
+    value: function paths(spec) {
+      return this.arrayFromArg(spec, this.path);
+    }
+  }, {
+    key: "skill",
+    value: function skill(spec) {
+      return this.custom(spec, kolmafia.Skill.get, "SKILL");
+    }
+  }, {
+    key: "skills",
+    value: function skills(spec) {
+      return this.arrayFromArg(spec, this.skill);
+    }
+    /**
+     * Create a group of arguments that will be printed separately in the help.
+     *
+     * Note that keys in the group must still be globally distinct.
+     *
+     * @param groupName The display name for the group in help.
+     * @param args A JS object specifying the script arguments. Its values should
+     *    be {@link Arg} objects (created by Args.string, Args.number, or others)
+     *    or groups of arguments (created by Args.group).
+     */
+  }, {
+    key: "group",
+    value: function group(groupName, args) {
+      return {
+        name: groupName,
+        args: args
+      };
+    }
+    /**
+     * Create a set of input arguments for a script.
+     * @param scriptName Prefix for property names; often the name of the script.
+     * @param scriptHelp Brief description of this script, for the help message.
+     * @param args A JS object specifying the script arguments. Its values should
+     *    be {@link Arg} objects (created by Args.string, Args.number, or others)
+     *    or groups of arguments (created by Args.group).
+     * @param options Config options for the args and arg parser.
+     * @returns An object which can hold parsed argument values. The keys of this
+     *    object are identical to the keys in 'args'.
+     */
+  }, {
+    key: "create",
+    value: function create(scriptName, scriptHelp, args, options) {
+      _traverse(args, (keySpec, key) => {
+        if (key === "help" || keySpec.key === "help") throw "help is a reserved argument name";
+      });
+      var argsWithHelp = _objectSpread2(_objectSpread2({}, args), {}, {
+        help: this.flag({
+          help: "Show this message and exit.",
+          setting: ""
+        })
+      });
+      // Create an object to hold argument results, with a default value for
+      // each argument.
+      var res = _objectSpread2(_objectSpread2({}, _loadDefaultValues(argsWithHelp)), {}, {
+        [specSymbol]: argsWithHelp,
+        [scriptSymbol]: scriptName,
+        [scriptHelpSymbol]: scriptHelp,
+        [optionsSymbol]: options !== null && options !== void 0 ? options : {}
+      });
+      if (options === null || options === void 0 ? void 0 : options.positionalArgs) {
+        var keys = [];
+        var metadata = Args.getMetadata(res);
+        metadata.traverse((keySpec, key) => {
+          var _a;
+          keys.push((_a = keySpec.key) !== null && _a !== void 0 ? _a : key);
+        });
+        var _iterator2 = _createForOfIteratorHelper(options.positionalArgs),
+          _step2;
+        try {
+          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+            var arg = _step2.value;
+            if (!keys.includes(arg)) throw "Unknown key for positional arg: ".concat(arg);
+          }
+        } catch (err) {
+          _iterator2.e(err);
+        } finally {
+          _iterator2.f();
+        }
+      }
+      return res;
+    }
+    /**
+     * Parse the command line input into the provided script arguments.
+     * @param args An object to hold the parsed argument values, from Args.create(*).
+     * @param command The command line input.
+     * @param includeSettings If true, parse values from settings as well.
+     */
+  }, {
+    key: "fill",
+    value: function fill(args, command) {
+      var includeSettings = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+      var _a;
+      var metadata = Args.getMetadata(args);
+      // Load the list of keys and flags from the arg spec
+      var keys = new Set();
+      var flags = new Set();
+      metadata.traverse((keySpec, key) => {
+        var _a;
+        var name = (_a = keySpec.key) !== null && _a !== void 0 ? _a : key;
+        if (flags.has(name) || keys.has(name)) throw "Duplicate arg key ".concat(name, " is not allowed");
+        if (keySpec.valueHelpName === "FLAG") flags.add(name);else keys.add(name);
+      });
+      // Parse values from settings.
+      if (includeSettings) {
+        metadata.traverseAndMaybeSet(args, (keySpec, key) => {
+          var _a, _b;
+          var setting = (_a = keySpec.setting) !== null && _a !== void 0 ? _a : "".concat(metadata.scriptName, "_").concat((_b = keySpec.key) !== null && _b !== void 0 ? _b : key);
+          if (setting === "") return undefined; // no setting
+          var value_str = kolmafia.getProperty(setting);
+          if (value_str === "") return undefined; // no setting
+          return parseAndValidate(keySpec, "Setting ".concat(setting), value_str);
+        });
+      }
+      // Parse new argments from the command line
+      if (command === undefined || command === "") return;
+      var parsed = new CommandParser(command, keys, flags, (_a = metadata.options.positionalArgs) !== null && _a !== void 0 ? _a : []).parse();
+      metadata.traverseAndMaybeSet(args, (keySpec, key) => {
+        var _a;
+        var argKey = (_a = keySpec.key) !== null && _a !== void 0 ? _a : key;
+        var value_str = parsed.get(argKey);
+        if (value_str === undefined) return undefined; // no setting
+        return parseAndValidate(keySpec, "Argument ".concat(argKey), value_str);
+      });
+    }
+    /**
+     * Parse command line input into a new set of script arguments.
+     * @param scriptName Prefix to use in property names; typically the name of the script.
+     * @param scriptHelp Brief description of this script, for the help message.
+     * @param spec An object specifying the script arguments.
+     * @param command The command line input.
+     * @param options Config options for the args and arg parser.
+     */
+  }, {
+    key: "parse",
+    value: function parse(scriptName, scriptHelp, spec, command, options) {
+      var args = this.create(scriptName, scriptHelp, spec, options);
+      this.fill(args, command);
+      return args;
+    }
+    /**
+     * Print a description of the script arguments to the CLI.
+     *
+     * First, all top-level argument descriptions are printed in the order they
+     * were defined. Afterwards, descriptions for groups of arguments are printed
+     * in the order they were defined.
+     *
+     * @param args An object of parsed arguments, from Args.create(*).
+     * @param maxOptionsToDisplay If given, do not list more than this many options for each arg.
+     */
+  }, {
+    key: "showHelp",
+    value: function showHelp(args, maxOptionsToDisplay) {
+      var _a;
+      var metadata = Args.getMetadata(args);
+      kolmafia.printHtml("".concat(metadata.scriptHelp));
+      kolmafia.printHtml("");
+      kolmafia.printHtml("<b>".concat((_a = metadata.options.defaultGroupName) !== null && _a !== void 0 ? _a : "Options", ":</b>"));
+      metadata.traverse((arg, key) => {
+        var _a, _b, _c, _d, _e;
+        if (arg.hidden) return;
+        var nameText = "<font color='".concat(kolmafia.isDarkMode() ? "yellow" : "blue", "'>").concat((_a = arg.key) !== null && _a !== void 0 ? _a : key, "</font>");
+        var valueText = arg.valueHelpName === "FLAG" ? "" : "<font color='purple'>".concat(arg.valueHelpName, "</font>");
+        var helpText = (_b = arg.help) !== null && _b !== void 0 ? _b : "";
+        var defaultText = "default" in arg ? "<font color='#888888'>[default: ".concat(arg.default, "]</font>") : "";
+        var settingText = arg.setting === "" ? "" : "<font color='#888888'>[setting: ".concat((_c = arg.setting) !== null && _c !== void 0 ? _c : "".concat(metadata.scriptName, "_").concat((_d = arg.key) !== null && _d !== void 0 ? _d : key), "]</font>");
+        kolmafia.printHtml("&nbsp;&nbsp;".concat([nameText, valueText, "-", helpText, defaultText, settingText].join(" ")));
+        var valueOptions = (_e = arg.options) !== null && _e !== void 0 ? _e : [];
+        if (valueOptions.length < (maxOptionsToDisplay !== null && maxOptionsToDisplay !== void 0 ? maxOptionsToDisplay : Number.MAX_VALUE)) {
+          var _iterator3 = _createForOfIteratorHelper(valueOptions),
+            _step3;
+          try {
+            for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+              var option = _step3.value;
+              if (option.length === 1 || option[1] === undefined) {
+                kolmafia.printHtml("&nbsp;&nbsp;&nbsp;&nbsp;<font color='blue'>".concat(nameText, "</font> ").concat(option[0]));
+              } else {
+                kolmafia.printHtml("&nbsp;&nbsp;&nbsp;&nbsp;<font color='blue'>".concat(nameText, "</font> ").concat(option[0], " - ").concat(option[1]));
+              }
+            }
+          } catch (err) {
+            _iterator3.e(err);
+          } finally {
+            _iterator3.f();
+          }
+        }
+      }, group => {
+        kolmafia.printHtml("");
+        kolmafia.printHtml("<b>".concat(group.name, ":</b>"));
+      });
+    }
+    /**
+     * Load the metadata information for a set of arguments. Only for advanced usage.
+     *
+     * @param args A JS object specifying the script arguments. Its values should
+     *    be {@link Arg} objects (created by Args.string, Args.number, or others)
+     *    or groups of arguments (created by Args.group).
+     * @returns A class containing metadata information.
+     */
+  }, {
+    key: "getMetadata",
+    value: function getMetadata(args) {
+      return new WrappedArgMetadata(args);
+    }
+  }]);
+}();
+var ParseError = /*#__PURE__*/_createClass(function ParseError(message) {
+  _classCallCheck(this, ParseError);
+  this.message = message;
+});
+/**
+ * Metadata for the parsed arguments.
+ *
+ * This information is hidden within the parsed argument object so that it
+ * is invisible to the user but available to fill(*) and showHelp(*).
+ */
+var specSymbol = Symbol("spec");
+var scriptSymbol = Symbol("script");
+var scriptHelpSymbol = Symbol("scriptHelp");
+var optionsSymbol = Symbol("options");
+/**
+ * Parse a string into a value for a given argument, throwing if the parsing fails.
+ * @param arg An argument that takes values in T.
+ * @param source A description of where this value came from, for the error message.
+ * @param value The value to parse.
+ * @returns the parsed value.
+ */
+function parseAndValidate(arg, source, value) {
+  var parsed_value;
+  try {
+    parsed_value = arg.parser(value);
+  } catch (_a) {
+    parsed_value = undefined;
+  }
+  if (parsed_value === undefined) throw "".concat(source, " expected ").concat(arg.valueHelpName, " but could not parse ").concat(value);
+  if (parsed_value instanceof ParseError) throw "".concat(source, " ").concat(parsed_value.message);
+  return parsed_value;
+}
+/**
+ * A class that reveals the hidden metadata and specs for arguments.
+ *
+ * Only for advanced usage.
+ */
+var WrappedArgMetadata = /*#__PURE__*/function () {
+  function WrappedArgMetadata(args) {
+    _classCallCheck(this, WrappedArgMetadata);
+    this.spec = args[specSymbol];
+    this.scriptName = args[scriptSymbol];
+    this.scriptHelp = args[scriptHelpSymbol];
+    this.options = args[optionsSymbol];
+  }
+  /**
+   * Create a parsed args object from this spec using all default values.
+   */
+  return _createClass(WrappedArgMetadata, [{
+    key: "loadDefaultValues",
+    value: function loadDefaultValues() {
+      return _loadDefaultValues(this.spec);
+    }
+    /**
+     * Traverse the spec and possibly generate a value for each argument.
+     *
+     * @param result The object to hold the resulting argument values, typically
+     *    the result of loadDefaultValues().
+     * @param setTo A function to generate an argument value from each arg spec.
+     *    If this function returns undefined, then the argument value is unchanged.
+     */
+  }, {
+    key: "traverseAndMaybeSet",
+    value: function traverseAndMaybeSet(result, setTo) {
+      return _traverseAndMaybeSet(this.spec, result, setTo);
+    }
+    /**
+     * Traverse the spec and call a method for each argument.
+     *
+     * @param process A function to call at each arg spec.
+     */
+  }, {
+    key: "traverse",
+    value: function traverse(process, onGroup) {
+      return _traverse(this.spec, process, onGroup);
+    }
+  }]);
+}();
+/**
+ * Create a parsed args object from a spec using all default values.
+ *
+ * @param spec The spec for all arguments.
+ */
+function _loadDefaultValues(spec) {
+  var result = {};
+  for (var k in spec) {
+    var argSpec = spec[k];
+    if ("args" in argSpec) {
+      result[k] = _loadDefaultValues(argSpec.args);
+    } else {
+      if ("default" in argSpec) result[k] = argSpec.default;else result[k] = undefined;
+    }
+  }
+  return result;
+}
+/**
+ * Traverse the spec and possibly generate a value for each argument.
+ *
+ * @param spec The spec for all arguments.
+ * @param result The object to hold the resulting argument values.
+ * @param setTo A function to generate an argument value from each arg spec.
+ *    If this function returns undefined, then the argument value is unchanged.
+ */
+function _traverseAndMaybeSet(spec, result, setTo) {
+  var groups = [];
+  for (var k in spec) {
+    var argSpec = spec[k];
+    if ("args" in argSpec) {
+      groups.push([argSpec, k]);
+    } else {
+      var value = setTo(argSpec, k);
+      if (value === undefined) continue;
+      result[k] = value;
+    }
+  }
+  for (var _i = 0, _groups = groups; _i < _groups.length; _i++) {
+    var group_and_key = _groups[_i];
+    _traverseAndMaybeSet(group_and_key[0].args, result[group_and_key[1]], setTo);
+  }
+}
+/**
+ * Traverse the spec and possibly generate a value for each argument.
+ *
+ * @param spec The spec for all arguments.
+ * @param process A function to call at each arg spec.
+ */
+function _traverse(spec, process, onGroup) {
+  var groups = [];
+  for (var k in spec) {
+    var argSpec = spec[k];
+    if ("args" in argSpec) {
+      groups.push([argSpec, k]);
+    } else {
+      process(argSpec, k);
+    }
+  }
+  for (var _i2 = 0, _groups2 = groups; _i2 < _groups2.length; _i2++) {
+    var group_and_key = _groups2[_i2];
+    onGroup === null || onGroup === void 0 ? void 0 : onGroup(group_and_key[0], group_and_key[1]);
+    _traverse(group_and_key[0].args, process, onGroup);
+  }
+}
+/**
+ * A parser to extract key/value pairs from a command line input.
+ * @member command The command line input.
+ * @member keys The set of valid keys that can appear.
+ * @member flags The set of valid flags that can appear.
+ * @member index An internal marker for the progress of the parser over the input.
+ */
+var CommandParser = /*#__PURE__*/function () {
+  function CommandParser(command, keys, flags, positionalArgs) {
+    _classCallCheck(this, CommandParser);
+    this.command = command;
+    this.index = 0;
+    this.keys = keys;
+    this.flags = flags;
+    this.positionalArgs = positionalArgs;
+    this.positionalArgsParsed = 0;
+  }
+  /**
+   * Perform the parsing of (key, value) pairs.
+   * @returns The set of extracted (key, value) pairs.
+   */
+  return _createClass(CommandParser, [{
+    key: "parse",
+    value: function parse() {
+      var _a, _b, _c, _d;
+      this.index = 0; // reset the parser
+      var result = new Map();
+      while (!this.finished()) {
+        // A flag F may appear as !F to be parsed as false.
+        var parsing_negative_flag = false;
+        if (this.peek() === "!") {
+          parsing_negative_flag = true;
+          this.consume(["!"]);
+        }
+        var startIndex = this.index;
+        var key = this.parseKey();
+        if (result.has(key)) {
+          throw "Duplicate key ".concat(key, " (first set to ").concat((_a = result.get(key)) !== null && _a !== void 0 ? _a : "", ")");
+        }
+        if (this.flags.has(key)) {
+          // The key corresponds to a flag.
+          // Parse [key] as true and ![key] as false.
+          result.set(key, parsing_negative_flag ? "false" : "true");
+          if (this.peek() === "=") throw "Flag ".concat(key, " cannot be assigned a value");
+          if (!this.finished()) this.consume([" "]);
+          this.prevUnquotedKey = undefined;
+        } else if (this.keys.has(key)) {
+          // Parse [key]=[value] or [key] [value]
+          this.consume(["=", " "]);
+          var value = this.parseValue();
+          if (["'", '"'].includes((_b = this.prev()) !== null && _b !== void 0 ? _b : "")) this.prevUnquotedKey = undefined;else this.prevUnquotedKey = key;
+          if (!this.finished()) this.consume([" "]);
+          result.set(key, value);
+        } else if (this.positionalArgsParsed < this.positionalArgs.length && this.peek() !== "=") {
+          // Parse [value] as the next positional arg
+          var positionalKey = this.positionalArgs[this.positionalArgsParsed];
+          this.positionalArgsParsed++;
+          this.index = startIndex; // back up to reparse the key as a value
+          var _value = this.parseValue();
+          if (["'", '"'].includes((_c = this.prev()) !== null && _c !== void 0 ? _c : "")) this.prevUnquotedKey = undefined;else this.prevUnquotedKey = key;
+          if (!this.finished()) this.consume([" "]);
+          if (result.has(positionalKey)) throw "Cannot assign ".concat(_value, " to ").concat(positionalKey, " (positionally) since ").concat(positionalKey, " was already set to ").concat((_d = result.get(positionalKey)) !== null && _d !== void 0 ? _d : "");
+          result.set(positionalKey, _value);
+        } else {
+          // Key not found; include a better error message if it is possible for quotes to have been missed
+          if (this.prevUnquotedKey && this.peek() !== "=") throw "Unknown argument: ".concat(key, " (if this should have been parsed as part of ").concat(this.prevUnquotedKey, ", you should surround the entire value in quotes)");else throw "Unknown argument: ".concat(key);
+        }
+      }
+      return result;
+    }
+    /**
+     * @returns True if the entire command has been parsed.
+     */
+  }, {
+    key: "finished",
+    value: function finished() {
+      return this.index >= this.command.length;
+    }
+    /**
+     * @returns The next character to parse, if it exists.
+     */
+  }, {
+    key: "peek",
+    value: function peek() {
+      if (this.index >= this.command.length) return undefined;
+      return this.command.charAt(this.index);
+    }
+    /**
+     * @returns The character just parsed, if it exists.
+     */
+  }, {
+    key: "prev",
+    value: function prev() {
+      if (this.index <= 0) return undefined;
+      if (this.index >= this.command.length + 1) return undefined;
+      return this.command.charAt(this.index - 1);
+    }
+    /**
+     * Advance the internal marker over the next expected character.
+     * Throws an error on unexpected characters.
+     *
+     * @param allowed Characters that are expected.
+     */
+  }, {
+    key: "consume",
+    value: function consume(allowed) {
+      var _a;
+      if (this.finished()) throw "Expected ".concat(allowed);
+      if (allowed.includes((_a = this.peek()) !== null && _a !== void 0 ? _a : "")) {
+        this.index += 1;
+      }
+    }
+    /**
+     * Find the next occurance of one of the provided characters, or the end of
+     * the string if the characters never appear again.
+     *
+     * @param searchValue The characters to locate.
+     */
+  }, {
+    key: "findNext",
+    value: function findNext(searchValue) {
+      var result = this.command.length;
+      var _iterator4 = _createForOfIteratorHelper(searchValue),
+        _step4;
+      try {
+        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+          var value = _step4.value;
+          var index = this.command.indexOf(value, this.index);
+          if (index !== -1 && index < result) result = index;
+        }
+      } catch (err) {
+        _iterator4.e(err);
+      } finally {
+        _iterator4.f();
+      }
+      return result;
+    }
+    /**
+     * Starting from the internal marker, parse a single key.
+     * This also advances the internal marker.
+     *
+     * @returns The next key.
+     */
+  }, {
+    key: "parseKey",
+    value: function parseKey() {
+      var keyEnd = this.findNext(["=", " "]);
+      var key = this.command.substring(this.index, keyEnd);
+      this.index = keyEnd;
+      return key;
+    }
+    /**
+     * Starting from the internal marker, parse a single value.
+     * This also advances the internal marker.
+     *
+     * Values are a single word or enclosed in matching quotes, i.e. one of:
+     *    "[^"]*"
+     *    '[^']*"
+     *    [^'"][^ ]*
+     *
+     * @returns The next value.
+     */
+  }, {
+    key: "parseValue",
+    value: function parseValue() {
+      var _a, _b;
+      var valueEnder = " ";
+      var quotes = ["'", '"'];
+      if (quotes.includes((_a = this.peek()) !== null && _a !== void 0 ? _a : "")) {
+        valueEnder = (_b = this.peek()) !== null && _b !== void 0 ? _b : ""; // The value is everything until the next quote
+        this.consume([valueEnder]); // Consume opening quote
+      }
+      var valueEnd = this.findNext([valueEnder]);
+      var value = this.command.substring(this.index, valueEnd);
+      if (valueEnder !== " " && valueEnd === this.command.length) {
+        throw "No closing ".concat(valueEnder, " found for ").concat(valueEnder).concat(value);
+      }
+      // Consume the value (and closing quote)
+      this.index = valueEnd;
+      if (valueEnder !== " ") this.consume([valueEnder]);
+      return value;
+    }
+  }]);
+}();
+
 var LogLevels;
 (function (LogLevels) {
   LogLevels[LogLevels["NONE"] = 0] = "NONE";
@@ -3070,769 +3802,6 @@ function prepareAscension() {
   }
 }
 
-var _templateObject$3, _templateObject2$2, _templateObject3$2, _templateObject4$2;
-var lowercaseName = kolmafia.myName().toLowerCase();
-var safariTargets = ["Kenny Kamakazi", "Busta_Rhymes", "Manendra", "Gausie", "Beldur", "worthawholebean", "ReverKiller", "Asmodais", "The Dictator", "Malibu Stacey", "DanceCommander6", "Captain Scotch", "threebullethamburgler", "BurningBman", "Katarn", "MrFizzyBubbs", "Purple Shrimp", "Butts McGruff", "Haxxi"].filter(n => n.toLowerCase() !== lowercaseName);
-function burnSafaris() {
-  for (var i = safariTargets.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var temp = safariTargets[i];
-    safariTargets[i] = safariTargets[j];
-    safariTargets[j] = temp;
-  }
-  while ($skill(_templateObject$3 || (_templateObject$3 = _taggedTemplateLiteral(["Experience Safari"]))).timescast < get("skillLevel180") && safariTargets.length) {
-    kolmafia.useSkill($skill(_templateObject2$2 || (_templateObject2$2 = _taggedTemplateLiteral(["Experience Safari"]))), 1, safariTargets[0]);
-    safariTargets.shift();
-  }
-}
-function getSkillsToPerm() {
-  kolmafia.visitUrl("charsheet.php"); // refresh knowledge of skills
-  var perms = kolmafia.getPermedSkills();
-  return new Map(kolmafia.Skill.all().filter(s => have$1(s) && !perms[s.name] && s.permable).map(s => [s, Lifestyle.hardcore]));
-}
-function smokeEmIfYouGotEm() {
-  var fullText = kolmafia.visitUrl("https://www.gutenberg.org/cache/epub/1321/pg1321.txt");
-  var lines = fullText.split("\n").map(line => line.trim()).filter(Boolean);
-  var poemLines = lines.slice(lines.indexOf("*** START OF THE PROJECT GUTENBERG EBOOK THE WASTE LAND ***"), lines.indexOf("*** END OF THE PROJECT GUTENBERG EBOOK THE WASTE LAND ***"));
-  var poemLine = (get("phccs_wasteLand", Number(kolmafia.myId())) + 1) % poemLines.length;
-  _set("phccs_wasteLand", poemLine);
-  var MESSAGE = poemLines[poemLine] || "yeeeowch!";
-  kolmafia.retrieveItem($item(_templateObject3$2 || (_templateObject3$2 = _taggedTemplateLiteral(["campfire smoke"]))));
-  withChoice(1394, "1&message=".concat(kolmafia.urlEncode(MESSAGE)), () => kolmafia.use($item(_templateObject4$2 || (_templateObject4$2 = _taggedTemplateLiteral(["campfire smoke"])))));
-}
-
-var Args = /*#__PURE__*/function () {
-  function Args() {
-    _classCallCheck(this, Args);
-  }
-  return _createClass(Args, null, [{
-    key: "custom",
-    value: function custom(spec, _parser, valueHelpName) {
-      var _a, _b;
-      var raw_options = (_a = spec.options) === null || _a === void 0 ? void 0 : _a.map(option => option[0]);
-      // Check that the default value actually appears in the options.
-      if ("default" in spec && raw_options) {
-        if (!raw_options.includes(spec.default)) {
-          throw "Invalid default value ".concat(spec.default);
-        }
-      }
-      return _objectSpread2(_objectSpread2({}, spec), {}, {
-        valueHelpName: valueHelpName,
-        parser: value => {
-          var parsed_value = _parser(value);
-          if (parsed_value === undefined || parsed_value instanceof ParseError) return parsed_value;
-          if (raw_options) {
-            if (!raw_options.includes(parsed_value)) {
-              return new ParseError("received ".concat(value, " which was not in the allowed options"));
-            }
-          }
-          return parsed_value;
-        },
-        options: (_b = spec.options) === null || _b === void 0 ? void 0 : _b.map(a => ["".concat(a[0]), a[1]])
-      });
-    }
-  }, {
-    key: "arrayFromArg",
-    value: function arrayFromArg(spec, argFromSpec) {
-      var _a, _b, _c;
-      // First, construct a non-array version of this argument.
-      // We do this by calling argFromSpec in order to extract the parser and
-      // valueHelpName (to make it easier to define the functions below).
-      //
-      // The default argument of an ArraySpec is of type T[], which causes
-      // problems, so we must remove it.
-      var spec_without_default = _objectSpread2({}, spec); // Avoid "the operand of a 'delete' operator must be optional"
-      if ("default" in spec_without_default) delete spec_without_default["default"];
-      var arg = argFromSpec.call(this, spec_without_default);
-      // Next, check that all default values actually appear in the options.
-      var raw_options = (_a = spec.options) === null || _a === void 0 ? void 0 : _a.map(option => option[0]);
-      if ("default" in spec && raw_options) {
-        var _iterator = _createForOfIteratorHelper(spec.default),
-          _step;
-        try {
-          for (_iterator.s(); !(_step = _iterator.n()).done;) {
-            var default_entry = _step.value;
-            if (!raw_options.includes(default_entry)) throw "Invalid default value ".concat(spec.default);
-          }
-        } catch (err) {
-          _iterator.e(err);
-        } finally {
-          _iterator.f();
-        }
-      }
-      var separator = (_b = spec.separator) !== null && _b !== void 0 ? _b : ",";
-      var arrayParser = value => {
-        // Split the array
-        var values = value.split(separator);
-        if (!spec.noTrim) values = values.map(v => v.trim());
-        // Parse all values, return the first error found if any
-        var result = values.map(v => arg.parser(v));
-        var error = result.find(v => v instanceof ParseError);
-        if (error) return error;
-        var failure_index = result.indexOf(undefined);
-        if (failure_index !== -1) return new ParseError("components expected ".concat(arg.valueHelpName, " but could not parse ").concat(values[failure_index]));
-        // Otherwise, all values are good
-        return result;
-      };
-      return _objectSpread2(_objectSpread2({}, spec), {}, {
-        valueHelpName: "".concat(arg.valueHelpName).concat(separator, " ").concat(arg.valueHelpName).concat(separator, " ..."),
-        parser: arrayParser,
-        options: (_c = spec.options) === null || _c === void 0 ? void 0 : _c.map(a => ["".concat(a[0]), a[1]])
-      });
-    }
-  }, {
-    key: "string",
-    value: function string(spec) {
-      return this.custom(spec, value => value, "TEXT");
-    }
-  }, {
-    key: "strings",
-    value: function strings(spec) {
-      return this.arrayFromArg(spec, this.string);
-    }
-  }, {
-    key: "number",
-    value: function number(spec) {
-      return this.custom(spec, value => isNaN(Number(value)) ? undefined : Number(value), "NUMBER");
-    }
-  }, {
-    key: "numbers",
-    value: function numbers(spec) {
-      return this.arrayFromArg(spec, this.number);
-    }
-  }, {
-    key: "boolean",
-    value: function boolean(spec) {
-      return this.custom(spec, value => {
-        if (value.toLowerCase() === "true") return true;
-        if (value.toLowerCase() === "false") return false;
-        return undefined;
-      }, "BOOLEAN");
-    }
-  }, {
-    key: "booleans",
-    value: function booleans(spec) {
-      return this.arrayFromArg(spec, this.boolean);
-    }
-  }, {
-    key: "flag",
-    value: function flag(spec) {
-      return this.custom(spec, value => {
-        if (value.toLowerCase() === "true") return true;
-        if (value.toLowerCase() === "false") return false;
-        return undefined;
-      }, "FLAG");
-    }
-  }, {
-    key: "class",
-    value: function _class(spec) {
-      return this.custom(spec, value => {
-        var match = kolmafia.Class.get(value);
-        // Class.get does fuzzy matching:
-        //  e.g. Class.get("sc") returns disco bandit.
-        // To avoid this foot-gun, only return exact matches or id lookups.
-        if (match.toString().toUpperCase() === value.toString().toUpperCase()) return match;
-        if (!isNaN(Number(value))) return match;
-        return undefined;
-      }, "CLASS");
-    }
-  }, {
-    key: "classes",
-    value: function classes(spec) {
-      return this.arrayFromArg(spec, this.class);
-    }
-  }, {
-    key: "effect",
-    value: function effect(spec) {
-      return this.custom(spec, kolmafia.Effect.get, "EFFECT");
-    }
-  }, {
-    key: "effects",
-    value: function effects(spec) {
-      return this.arrayFromArg(spec, this.effect);
-    }
-  }, {
-    key: "familiar",
-    value: function familiar(spec) {
-      return this.custom(spec, kolmafia.Familiar.get, "FAMILIAR");
-    }
-  }, {
-    key: "familiars",
-    value: function familiars(spec) {
-      return this.arrayFromArg(spec, this.familiar);
-    }
-  }, {
-    key: "item",
-    value: function item(spec) {
-      return this.custom(spec, kolmafia.Item.get, "ITEM");
-    }
-  }, {
-    key: "items",
-    value: function items(spec) {
-      return this.arrayFromArg(spec, this.item);
-    }
-  }, {
-    key: "location",
-    value: function location(spec) {
-      return this.custom(spec, kolmafia.Location.get, "LOCATION");
-    }
-  }, {
-    key: "locations",
-    value: function locations(spec) {
-      return this.arrayFromArg(spec, this.location);
-    }
-  }, {
-    key: "monster",
-    value: function monster(spec) {
-      return this.custom(spec, kolmafia.Monster.get, "MONSTER");
-    }
-  }, {
-    key: "monsters",
-    value: function monsters(spec) {
-      return this.arrayFromArg(spec, this.monster);
-    }
-  }, {
-    key: "path",
-    value: function path(spec) {
-      return this.custom(spec, kolmafia.Path.get, "PATH");
-    }
-  }, {
-    key: "paths",
-    value: function paths(spec) {
-      return this.arrayFromArg(spec, this.path);
-    }
-  }, {
-    key: "skill",
-    value: function skill(spec) {
-      return this.custom(spec, kolmafia.Skill.get, "SKILL");
-    }
-  }, {
-    key: "skills",
-    value: function skills(spec) {
-      return this.arrayFromArg(spec, this.skill);
-    }
-    /**
-     * Create a group of arguments that will be printed separately in the help.
-     *
-     * Note that keys in the group must still be globally distinct.
-     *
-     * @param groupName The display name for the group in help.
-     * @param args A JS object specifying the script arguments. Its values should
-     *    be {@link Arg} objects (created by Args.string, Args.number, or others)
-     *    or groups of arguments (created by Args.group).
-     */
-  }, {
-    key: "group",
-    value: function group(groupName, args) {
-      return {
-        name: groupName,
-        args: args
-      };
-    }
-    /**
-     * Create a set of input arguments for a script.
-     * @param scriptName Prefix for property names; often the name of the script.
-     * @param scriptHelp Brief description of this script, for the help message.
-     * @param args A JS object specifying the script arguments. Its values should
-     *    be {@link Arg} objects (created by Args.string, Args.number, or others)
-     *    or groups of arguments (created by Args.group).
-     * @param options Config options for the args and arg parser.
-     * @returns An object which can hold parsed argument values. The keys of this
-     *    object are identical to the keys in 'args'.
-     */
-  }, {
-    key: "create",
-    value: function create(scriptName, scriptHelp, args, options) {
-      _traverse(args, (keySpec, key) => {
-        if (key === "help" || keySpec.key === "help") throw "help is a reserved argument name";
-      });
-      var argsWithHelp = _objectSpread2(_objectSpread2({}, args), {}, {
-        help: this.flag({
-          help: "Show this message and exit.",
-          setting: ""
-        })
-      });
-      // Create an object to hold argument results, with a default value for
-      // each argument.
-      var res = _objectSpread2(_objectSpread2({}, _loadDefaultValues(argsWithHelp)), {}, {
-        [specSymbol]: argsWithHelp,
-        [scriptSymbol]: scriptName,
-        [scriptHelpSymbol]: scriptHelp,
-        [optionsSymbol]: options !== null && options !== void 0 ? options : {}
-      });
-      if (options === null || options === void 0 ? void 0 : options.positionalArgs) {
-        var keys = [];
-        var metadata = Args.getMetadata(res);
-        metadata.traverse((keySpec, key) => {
-          var _a;
-          keys.push((_a = keySpec.key) !== null && _a !== void 0 ? _a : key);
-        });
-        var _iterator2 = _createForOfIteratorHelper(options.positionalArgs),
-          _step2;
-        try {
-          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-            var arg = _step2.value;
-            if (!keys.includes(arg)) throw "Unknown key for positional arg: ".concat(arg);
-          }
-        } catch (err) {
-          _iterator2.e(err);
-        } finally {
-          _iterator2.f();
-        }
-      }
-      return res;
-    }
-    /**
-     * Parse the command line input into the provided script arguments.
-     * @param args An object to hold the parsed argument values, from Args.create(*).
-     * @param command The command line input.
-     * @param includeSettings If true, parse values from settings as well.
-     */
-  }, {
-    key: "fill",
-    value: function fill(args, command) {
-      var includeSettings = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-      var _a;
-      var metadata = Args.getMetadata(args);
-      // Load the list of keys and flags from the arg spec
-      var keys = new Set();
-      var flags = new Set();
-      metadata.traverse((keySpec, key) => {
-        var _a;
-        var name = (_a = keySpec.key) !== null && _a !== void 0 ? _a : key;
-        if (flags.has(name) || keys.has(name)) throw "Duplicate arg key ".concat(name, " is not allowed");
-        if (keySpec.valueHelpName === "FLAG") flags.add(name);else keys.add(name);
-      });
-      // Parse values from settings.
-      if (includeSettings) {
-        metadata.traverseAndMaybeSet(args, (keySpec, key) => {
-          var _a, _b;
-          var setting = (_a = keySpec.setting) !== null && _a !== void 0 ? _a : "".concat(metadata.scriptName, "_").concat((_b = keySpec.key) !== null && _b !== void 0 ? _b : key);
-          if (setting === "") return undefined; // no setting
-          var value_str = kolmafia.getProperty(setting);
-          if (value_str === "") return undefined; // no setting
-          return parseAndValidate(keySpec, "Setting ".concat(setting), value_str);
-        });
-      }
-      // Parse new argments from the command line
-      if (command === undefined || command === "") return;
-      var parsed = new CommandParser(command, keys, flags, (_a = metadata.options.positionalArgs) !== null && _a !== void 0 ? _a : []).parse();
-      metadata.traverseAndMaybeSet(args, (keySpec, key) => {
-        var _a;
-        var argKey = (_a = keySpec.key) !== null && _a !== void 0 ? _a : key;
-        var value_str = parsed.get(argKey);
-        if (value_str === undefined) return undefined; // no setting
-        return parseAndValidate(keySpec, "Argument ".concat(argKey), value_str);
-      });
-    }
-    /**
-     * Parse command line input into a new set of script arguments.
-     * @param scriptName Prefix to use in property names; typically the name of the script.
-     * @param scriptHelp Brief description of this script, for the help message.
-     * @param spec An object specifying the script arguments.
-     * @param command The command line input.
-     * @param options Config options for the args and arg parser.
-     */
-  }, {
-    key: "parse",
-    value: function parse(scriptName, scriptHelp, spec, command, options) {
-      var args = this.create(scriptName, scriptHelp, spec, options);
-      this.fill(args, command);
-      return args;
-    }
-    /**
-     * Print a description of the script arguments to the CLI.
-     *
-     * First, all top-level argument descriptions are printed in the order they
-     * were defined. Afterwards, descriptions for groups of arguments are printed
-     * in the order they were defined.
-     *
-     * @param args An object of parsed arguments, from Args.create(*).
-     * @param maxOptionsToDisplay If given, do not list more than this many options for each arg.
-     */
-  }, {
-    key: "showHelp",
-    value: function showHelp(args, maxOptionsToDisplay) {
-      var _a;
-      var metadata = Args.getMetadata(args);
-      kolmafia.printHtml("".concat(metadata.scriptHelp));
-      kolmafia.printHtml("");
-      kolmafia.printHtml("<b>".concat((_a = metadata.options.defaultGroupName) !== null && _a !== void 0 ? _a : "Options", ":</b>"));
-      metadata.traverse((arg, key) => {
-        var _a, _b, _c, _d, _e;
-        if (arg.hidden) return;
-        var nameText = "<font color='".concat(kolmafia.isDarkMode() ? "yellow" : "blue", "'>").concat((_a = arg.key) !== null && _a !== void 0 ? _a : key, "</font>");
-        var valueText = arg.valueHelpName === "FLAG" ? "" : "<font color='purple'>".concat(arg.valueHelpName, "</font>");
-        var helpText = (_b = arg.help) !== null && _b !== void 0 ? _b : "";
-        var defaultText = "default" in arg ? "<font color='#888888'>[default: ".concat(arg.default, "]</font>") : "";
-        var settingText = arg.setting === "" ? "" : "<font color='#888888'>[setting: ".concat((_c = arg.setting) !== null && _c !== void 0 ? _c : "".concat(metadata.scriptName, "_").concat((_d = arg.key) !== null && _d !== void 0 ? _d : key), "]</font>");
-        kolmafia.printHtml("&nbsp;&nbsp;".concat([nameText, valueText, "-", helpText, defaultText, settingText].join(" ")));
-        var valueOptions = (_e = arg.options) !== null && _e !== void 0 ? _e : [];
-        if (valueOptions.length < (maxOptionsToDisplay !== null && maxOptionsToDisplay !== void 0 ? maxOptionsToDisplay : Number.MAX_VALUE)) {
-          var _iterator3 = _createForOfIteratorHelper(valueOptions),
-            _step3;
-          try {
-            for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-              var option = _step3.value;
-              if (option.length === 1 || option[1] === undefined) {
-                kolmafia.printHtml("&nbsp;&nbsp;&nbsp;&nbsp;<font color='blue'>".concat(nameText, "</font> ").concat(option[0]));
-              } else {
-                kolmafia.printHtml("&nbsp;&nbsp;&nbsp;&nbsp;<font color='blue'>".concat(nameText, "</font> ").concat(option[0], " - ").concat(option[1]));
-              }
-            }
-          } catch (err) {
-            _iterator3.e(err);
-          } finally {
-            _iterator3.f();
-          }
-        }
-      }, group => {
-        kolmafia.printHtml("");
-        kolmafia.printHtml("<b>".concat(group.name, ":</b>"));
-      });
-    }
-    /**
-     * Load the metadata information for a set of arguments. Only for advanced usage.
-     *
-     * @param args A JS object specifying the script arguments. Its values should
-     *    be {@link Arg} objects (created by Args.string, Args.number, or others)
-     *    or groups of arguments (created by Args.group).
-     * @returns A class containing metadata information.
-     */
-  }, {
-    key: "getMetadata",
-    value: function getMetadata(args) {
-      return new WrappedArgMetadata(args);
-    }
-  }]);
-}();
-var ParseError = /*#__PURE__*/_createClass(function ParseError(message) {
-  _classCallCheck(this, ParseError);
-  this.message = message;
-});
-/**
- * Metadata for the parsed arguments.
- *
- * This information is hidden within the parsed argument object so that it
- * is invisible to the user but available to fill(*) and showHelp(*).
- */
-var specSymbol = Symbol("spec");
-var scriptSymbol = Symbol("script");
-var scriptHelpSymbol = Symbol("scriptHelp");
-var optionsSymbol = Symbol("options");
-/**
- * Parse a string into a value for a given argument, throwing if the parsing fails.
- * @param arg An argument that takes values in T.
- * @param source A description of where this value came from, for the error message.
- * @param value The value to parse.
- * @returns the parsed value.
- */
-function parseAndValidate(arg, source, value) {
-  var parsed_value;
-  try {
-    parsed_value = arg.parser(value);
-  } catch (_a) {
-    parsed_value = undefined;
-  }
-  if (parsed_value === undefined) throw "".concat(source, " expected ").concat(arg.valueHelpName, " but could not parse ").concat(value);
-  if (parsed_value instanceof ParseError) throw "".concat(source, " ").concat(parsed_value.message);
-  return parsed_value;
-}
-/**
- * A class that reveals the hidden metadata and specs for arguments.
- *
- * Only for advanced usage.
- */
-var WrappedArgMetadata = /*#__PURE__*/function () {
-  function WrappedArgMetadata(args) {
-    _classCallCheck(this, WrappedArgMetadata);
-    this.spec = args[specSymbol];
-    this.scriptName = args[scriptSymbol];
-    this.scriptHelp = args[scriptHelpSymbol];
-    this.options = args[optionsSymbol];
-  }
-  /**
-   * Create a parsed args object from this spec using all default values.
-   */
-  return _createClass(WrappedArgMetadata, [{
-    key: "loadDefaultValues",
-    value: function loadDefaultValues() {
-      return _loadDefaultValues(this.spec);
-    }
-    /**
-     * Traverse the spec and possibly generate a value for each argument.
-     *
-     * @param result The object to hold the resulting argument values, typically
-     *    the result of loadDefaultValues().
-     * @param setTo A function to generate an argument value from each arg spec.
-     *    If this function returns undefined, then the argument value is unchanged.
-     */
-  }, {
-    key: "traverseAndMaybeSet",
-    value: function traverseAndMaybeSet(result, setTo) {
-      return _traverseAndMaybeSet(this.spec, result, setTo);
-    }
-    /**
-     * Traverse the spec and call a method for each argument.
-     *
-     * @param process A function to call at each arg spec.
-     */
-  }, {
-    key: "traverse",
-    value: function traverse(process, onGroup) {
-      return _traverse(this.spec, process, onGroup);
-    }
-  }]);
-}();
-/**
- * Create a parsed args object from a spec using all default values.
- *
- * @param spec The spec for all arguments.
- */
-function _loadDefaultValues(spec) {
-  var result = {};
-  for (var k in spec) {
-    var argSpec = spec[k];
-    if ("args" in argSpec) {
-      result[k] = _loadDefaultValues(argSpec.args);
-    } else {
-      if ("default" in argSpec) result[k] = argSpec.default;else result[k] = undefined;
-    }
-  }
-  return result;
-}
-/**
- * Traverse the spec and possibly generate a value for each argument.
- *
- * @param spec The spec for all arguments.
- * @param result The object to hold the resulting argument values.
- * @param setTo A function to generate an argument value from each arg spec.
- *    If this function returns undefined, then the argument value is unchanged.
- */
-function _traverseAndMaybeSet(spec, result, setTo) {
-  var groups = [];
-  for (var k in spec) {
-    var argSpec = spec[k];
-    if ("args" in argSpec) {
-      groups.push([argSpec, k]);
-    } else {
-      var value = setTo(argSpec, k);
-      if (value === undefined) continue;
-      result[k] = value;
-    }
-  }
-  for (var _i = 0, _groups = groups; _i < _groups.length; _i++) {
-    var group_and_key = _groups[_i];
-    _traverseAndMaybeSet(group_and_key[0].args, result[group_and_key[1]], setTo);
-  }
-}
-/**
- * Traverse the spec and possibly generate a value for each argument.
- *
- * @param spec The spec for all arguments.
- * @param process A function to call at each arg spec.
- */
-function _traverse(spec, process, onGroup) {
-  var groups = [];
-  for (var k in spec) {
-    var argSpec = spec[k];
-    if ("args" in argSpec) {
-      groups.push([argSpec, k]);
-    } else {
-      process(argSpec, k);
-    }
-  }
-  for (var _i2 = 0, _groups2 = groups; _i2 < _groups2.length; _i2++) {
-    var group_and_key = _groups2[_i2];
-    onGroup === null || onGroup === void 0 ? void 0 : onGroup(group_and_key[0], group_and_key[1]);
-    _traverse(group_and_key[0].args, process, onGroup);
-  }
-}
-/**
- * A parser to extract key/value pairs from a command line input.
- * @member command The command line input.
- * @member keys The set of valid keys that can appear.
- * @member flags The set of valid flags that can appear.
- * @member index An internal marker for the progress of the parser over the input.
- */
-var CommandParser = /*#__PURE__*/function () {
-  function CommandParser(command, keys, flags, positionalArgs) {
-    _classCallCheck(this, CommandParser);
-    this.command = command;
-    this.index = 0;
-    this.keys = keys;
-    this.flags = flags;
-    this.positionalArgs = positionalArgs;
-    this.positionalArgsParsed = 0;
-  }
-  /**
-   * Perform the parsing of (key, value) pairs.
-   * @returns The set of extracted (key, value) pairs.
-   */
-  return _createClass(CommandParser, [{
-    key: "parse",
-    value: function parse() {
-      var _a, _b, _c, _d;
-      this.index = 0; // reset the parser
-      var result = new Map();
-      while (!this.finished()) {
-        // A flag F may appear as !F to be parsed as false.
-        var parsing_negative_flag = false;
-        if (this.peek() === "!") {
-          parsing_negative_flag = true;
-          this.consume(["!"]);
-        }
-        var startIndex = this.index;
-        var key = this.parseKey();
-        if (result.has(key)) {
-          throw "Duplicate key ".concat(key, " (first set to ").concat((_a = result.get(key)) !== null && _a !== void 0 ? _a : "", ")");
-        }
-        if (this.flags.has(key)) {
-          // The key corresponds to a flag.
-          // Parse [key] as true and ![key] as false.
-          result.set(key, parsing_negative_flag ? "false" : "true");
-          if (this.peek() === "=") throw "Flag ".concat(key, " cannot be assigned a value");
-          if (!this.finished()) this.consume([" "]);
-          this.prevUnquotedKey = undefined;
-        } else if (this.keys.has(key)) {
-          // Parse [key]=[value] or [key] [value]
-          this.consume(["=", " "]);
-          var value = this.parseValue();
-          if (["'", '"'].includes((_b = this.prev()) !== null && _b !== void 0 ? _b : "")) this.prevUnquotedKey = undefined;else this.prevUnquotedKey = key;
-          if (!this.finished()) this.consume([" "]);
-          result.set(key, value);
-        } else if (this.positionalArgsParsed < this.positionalArgs.length && this.peek() !== "=") {
-          // Parse [value] as the next positional arg
-          var positionalKey = this.positionalArgs[this.positionalArgsParsed];
-          this.positionalArgsParsed++;
-          this.index = startIndex; // back up to reparse the key as a value
-          var _value = this.parseValue();
-          if (["'", '"'].includes((_c = this.prev()) !== null && _c !== void 0 ? _c : "")) this.prevUnquotedKey = undefined;else this.prevUnquotedKey = key;
-          if (!this.finished()) this.consume([" "]);
-          if (result.has(positionalKey)) throw "Cannot assign ".concat(_value, " to ").concat(positionalKey, " (positionally) since ").concat(positionalKey, " was already set to ").concat((_d = result.get(positionalKey)) !== null && _d !== void 0 ? _d : "");
-          result.set(positionalKey, _value);
-        } else {
-          // Key not found; include a better error message if it is possible for quotes to have been missed
-          if (this.prevUnquotedKey && this.peek() !== "=") throw "Unknown argument: ".concat(key, " (if this should have been parsed as part of ").concat(this.prevUnquotedKey, ", you should surround the entire value in quotes)");else throw "Unknown argument: ".concat(key);
-        }
-      }
-      return result;
-    }
-    /**
-     * @returns True if the entire command has been parsed.
-     */
-  }, {
-    key: "finished",
-    value: function finished() {
-      return this.index >= this.command.length;
-    }
-    /**
-     * @returns The next character to parse, if it exists.
-     */
-  }, {
-    key: "peek",
-    value: function peek() {
-      if (this.index >= this.command.length) return undefined;
-      return this.command.charAt(this.index);
-    }
-    /**
-     * @returns The character just parsed, if it exists.
-     */
-  }, {
-    key: "prev",
-    value: function prev() {
-      if (this.index <= 0) return undefined;
-      if (this.index >= this.command.length + 1) return undefined;
-      return this.command.charAt(this.index - 1);
-    }
-    /**
-     * Advance the internal marker over the next expected character.
-     * Throws an error on unexpected characters.
-     *
-     * @param allowed Characters that are expected.
-     */
-  }, {
-    key: "consume",
-    value: function consume(allowed) {
-      var _a;
-      if (this.finished()) throw "Expected ".concat(allowed);
-      if (allowed.includes((_a = this.peek()) !== null && _a !== void 0 ? _a : "")) {
-        this.index += 1;
-      }
-    }
-    /**
-     * Find the next occurance of one of the provided characters, or the end of
-     * the string if the characters never appear again.
-     *
-     * @param searchValue The characters to locate.
-     */
-  }, {
-    key: "findNext",
-    value: function findNext(searchValue) {
-      var result = this.command.length;
-      var _iterator4 = _createForOfIteratorHelper(searchValue),
-        _step4;
-      try {
-        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-          var value = _step4.value;
-          var index = this.command.indexOf(value, this.index);
-          if (index !== -1 && index < result) result = index;
-        }
-      } catch (err) {
-        _iterator4.e(err);
-      } finally {
-        _iterator4.f();
-      }
-      return result;
-    }
-    /**
-     * Starting from the internal marker, parse a single key.
-     * This also advances the internal marker.
-     *
-     * @returns The next key.
-     */
-  }, {
-    key: "parseKey",
-    value: function parseKey() {
-      var keyEnd = this.findNext(["=", " "]);
-      var key = this.command.substring(this.index, keyEnd);
-      this.index = keyEnd;
-      return key;
-    }
-    /**
-     * Starting from the internal marker, parse a single value.
-     * This also advances the internal marker.
-     *
-     * Values are a single word or enclosed in matching quotes, i.e. one of:
-     *    "[^"]*"
-     *    '[^']*"
-     *    [^'"][^ ]*
-     *
-     * @returns The next value.
-     */
-  }, {
-    key: "parseValue",
-    value: function parseValue() {
-      var _a, _b;
-      var valueEnder = " ";
-      var quotes = ["'", '"'];
-      if (quotes.includes((_a = this.peek()) !== null && _a !== void 0 ? _a : "")) {
-        valueEnder = (_b = this.peek()) !== null && _b !== void 0 ? _b : ""; // The value is everything until the next quote
-        this.consume([valueEnder]); // Consume opening quote
-      }
-      var valueEnd = this.findNext([valueEnder]);
-      var value = this.command.substring(this.index, valueEnd);
-      if (valueEnder !== " " && valueEnd === this.command.length) {
-        throw "No closing ".concat(valueEnder, " found for ").concat(valueEnder).concat(value);
-      }
-      // Consume the value (and closing quote)
-      this.index = valueEnd;
-      if (valueEnder !== " ") this.consume([valueEnder]);
-      return value;
-    }
-  }]);
-}();
-
 /**
  * The strategy to use for combat for a task, which indicates what to do
  * for each monster.
@@ -4353,7 +4322,7 @@ var CombatResources = /*#__PURE__*/function () {
   }]);
 }();
 
-var _templateObject$2, _templateObject2$1, _templateObject3$1, _templateObject4$1, _templateObject5$1, _templateObject6$1, _templateObject7$1, _templateObject8$1, _templateObject9$1, _templateObject0$1, _templateObject1$1, _templateObject10$1, _templateObject11$1, _templateObject12$1, _templateObject13$1, _templateObject14$1, _templateObject15$1, _templateObject16$1, _templateObject17$1, _templateObject18$1, _templateObject19$1, _templateObject20$1, _templateObject21$1, _templateObject22$1, _templateObject23, _templateObject24, _templateObject25, _templateObject26, _templateObject27, _templateObject28, _templateObject29, _templateObject30, _templateObject31, _templateObject32, _templateObject33, _templateObject34, _templateObject35, _templateObject36, _templateObject37, _templateObject38, _templateObject39, _templateObject40, _templateObject41, _templateObject42, _templateObject43, _templateObject44, _templateObject45, _templateObject46, _templateObject47, _templateObject48, _templateObject49, _templateObject50, _templateObject51, _templateObject52, _templateObject53, _templateObject54, _templateObject55, _templateObject56, _templateObject57, _templateObject58, _templateObject59, _templateObject60, _templateObject61, _templateObject62, _templateObject63, _templateObject64, _templateObject65, _templateObject66, _templateObject67, _templateObject68, _templateObject69, _templateObject70, _templateObject71, _templateObject72, _templateObject73, _templateObject74, _templateObject75, _templateObject76, _templateObject77, _templateObject78, _templateObject79, _templateObject80;
+var _templateObject$3, _templateObject2$2, _templateObject3$2, _templateObject4$2, _templateObject5$1, _templateObject6$1, _templateObject7$1, _templateObject8$1, _templateObject9$1, _templateObject0$1, _templateObject1$1, _templateObject10$1, _templateObject11$1, _templateObject12$1, _templateObject13$1, _templateObject14$1, _templateObject15$1, _templateObject16$1, _templateObject17$1, _templateObject18$1, _templateObject19$1, _templateObject20$1, _templateObject21$1, _templateObject22$1, _templateObject23, _templateObject24, _templateObject25, _templateObject26, _templateObject27, _templateObject28, _templateObject29, _templateObject30, _templateObject31, _templateObject32, _templateObject33, _templateObject34, _templateObject35, _templateObject36, _templateObject37, _templateObject38, _templateObject39, _templateObject40, _templateObject41, _templateObject42, _templateObject43, _templateObject44, _templateObject45, _templateObject46, _templateObject47, _templateObject48, _templateObject49, _templateObject50, _templateObject51, _templateObject52, _templateObject53, _templateObject54, _templateObject55, _templateObject56, _templateObject57, _templateObject58, _templateObject59, _templateObject60, _templateObject61, _templateObject62, _templateObject63, _templateObject64, _templateObject65, _templateObject66, _templateObject67, _templateObject68, _templateObject69, _templateObject70, _templateObject71, _templateObject72, _templateObject73, _templateObject74, _templateObject75, _templateObject76, _templateObject77, _templateObject78, _templateObject79, _templateObject80;
 var FORCE_REFRESH_REQUIREMENT = new Requirement([], {
   forceUpdate: true
 });
@@ -4415,12 +4384,12 @@ var Outfit = /*#__PURE__*/function () {
   }, {
     key: "equipNonAccessory",
     value: function equipNonAccessory(item, slot) {
-      if ($slots(_templateObject$2 || (_templateObject$2 = _taggedTemplateLiteral(["acc1, acc2, acc3"]))).includes(kolmafia.toSlot(item))) return false;
+      if ($slots(_templateObject$3 || (_templateObject$3 = _taggedTemplateLiteral(["acc1, acc2, acc3"]))).includes(kolmafia.toSlot(item))) return false;
       if (slot !== undefined && slot !== kolmafia.toSlot(item)) return false;
       if (this.equips.has(kolmafia.toSlot(item))) return false;
       switch (kolmafia.toSlot(item)) {
-        case $slot(_templateObject2$1 || (_templateObject2$1 = _taggedTemplateLiteral(["off-hand"]))):
-          if (this.equips.has($slot(_templateObject3$1 || (_templateObject3$1 = _taggedTemplateLiteral(["weapon"])))) && weaponHands(this.equips.get($slot(_templateObject4$1 || (_templateObject4$1 = _taggedTemplateLiteral(["weapon"]))))) !== 1) {
+        case $slot(_templateObject2$2 || (_templateObject2$2 = _taggedTemplateLiteral(["off-hand"]))):
+          if (this.equips.has($slot(_templateObject3$2 || (_templateObject3$2 = _taggedTemplateLiteral(["weapon"])))) && weaponHands(this.equips.get($slot(_templateObject4$2 || (_templateObject4$2 = _taggedTemplateLiteral(["weapon"]))))) !== 1) {
             return false;
           }
           break;
@@ -5230,7 +5199,7 @@ function weaponsCompatible(weapon, offhand) {
   return true;
 }
 
-var _templateObject$1;
+var _templateObject$2;
 var grimoireCCS = "grimoire_macro";
 /**
  * An Engine which allows for custom engine state. Most beginning users should
@@ -5690,7 +5659,7 @@ ContextualEngine.defaultSettings = {
   libramSkillsSoftcore: "none"
 };
 function maxSongs() {
-  return have$1($skill(_templateObject$1 || (_templateObject$1 = _taggedTemplateLiteral(["Mariachi Memory"])))) ? 4 : 3;
+  return have$1($skill(_templateObject$2 || (_templateObject$2 = _taggedTemplateLiteral(["Mariachi Memory"])))) ? 4 : 3;
 }
 var wanderingNCs = new Set([
 // Halloweener dog noncombats
@@ -5731,6 +5700,37 @@ function lastEncounterWasWanderingNC() {
     if (environment === ((_c = get("lastAdventure")) === null || _c === void 0 ? void 0 : _c.environment)) return true;
     return wanderingNCs.has(last);
   }
+}
+
+var _templateObject$1, _templateObject2$1, _templateObject3$1, _templateObject4$1;
+var lowercaseName = kolmafia.myName().toLowerCase();
+var safariTargets = ["Kenny Kamakazi", "Busta_Rhymes", "Manendra", "Gausie", "Beldur", "worthawholebean", "ReverKiller", "Asmodais", "The Dictator", "Malibu Stacey", "DanceCommander6", "Captain Scotch", "threebullethamburgler", "BurningBman", "Katarn", "MrFizzyBubbs", "Purple Shrimp", "Butts McGruff", "Haxxi"].filter(n => n.toLowerCase() !== lowercaseName);
+function burnSafaris() {
+  for (var i = safariTargets.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = safariTargets[i];
+    safariTargets[i] = safariTargets[j];
+    safariTargets[j] = temp;
+  }
+  while ($skill(_templateObject$1 || (_templateObject$1 = _taggedTemplateLiteral(["Experience Safari"]))).timescast < get("skillLevel180") && safariTargets.length) {
+    kolmafia.useSkill($skill(_templateObject2$1 || (_templateObject2$1 = _taggedTemplateLiteral(["Experience Safari"]))), 1, safariTargets[0]);
+    safariTargets.shift();
+  }
+}
+function getSkillsToPerm() {
+  kolmafia.visitUrl("charsheet.php"); // refresh knowledge of skills
+  var perms = kolmafia.getPermedSkills();
+  return new Map(kolmafia.Skill.all().filter(s => have$1(s) && !perms[s.name] && s.permable).map(s => [s, Lifestyle.hardcore]));
+}
+function smokeEmIfYouGotEm() {
+  var fullText = kolmafia.visitUrl("https://www.gutenberg.org/cache/epub/1321/pg1321.txt");
+  var lines = fullText.split("\n").map(line => line.trim()).filter(Boolean);
+  var poemLines = lines.slice(lines.indexOf("*** START OF THE PROJECT GUTENBERG EBOOK THE WASTE LAND ***"), lines.indexOf("*** END OF THE PROJECT GUTENBERG EBOOK THE WASTE LAND ***"));
+  var poemLine = (get("phccs_wasteLand", Number(kolmafia.myId())) + 1) % poemLines.length;
+  _set("phccs_wasteLand", poemLine);
+  var MESSAGE = poemLines[poemLine] || "yeeeowch!";
+  kolmafia.retrieveItem($item(_templateObject3$1 || (_templateObject3$1 = _taggedTemplateLiteral(["campfire smoke"]))));
+  withChoice(1394, "1&message=".concat(kolmafia.urlEncode(MESSAGE)), () => kolmafia.use($item(_templateObject4$1 || (_templateObject4$1 = _taggedTemplateLiteral(["campfire smoke"])))));
 }
 
 var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6, _templateObject7, _templateObject8, _templateObject9, _templateObject0, _templateObject1, _templateObject10, _templateObject11, _templateObject12, _templateObject13, _templateObject14, _templateObject15, _templateObject16, _templateObject17, _templateObject18, _templateObject19, _templateObject20, _templateObject21, _templateObject22;
