@@ -20,12 +20,8 @@ const baseSettings = {
     replace({
       preventAssignment: true,
       values: {
-        "process.env.GITHUB_SHA": JSON.stringify(
-          process.env.GITHUB_SHA ?? "CustomBuild",
-        ),
-        "process.env.GITHUB_REF_NAME": JSON.stringify(
-          process.env.GITHUB_REF_NAME ?? "CustomBuild",
-        ),
+        "process.env.GITHUB_SHA": JSON.stringify(process.env.GITHUB_SHA ?? "CustomBuild"),
+        "process.env.GITHUB_REF_NAME": JSON.stringify(process.env.GITHUB_REF_NAME ?? "CustomBuild"),
         "process.env.GITHUB_REPOSITORY": JSON.stringify(
           process.env.GITHUB_REPOSITORY ?? "CustomBuild",
         ),

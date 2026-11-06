@@ -1,13 +1,7 @@
-import { burnSafaris, getSkillsToPerm, smokeEmIfYouGotEm } from "./lib";
 import { visitUrl } from "kolmafia";
-import {
-  $class,
-  $item,
-  $path,
-  ascend,
-  Lifestyle,
-  prepareAscension,
-} from "libram";
+import { $class, $item, $path, ascend, Lifestyle, prepareAscension } from "libram";
+
+import { burnSafaris, getSkillsToPerm, smokeEmIfYouGotEm } from "./lib";
 
 export function main(): void {
   burnSafaris();

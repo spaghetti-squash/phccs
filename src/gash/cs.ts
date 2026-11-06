@@ -1,4 +1,3 @@
-import { burnSafaris, getSkillsToPerm, smokeEmIfYouGotEm } from "./lib";
 import { Args } from "grimoire-kolmafia";
 import {
   abort,
@@ -30,6 +29,8 @@ import {
   prepareAscension,
   sum,
 } from "libram";
+
+import { burnSafaris, getSkillsToPerm, smokeEmIfYouGotEm } from "./lib";
 
 const args = Args.create(
   "phccs_gash",
@@ -83,10 +84,7 @@ const MAINSTAT_BASED_REQUIREMENTS: Record<
   Moxie: [
     {
       name: "Evil Olive in locket",
-      meets: () =>
-        CombatLoversLocket.unlockedLocketMonsters().includes(
-          $monster`Evil Olive`,
-        ),
+      meets: () => CombatLoversLocket.unlockedLocketMonsters().includes($monster`Evil Olive`),
       reason: "we need to be able to make equalizer potions!",
     },
     {
@@ -106,9 +104,8 @@ const REGULAR_REQUIREMENTS = [
     meets: () =>
       have($item`The Eternity Codpiece`) &&
       availableAmount($item`glacial sapphire`) +
-        sum(
-          $slots`codpiece1, codpiece2, codpiece3, codpiece4, codpiece5`,
-          (slot) => Number(equippedItem(slot) === $item`glacial sapphire`),
+        sum($slots`codpiece1, codpiece2, codpiece3, codpiece4, codpiece5`, (slot) =>
+          Number(equippedItem(slot) === $item`glacial sapphire`),
         ) >=
         5,
     reason: "We use it for leveling!",
@@ -143,9 +140,7 @@ export function main(input = ""): void {
     }
 
     if (args.softcore) {
-      const missingItems = $items`Stick-Knife of Loathing, Buddy Bjorn`.filter(
-        (i) => !have(i),
-      );
+      const missingItems = $items`Stick-Knife of Loathing, Buddy Bjorn`.filter((i) => !have(i));
       if (
         missingItems.length &&
         !userConfirm(
@@ -161,8 +156,7 @@ export function main(input = ""): void {
 
   for (const codslot of $slots`codpiece1, codpiece2, codpiece3, codpiece4, codpiece5`) {
     if (equippedItem(codslot) !== $item`glacial sapphire`) {
-      if (!itemAmount($item`glacial sapphire`))
-        abort("We don't have enough sapphires!");
+      if (!itemAmount($item`glacial sapphire`)) abort("We don't have enough sapphires!");
       equip(codslot, $item`glacial sapphire`);
     }
   }

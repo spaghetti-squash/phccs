@@ -1,6 +1,3 @@
-import { CSStrategy, Macro } from "./combat";
-import { CSTask, currentBirdHas, favouriteBirdHas } from "./lib";
-import uniform from "./outfit";
 import {
   abort,
   adv1,
@@ -53,12 +50,15 @@ import {
   SourceTerminal,
 } from "libram";
 
+import { CSStrategy, Macro } from "./combat";
+import { CSTask, currentBirdHas, favouriteBirdHas } from "./lib";
+import uniform from "./outfit";
+
 export function beachTask(effect: Effect): CSTask {
   const num = 1 + BeachComb.headBuffs.indexOf(effect);
   return {
     name: `Beach Head: ${effect}`,
-    completed: () =>
-      getProperty("_beachHeadsUsed").split(",").includes(num.toFixed(0)),
+    completed: () => getProperty("_beachHeadsUsed").split(",").includes(num.toFixed(0)),
     ready: () =>
       get("_freeBeachWalksUsed") < 11 &&
       get("beachHeadsUnlocked").split(",").includes(num.toFixed(0)),
@@ -108,10 +108,7 @@ export function restore(effects: Effect[]): CSTask {
     name: "Restore",
     completed: () => effects.every((e) => have(e)),
     do: () => {
-      if (
-        !have($item`magical sausage`) &&
-        have($item`magical sausage casing`)
-      ) {
+      if (!have($item`magical sausage`) && have($item`magical sausage casing`)) {
         create(1, $item`magical sausage`);
       }
       if (have($item`magical sausage`)) {
@@ -149,14 +146,8 @@ export function skillTask(
   }
 }
 
-export function restoreBuffTasks(
-  buffs: Effect[],
-  includeAprilShield = false,
-): CSTask[] {
-  return [
-    ...buffs.map((buff) => skillTask(buff, includeAprilShield)),
-    restore(buffs),
-  ];
+export function restoreBuffTasks(buffs: Effect[], includeAprilShield = false): CSTask[] {
+  return [...buffs.map((buff) => skillTask(buff, includeAprilShield)), restore(buffs)];
 }
 
 export function commonFamiliarWeightBuffs(): CSTask[] {
@@ -174,16 +165,12 @@ export function commonFamiliarWeightBuffs(): CSTask[] {
   ];
 }
 
-export function songTask(
-  song: Effect | Skill,
-  shrugSong: Effect | Skill,
-): CSTask {
+export function songTask(song: Effect | Skill, shrugSong: Effect | Skill): CSTask {
   const { wantedSongSkill, wantedSongEffect } =
     song instanceof Effect
       ? { wantedSongSkill: toSkill(song), wantedSongEffect: song }
       : { wantedSongSkill: song, wantedSongEffect: toEffect(song) };
-  const shrugSongEffect =
-    shrugSong instanceof Effect ? shrugSong : toEffect(shrugSong);
+  const shrugSongEffect = shrugSong instanceof Effect ? shrugSong : toEffect(shrugSong);
   return {
     name: song.name,
     completed: () => have(wantedSongEffect),
@@ -195,9 +182,7 @@ export function songTask(
   };
 }
 
-export function asdonTask(
-  style: Effect | keyof typeof AsdonMartin.Driving,
-): CSTask {
+export function asdonTask(style: Effect | keyof typeof AsdonMartin.Driving): CSTask {
   const effect = style instanceof Effect ? style : AsdonMartin.Driving[style];
   return {
     name: effect.name,
@@ -243,11 +228,7 @@ export function meteorShower(): CSTask {
       }),
     choices: { [1387]: 3, [1324]: 5 },
     combat: new CSStrategy(() =>
-      Macro.externalIf(
-        have($effect`Overheated`),
-        new Macro(),
-        Macro.skill($skill`Turbo`),
-      )
+      Macro.externalIf(have($effect`Overheated`), new Macro(), Macro.skill($skill`Turbo`))
         .skill($skill`Meteor Shower`)
         .skill($skill`Use the Force`),
     ),
@@ -272,16 +253,11 @@ export function birdTask(modifier: NumericModifier, positive = true): CSTask {
   };
 }
 
-export function favouriteBirdTask(
-  modifier: NumericModifier,
-  positive = true,
-): CSTask {
+export function favouriteBirdTask(modifier: NumericModifier, positive = true): CSTask {
   return {
     name: "Favourite Bird",
     completed: () => get("_favoriteBirdVisited"),
-    ready: () =>
-      have($skill`Visit your Favorite Bird`) &&
-      favouriteBirdHas(modifier, positive),
+    ready: () => have($skill`Visit your Favorite Bird`) && favouriteBirdHas(modifier, positive),
     do: () => useSkill($skill`Visit your Favorite Bird`),
   };
 }
@@ -290,8 +266,7 @@ export function deckTask(card: DeckOfEveryCard.Card): CSTask {
   return {
     name: `Cheat At Cards: ${card}`,
     completed: () => DeckOfEveryCard.getCardsSeen().includes(card),
-    ready: () =>
-      DeckOfEveryCard.have() && DeckOfEveryCard.getRemainingCheats() > 0,
+    ready: () => DeckOfEveryCard.have() && DeckOfEveryCard.getRemainingCheats() > 0,
     do: () => DeckOfEveryCard.cheatCard(card),
   };
 }
@@ -305,12 +280,7 @@ export function aprilTask(song: AprilingBandHelmet.MarchingSong): CSTask {
   };
 }
 
-export function buskTask(
-  hat: Item,
-  shirt: Item,
-  pants: Item,
-  index: number,
-): CSTask {
+export function buskTask(hat: Item, shirt: Item, pants: Item, index: number): CSTask {
   return {
     name: `Busk #${index + 1}: ${hat}. ${shirt}, and ${pants}`,
     outfit: {
@@ -330,8 +300,7 @@ export function buskTask(
         .map((item) => ({ item })),
     ready: () =>
       [hat, shirt, pants].every(
-        (it) =>
-          it === $item.none || (canEquip(it) && (have(it) || npcPrice(it) > 0)),
+        (it) => it === $item.none || (canEquip(it) && (have(it) || npcPrice(it) > 0)),
       ),
     completed: () => get("_beretBuskingUses") !== index,
     do: () => {

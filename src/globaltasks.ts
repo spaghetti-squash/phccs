@@ -1,27 +1,37 @@
-import { CSStrategy, Macro } from "./combat";
-import { CSTask } from "./lib";
-import uniform from "./outfit";
 import { Quest } from "grimoire-kolmafia";
-import {
-  abort,
-  adv1,
-  cliExecute,
-  myInebriety,
-  reverseNumberology,
-  useSkill,
-} from "kolmafia";
+import { abort, adv1, cliExecute, myInebriety, reverseNumberology, useSkill } from "kolmafia";
 import {
   $effect,
+  $familiar,
   $item,
   $location,
   $skill,
   Counter,
   get,
   have,
+  set,
+  ToyCupidBow,
   withProperty,
 } from "libram";
 
+import { CSStrategy, Macro } from "./combat";
+import { CSTask } from "./lib";
+import uniform from "./outfit";
+
 const GLOBAL_TASKS: CSTask[] = [
+  {
+    name: "Correct Machine Elf Cupid Bow Tracking",
+    ready: () => have($item`self-dribbling basketball`),
+    completed: () => ToyCupidBow.doneToday($familiar`Machine Elf`),
+    do: () => {
+      set(
+        "_cupidBowFamiliars",
+        [...get("_cupidBowFamiliars").split(";").filter(Boolean), $familiar`Machine Elf`.id].join(
+          ";",
+        ),
+      );
+    },
+  },
   {
     name: "Beaten Up!",
     completed: () => !have($effect`Beaten Up`),
@@ -39,8 +49,7 @@ const GLOBAL_TASKS: CSTask[] = [
     name: "Numberology",
     ready: () => Object.values(reverseNumberology()).includes(69),
     completed: () =>
-      get("_universeCalculated") >=
-      (get("skillLevel144") > 3 ? 2 : get("skillLevel144")),
+      get("_universeCalculated") >= (get("skillLevel144") > 3 ? 2 : get("skillLevel144")),
     do: () => cliExecute("numberology 69"),
   },
   {
@@ -50,8 +59,7 @@ const GLOBAL_TASKS: CSTask[] = [
     do: () =>
       withProperty("recoveryScript", "", () => {
         adv1($location`Noob Cave`, -1, "");
-        if (get("lastEncounter") === "Poetic Justice")
-          useSkill($skill`Tongue of the Walrus`);
+        if (get("lastEncounter") === "Poetic Justice") useSkill($skill`Tongue of the Walrus`);
       }),
     outfit: { weapon: $item`June cleaver` },
   },
@@ -63,8 +71,7 @@ const GLOBAL_TASKS: CSTask[] = [
       get("questPAGhost") !== "unstarted" &&
       !!get("ghostLocation") &&
       !have($effect`Meteor Showered`),
-    do: () =>
-      get("ghostLocation") ?? abort("Failed to identify ghost location"),
+    do: () => get("ghostLocation") ?? abort("Failed to identify ghost location"),
     combat: new CSStrategy(() =>
       Macro.delevel()
         .easyFight()
@@ -73,8 +80,7 @@ const GLOBAL_TASKS: CSTask[] = [
         .trySkill($skill`Shoot Ghost`)
         .trySkill($skill`Trap Ghost`),
     ),
-    outfit: () =>
-      uniform({ changes: { back: $item`protonic accelerator pack` } }),
+    outfit: () => uniform({ changes: { back: $item`protonic accelerator pack` } }),
   },
 ];
 

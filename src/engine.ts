@@ -1,5 +1,3 @@
-import GLOBAL_QUEST from "./globaltasks";
-import { burnLibrams, CSTask } from "./lib";
 import { Engine, getTasks, Outfit, OutfitSpec, Quest } from "grimoire-kolmafia";
 import {
   abort,
@@ -27,6 +25,9 @@ import {
   uneffect,
 } from "libram";
 
+import GLOBAL_QUEST from "./globaltasks";
+import { burnLibrams, CSTask } from "./lib";
+
 const HIGHLIGHT = isDarkMode() ? "yellow" : "blue";
 
 type Service = {
@@ -39,10 +40,7 @@ type Misc = {
   type: "MISC";
   name: string;
 };
-export type CSQuest = Quest<CSTask> & { turnsSpent?: Delayed<number> } & (
-    | Service
-    | Misc
-  );
+export type CSQuest = Quest<CSTask> & { turnsSpent?: Delayed<number> } & (Service | Misc);
 
 export class CSEngine extends Engine<never, CSTask> {
   private static propertyManager = new PropertiesManager();
@@ -60,10 +58,7 @@ export class CSEngine extends Engine<never, CSTask> {
     super(getTasks([GLOBAL_QUEST, quest]));
     this.csOptions = quest;
     this.turnsSpent = quest.turnsSpent;
-    this.name =
-      this.csOptions.type === "MISC"
-        ? this.csOptions.name
-        : this.csOptions.test.statName;
+    this.name = this.csOptions.type === "MISC" ? this.csOptions.name : this.csOptions.test.statName;
   }
 
   destruct(): void {
@@ -135,12 +130,8 @@ export class CSEngine extends Engine<never, CSTask> {
           Outfit.from(
             spec,
             new Error(
-              `Failed to equip outfit for ${
-                this.name
-              }. Also, that outfit is ${toJson(
-                Object.fromEntries(
-                  Object.entries(spec).filter(([key]) => key !== "afterDress"),
-                ),
+              `Failed to equip outfit for ${this.name}. Also, that outfit is ${toJson(
+                Object.fromEntries(Object.entries(spec).filter(([key]) => key !== "afterDress")),
               )}`,
             ),
           ).dress();
@@ -157,9 +148,7 @@ export class CSEngine extends Engine<never, CSTask> {
       if (result === "failed") throw new Error(warning);
 
       if (result === "already completed")
-        throw new Error(
-          `Libram thinks we already completed ${this.name} but we beg to differ`,
-        );
+        throw new Error(`Libram thinks we already completed ${this.name} but we beg to differ`);
     } finally {
       this.destruct();
     }
@@ -189,9 +178,7 @@ export class CSEngine extends Engine<never, CSTask> {
 
       if (get("_cloudTalkSmoker")) {
         print(
-          `${get("_cloudTalkSmoker").slice(10)} has a message for you: ${get(
-            "_cloudTalkMessage",
-          )}`,
+          `${get("_cloudTalkSmoker").slice(10)} has a message for you: ${get("_cloudTalkMessage")}`,
         );
       }
 

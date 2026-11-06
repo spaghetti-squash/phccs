@@ -1,8 +1,3 @@
-import { CSStrategy, Macro } from "./combat";
-import { asdonTask } from "./commons";
-import { CSQuest } from "./engine";
-import { guildQuestZone, peridotChoice } from "./lib";
-import uniform from "./outfit";
 import { adv1, buy, create, eat, visitUrl } from "kolmafia";
 import {
   $classes,
@@ -19,6 +14,12 @@ import {
   getKramcoWandererChance,
   have,
 } from "libram";
+
+import { CSStrategy, Macro } from "./combat";
+import { asdonTask } from "./commons";
+import { CSQuest } from "./engine";
+import { guildQuestZone, peridotChoice } from "./lib";
+import uniform from "./outfit";
 
 const CoilWire: CSQuest = {
   type: "SERVICE",

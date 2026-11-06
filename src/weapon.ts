@@ -1,19 +1,3 @@
-import { CSStrategy, Macro } from "./combat";
-import {
-  beachTask,
-  birdTask,
-  favouriteBirdTask,
-  incrementShowers,
-  innerElf,
-  potionTask,
-  restoreBuffTasks,
-  showers,
-  skillTask,
-  songTask,
-} from "./commons";
-import { CSEngine, CSQuest } from "./engine";
-import { unequip } from "./lib";
-import uniform from "./outfit";
 import { OutfitSpec } from "grimoire-kolmafia";
 import {
   canadiaAvailable,
@@ -43,6 +27,23 @@ import {
   set,
 } from "libram";
 
+import { CSStrategy, Macro } from "./combat";
+import {
+  beachTask,
+  birdTask,
+  favouriteBirdTask,
+  incrementShowers,
+  innerElf,
+  potionTask,
+  restoreBuffTasks,
+  showers,
+  skillTask,
+  songTask,
+} from "./commons";
+import { CSEngine, CSQuest } from "./engine";
+import { unequip } from "./lib";
+import uniform from "./outfit";
+
 const buffs = $effects`Carol of the Bulls, Song of the North, Rage of the Reindeer, Scowl of the Auk, Disdain of the War Snapper, Tenacity of the Snapper`;
 
 const Weapon: CSQuest = {
@@ -50,8 +51,7 @@ const Weapon: CSQuest = {
   type: "SERVICE",
   test: CommunityService.WeaponDamage,
   outfit: () => {
-    if (!have($item`broken champagne bottle`))
-      cliExecute("fold broken champagne bottle");
+    if (!have($item`broken champagne bottle`)) cliExecute("fold broken champagne bottle");
     return {
       hat: $items`seal-skull helmet, Iunion Crown`,
       weapon: $item`broken champagne bottle`,
@@ -84,10 +84,7 @@ const Weapon: CSQuest = {
     potionTask($item`vial of hamethyst juice`),
     potionTask($item`imported taffy`),
     beachTask($effect`Lack of Body-Building`),
-    songTask(
-      $effect`Jackasses' Symphony of Destruction`,
-      $effect`The Sonata of Sneakiness`,
-    ),
+    songTask($effect`Jackasses' Symphony of Destruction`, $effect`The Sonata of Sneakiness`),
     {
       name: "Play Pool",
       completed: () => have($effect`Billiards Belligerence`),
@@ -105,8 +102,7 @@ const Weapon: CSQuest = {
             famequip: $item.none,
           },
         }),
-      prepare: () =>
-        Horsery.current() === "pale" && Horsery.changeHorse("dark"),
+      prepare: () => Horsery.current() === "pale" && Horsery.changeHorse("dark"),
       combat: new CSStrategy(() =>
         Macro.trySkill($skill`Asdon Martin: Spring-Loaded Front Bumper`)
           .trySkill($skill`Feel Hatred`)
@@ -123,8 +119,7 @@ const Weapon: CSQuest = {
     },
     {
       name: "Spit Ungulith",
-      completed: () =>
-        have($item`corrupted marrow`) || have($effect`Cowrruption`),
+      completed: () => have($item`corrupted marrow`) || have($effect`Cowrruption`),
       do: (): void => {
         CombatLoversLocket.reminisce($monster`ungulith`);
         if (handlingChoice()) runChoice(-1);
@@ -139,10 +134,7 @@ const Weapon: CSQuest = {
         return uniform({ changes, canAttack: false });
       },
       post: (): void => {
-        if (
-          myFamiliar() === $familiar`Melodramedary` &&
-          have($effect`Spit Upon`, 15)
-        )
+        if (myFamiliar() === $familiar`Melodramedary` && have($effect`Spit Upon`, 15))
           set("camelSpit", 0);
         if (have($effect`Meteor Showered`)) incrementShowers();
         set("_meteorShowerUses", showers);
@@ -169,20 +161,18 @@ const Weapon: CSQuest = {
       completed: () => have($item`meteorite ring`),
       ready: () =>
         canadiaAvailable() &&
-        $items`meteorite fragment, meteorite earring, meteorite necklace`.some(
-          (item) => have(item),
+        $items`meteorite fragment, meteorite earring, meteorite necklace`.some((item) =>
+          have(item),
         ),
       do: (): void => {
-        const meteor =
-          $items`meteorite necklace, meteorite fragment, meteorite earring`.find(
-            (item) => have(item),
-          );
+        const meteor = $items`meteorite necklace, meteorite fragment, meteorite earring`.find(
+          (item) => have(item),
+        );
         if (meteor) {
           unequip(meteor);
           retrieveItem(1, $item`tenderizing hammer`);
           retrieveItem(1, $item`jewelry-making pliers`);
-          if (meteor !== $item`meteorite fragment`)
-            cliExecute(`smash ${meteor}`);
+          if (meteor !== $item`meteorite fragment`) cliExecute(`smash ${meteor}`);
           cliExecute(`make ${$item`meteorite ring`}`);
         }
       },

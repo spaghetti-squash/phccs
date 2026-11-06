@@ -77,8 +77,7 @@ const DEFAULT_UNIFORM = (): OutfitSpec => ({
           default: $item`Fourth of May Cosplay Saber`,
         }),
   back:
-    get("questPAGhost") === "unstarted" &&
-    get("nextParanormalActivity") <= totalTurnsPlayed()
+    get("questPAGhost") === "unstarted" && get("nextParanormalActivity") <= totalTurnsPlayed()
       ? $item`protonic accelerator pack`
       : $items`LOV Epaulettes, unwrapped knock-off retro superhero cape`,
 });
@@ -92,15 +91,13 @@ const FAMILIAR_PICKS = [
   {
     familiar: $familiar`Melodramedary`,
     famequip: () => $items`dromedary drinking helmet`.find((i) => have(i)),
-    condition: () =>
-      get("camelSpit") < 100 && !have($effect`Spit Upon`) && inHardcore(),
+    condition: () => get("camelSpit") < 100 && !have($effect`Spit Upon`) && inHardcore(),
   },
   {
     familiar: $familiar`Shorter-Order Cook`,
     condition: () =>
-      ![$effect`Shortly Stacked`, $item`short stack of pancakes`].some((x) =>
-        have(x),
-      ) && !CommunityService.FamiliarWeight.isDone(),
+      ![$effect`Shortly Stacked`, $item`short stack of pancakes`].some((x) => have(x)) &&
+      !CommunityService.FamiliarWeight.isDone(),
   },
   {
     familiar: $familiar`Garbage Fire`,
@@ -111,11 +108,7 @@ const FAMILIAR_PICKS = [
     condition: () => {
       if (ToyCupidBow.doneToday($familiar`Cornbeefadon`)) return false;
       const currentCupidFamiliar = ToyCupidBow.currentFamiliar();
-      if (
-        !currentCupidFamiliar ||
-        currentCupidFamiliar === $familiar`Cornbeefadon`
-      )
-        return true;
+      if (!currentCupidFamiliar || currentCupidFamiliar === $familiar`Cornbeefadon`) return true;
       return ToyCupidBow.doneToday(currentCupidFamiliar);
     },
   },
@@ -125,9 +118,7 @@ function findFirstFamiliar(fams: Familiar[]) {
   return fams.find((f) => have(f));
 }
 
-function chooseFamiliar(
-  canAttack: boolean,
-): Pick<OutfitSpec, "familiar" | "famequip"> {
+function chooseFamiliar(canAttack: boolean): Pick<OutfitSpec, "familiar" | "famequip"> {
   const pick = FAMILIAR_PICKS.find(
     ({ condition, familiar }) =>
       condition() &&
@@ -152,29 +143,22 @@ function chooseFamiliar(
     }
     return {
       familiar: pick.familiar,
-      famequip: ToyCupidBow.doneToday(pick.familiar)
-        ? $item`tiny stillsuit`
-        : $item`toy Cupid bow`,
+      famequip: ToyCupidBow.doneToday(pick.familiar) ? $item`tiny stillsuit` : $item`toy Cupid bow`,
     };
   }
   return {
     famequip: $item`tiny stillsuit`,
     familiar:
-      findFirstFamiliar($familiars`Puck Man, Ms. Puck Man`) ??
-      $familiar`Blood-Faced Volleyball`,
+      findFirstFamiliar($familiars`Puck Man, Ms. Puck Man`) ?? $familiar`Blood-Faced Volleyball`,
   };
 }
 
 export const equipBluePlate = () =>
   have($item`blue plate`) &&
-  familiarEquippedEquipment($familiar`Shorter-Order Cook`) !==
-    $item`blue plate` &&
+  familiarEquippedEquipment($familiar`Shorter-Order Cook`) !== $item`blue plate` &&
   equip($familiar`Shorter-Order Cook`, $item`blue plate`);
 
-export default function uniform({
-  changes = {} as OutfitSpec,
-  canAttack = true,
-} = {}): OutfitSpec {
+export default function uniform({ changes = {} as OutfitSpec, canAttack = true } = {}): OutfitSpec {
   if ("familiar" in changes && !("famequip" in changes) && changes.familiar) {
     if (ToyCupidBow.familiarsToday().includes(changes.familiar)) {
       changes.famequip = $item`tiny stillsuit`;

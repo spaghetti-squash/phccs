@@ -1,22 +1,5 @@
-import { CSStrategy, Macro } from "./combat";
-import {
-  aprilTask,
-  asdonTask,
-  deckTask,
-  potionTask,
-  skillTask,
-} from "./commons";
-import { CSQuest } from "./engine";
-import uniform from "./outfit";
 import { OutfitSpec } from "grimoire-kolmafia";
-import {
-  canAdventure,
-  cliExecute,
-  create,
-  use,
-  useSkill,
-  visitUrl,
-} from "kolmafia";
+import { canAdventure, cliExecute, create, use, useSkill, visitUrl } from "kolmafia";
 import {
   $classes,
   $effect,
@@ -31,6 +14,11 @@ import {
   have,
   SourceTerminal,
 } from "libram";
+
+import { CSStrategy, Macro } from "./combat";
+import { aprilTask, asdonTask, deckTask, potionTask, skillTask } from "./commons";
+import { CSQuest } from "./engine";
+import uniform from "./outfit";
 
 const BoozeDrop: CSQuest = {
   name: "Booze Drop",
@@ -68,9 +56,7 @@ const BoozeDrop: CSQuest = {
           canAttack: false,
         }),
       combat: new CSStrategy(() =>
-        Macro.skill($skill`Become a Bat`).skill(
-          $skill`Throw Latte on Opponent`,
-        ),
+        Macro.skill($skill`Become a Bat`).skill($skill`Throw Latte on Opponent`),
       ),
     },
     {
@@ -96,8 +82,7 @@ const BoozeDrop: CSQuest = {
       name: "Get Anticheese",
       ready: () => canAdventure($location`South of the Border`),
       completed: () => get("lastAnticheeseDay") > 0,
-      do: () =>
-        visitUrl("place.php?whichplace=desertbeach&action=db_nukehouse"),
+      do: () => visitUrl("place.php?whichplace=desertbeach&action=db_nukehouse"),
     },
     {
       name: "Government",

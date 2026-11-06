@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript",
-    "format": "eslint src --fix --ext .ts && NODE_OPTIONS=\"--experimental-strip-types\" prettier --write .",
-    "lint": "eslint src --ext .ts &&  NODE_OPTIONS=\"--experimental-strip-types\" prettier --check .",
+    "format": "eslint src --fix --ext .ts && prettier --write .",
+    "lint": "eslint src --ext .ts && prettier --check .",
     "watch": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript --watch",
     "install-mafia": "create-kolmafia-script --install"
   },
@@ -28,7 +28,7 @@
     "create-kolmafia-script": "^0.2.2",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-libram": "^0.5.3",
+    "eslint-plugin-libram": "^0.6.0",
     "jiti": "^2.6.1",
     "prettier": "^3.8.0",
     "rollup": "^4.55.3",
@@ -52,5 +52,8 @@
     "url": "https://github.com/spaghetti-squash/phccs/issues"
   },
   "homepage": "https://github.com/spaghetti-squash/phccs#readme",
-  "packageManager": "yarn@4.4.1"
+  "packageManager": "yarn@4.4.1",
+  "engines": {
+    "node": ">=24.2.0"
+  }
 }

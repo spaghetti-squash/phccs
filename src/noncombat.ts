@@ -1,3 +1,6 @@
+import { cliExecute } from "kolmafia";
+import { $effect, $effects, $familiar, $item, CommunityService, get, Horsery } from "libram";
+
 import {
   aprilTask,
   asdonTask,
@@ -9,16 +12,6 @@ import {
   songTask,
 } from "./commons";
 import { CSQuest } from "./engine";
-import { cliExecute } from "kolmafia";
-import {
-  $effect,
-  $effects,
-  $familiar,
-  $item,
-  CommunityService,
-  get,
-  Horsery,
-} from "libram";
 
 const Noncombat: CSQuest = {
   name: "Noncombat",
@@ -49,10 +42,7 @@ const Noncombat: CSQuest = {
     skillTask($effect`Feeling Lonely`),
     birdTask("Combat Rate", false),
     favouriteBirdTask("Combat Rate", false),
-    songTask(
-      $effect`The Sonata of Sneakiness`,
-      $effect`Fat Leon's Phat Loot Lyric`,
-    ),
+    songTask($effect`The Sonata of Sneakiness`, $effect`Fat Leon's Phat Loot Lyric`),
     restore($effects`Smooth Movements, The Sonata of Sneakiness`),
     {
       name: "Swim Sprints",

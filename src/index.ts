@@ -1,3 +1,5 @@
+import { logger, LogLevels, sinceKolmafiaRevision } from "libram";
+
 import BoozeDrop from "./boozedrop";
 import CoilWire from "./coilwire";
 import { CSEngine } from "./engine";
@@ -9,7 +11,6 @@ import Prologue from "./prologue";
 import Spell from "./spell";
 import StatTests from "./stattests";
 import Weapon from "./weapon";
-import { logger, LogLevels, sinceKolmafiaRevision } from "libram";
 
 export function main() {
   sinceKolmafiaRevision(28500);

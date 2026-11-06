@@ -1,13 +1,4 @@
 import {
-  birdTask,
-  favouriteBirdTask,
-  innerElf,
-  potionTask,
-  restoreBuffTasks,
-} from "./commons";
-import { CSQuest } from "./engine";
-import { CSTask } from "./lib";
-import {
   cliExecute,
   create,
   effectModifier,
@@ -31,6 +22,10 @@ import {
   have,
   RetroCape,
 } from "libram";
+
+import { birdTask, favouriteBirdTask, innerElf, potionTask, restoreBuffTasks } from "./commons";
+import { CSQuest } from "./engine";
+import { CSTask } from "./lib";
 
 const SKILL_BUFFS = {
   MUSCLE: $effects`Feeling Excited, Big, Song of Bravado, Rage of the Reindeer, Quiet Determination, Disdain of the War Snapper`,
@@ -67,9 +62,7 @@ function equalizeTasks(): CSTask[] {
     {
       name: `Create ${equalizerPotion}`,
       ready: () => have(equalizerFruit) && get("hasRange"),
-      completed: () =>
-        have(equalizerPotion) ||
-        have(effectModifier(equalizerPotion, "Effect")),
+      completed: () => have(equalizerPotion) || have(effectModifier(equalizerPotion, "Effect")),
       do: () => create(equalizerPotion),
       class: $classes`Seal Clubber, Turtle Tamer, Disco Bandit, Accordion Thief, Sauceror`,
     },
@@ -193,9 +186,7 @@ const Moxie: CSQuest = {
     ...skillBuffTasks("MOXIE"),
     birdTask("Moxie Percent"),
     favouriteBirdTask("Moxie Percent"),
-    ...$items`runproof mascara, confiscated love note, dollop of barbecue sauce`.map(
-      potionTask,
-    ),
+    ...$items`runproof mascara, confiscated love note, dollop of barbecue sauce`.map(potionTask),
     {
       name: "Rhinestones",
       completed: () => !have($item`rhinestone`),

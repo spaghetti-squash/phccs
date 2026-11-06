@@ -1,24 +1,3 @@
-import { CSStrategy, Macro } from "./combat";
-import {
-  beachTask,
-  buskTask,
-  favouriteBirdTask,
-  innerElf,
-  potionTask,
-  restore,
-  restoreBuffTasks,
-  skillTask,
-} from "./commons";
-import { CSQuest } from "./engine";
-import {
-  availableEmbers,
-  burnLibrams,
-  guildQuestZone,
-  peridotChoice,
-  SYNTH_EFFECT,
-  synthExp,
-} from "./lib";
-import uniform, { equipBluePlate } from "./outfit";
 import { OutfitSpec } from "grimoire-kolmafia";
 import {
   buy,
@@ -65,6 +44,28 @@ import {
   withProperties,
 } from "libram";
 
+import { CSStrategy, Macro } from "./combat";
+import {
+  beachTask,
+  buskTask,
+  favouriteBirdTask,
+  innerElf,
+  potionTask,
+  restore,
+  restoreBuffTasks,
+  skillTask,
+} from "./commons";
+import { CSQuest } from "./engine";
+import {
+  availableEmbers,
+  burnLibrams,
+  guildQuestZone,
+  peridotChoice,
+  SYNTH_EFFECT,
+  synthExp,
+} from "./lib";
+import uniform, { equipBluePlate } from "./outfit";
+
 const levellingComplete = get("csServicesPerformed").split(",").length > 1;
 let lovePotionConsidered = false;
 
@@ -83,8 +84,7 @@ const CastSkills = [
   },
   completed: () => (s.buff ? have(toEffect(s)) : s.timescast >= s.dailylimit),
   ready: () => myMp() >= mpCost(s) && !queenPrep,
-  outfit: () =>
-    uniform({ changes: { offhand: $item`April Shower Thoughts shield` } }),
+  outfit: () => uniform({ changes: { offhand: $item`April Shower Thoughts shield` } }),
 }));
 
 const generalStoreItem = byStat({
@@ -131,19 +131,12 @@ const Level: CSQuest = {
       1,
     ),
     buskTask($item`coconut shell`, $item`fresh coat of paint`, $item.none, 2),
-    buskTask(
-      $item`norwhal helmet`,
-      $item`fresh coat of paint`,
-      $item`union scalemail pants`,
-      3,
-    ),
+    buskTask($item`norwhal helmet`, $item`fresh coat of paint`, $item`union scalemail pants`, 3),
     buskTask($item.none, $item.none, $item`repaid diaper`, 4),
     {
       name: "Ember",
       ready: () =>
-        get("_beretBuskingUses") >= 5 &&
-        get("_loveTunnelUsed") &&
-        have($effect`Entauntauned`),
+        get("_beretBuskingUses") >= 5 && get("_loveTunnelUsed") && have($effect`Entauntauned`),
       completed: () => availableEmbers() <= 0,
       do: () => {
         buy($coinmaster`Sept-Ember Censer`, 1, $item`Mmm-brr! brand mouthwash`);
@@ -202,8 +195,7 @@ const Level: CSQuest = {
     {
       name: "Ten-Percent Bonus",
       completed: () => !have($item`a ten-percent bonus`),
-      outfit: () =>
-        uniform({ changes: { offhand: $item`familiar scrapbook` } }),
+      outfit: () => uniform({ changes: { offhand: $item`familiar scrapbook` } }),
       effects: byStat({ Mysticality: $effects`Inscrutable Gaze`, default: [] }),
       do: () => use(1, $item`a ten-percent bonus`),
     },
@@ -230,9 +222,7 @@ const Level: CSQuest = {
 
         if (
           numericModifier(loveEffect, myPrimestat().toString()) > 10 &&
-          Stat.all().every(
-            (stat) => numericModifier(loveEffect, stat.toString()) > -30,
-          ) &&
+          Stat.all().every((stat) => numericModifier(loveEffect, stat.toString()) > -30) &&
           numericModifier(loveEffect, "Maximum HP Percent") > -0.001
         ) {
           use(1, lovePotion);
@@ -271,9 +261,7 @@ const Level: CSQuest = {
     },
     {
       name: "Buy General Store Potion",
-      completed: () =>
-        have(generalStoreItem) ||
-        have(effectModifier(generalStoreItem, "Effect")),
+      completed: () => have(generalStoreItem) || have(effectModifier(generalStoreItem, "Effect")),
       do: () => buy(1, generalStoreItem),
     },
     potionTask(generalStoreItem),
@@ -306,9 +294,7 @@ const Level: CSQuest = {
       name: "Acquire Casting Items",
       completed: () => $items`turtle totem, saucepan`.every((i) => have(i)),
       do: () =>
-        $items`turtle totem, saucepan`.forEach(
-          (i) => !have(i) && cliExecute(`acquire ${i}`),
-        ),
+        $items`turtle totem, saucepan`.forEach((i) => !have(i) && cliExecute(`acquire ${i}`)),
     },
     ...CastSkills,
     {
@@ -467,19 +453,14 @@ const Level: CSQuest = {
       completed: () => have($item`very pointy crown`),
       ready: () =>
         !have($effect`Psalm of Pointiness`) ||
-        (myPrimestat() === $stat`Moxie` &&
-          myMp() >= mpCost($skill`Summon Love Song`)),
+        (myPrimestat() === $stat`Moxie` && myMp() >= mpCost($skill`Summon Love Song`)),
       do: () => {
         useSkill($skill`Cannelloni Cocoon`);
         if (!have($effect`Psalm of Pointiness`)) {
-          if (getActiveSongs().length >= 4)
-            uneffect($effect`Fat Leon's Phat Loot Lyric`);
+          if (getActiveSongs().length >= 4) uneffect($effect`Fat Leon's Phat Loot Lyric`);
           useSkill($skill`The Psalm of Pointiness`);
         }
-        while (
-          myPrimestat() === $stat`Moxie` &&
-          myMp() >= mpCost($skill`Summon Love Song`)
-        ) {
+        while (myPrimestat() === $stat`Moxie` && myMp() >= mpCost($skill`Summon Love Song`)) {
           useSkill($skill`Summon Love Song`);
         }
       },
@@ -504,9 +485,7 @@ const Level: CSQuest = {
           },
         });
       },
-      combat: new CSStrategy(() =>
-        Macro.tryBowl().throwLoveSongs().attack().repeat(),
-      ),
+      combat: new CSStrategy(() => Macro.tryBowl().throwLoveSongs().attack().repeat()),
       post: () => {
         queenPrep = false;
         uneffect($effect`Psalm of Pointiness`);
@@ -572,10 +551,7 @@ const Level: CSQuest = {
       do: $location`The Haiku Dungeon`,
       choices: peridotChoice($monster`amateur ninja`),
       combat: new CSStrategy(() =>
-        Macro.if_(
-          $monster`amateur ninja`,
-          Macro.skill($skill`Chest X-Ray`),
-        ).abort(),
+        Macro.if_($monster`amateur ninja`, Macro.skill($skill`Chest X-Ray`)).abort(),
       ),
       outfit: () =>
         uniform({
@@ -619,11 +595,7 @@ const Level: CSQuest = {
           )
           .if_(
             $monster`LOV Equivocator`,
-            Macro.step("pickpocket")
-              .delevel()
-              .easyFight()
-              .candyblast()
-              .defaultKill(),
+            Macro.step("pickpocket").delevel().easyFight().candyblast().defaultKill(),
           ),
       ),
       post: (): void => {
@@ -650,25 +622,18 @@ const Level: CSQuest = {
       name: "Tentacle",
       completed: () => get("_eldritchHorrorEvoked"),
       do: () =>
-        withProperties(
-          { autoAbortThreshold: -0.05, hpAutoRecoveryTarget: -0.05 },
-          () => {
-            try {
-              useSkill($skill`Evoke Eldritch Horror`);
-              runCombat();
-            } catch (e) {
-              print(`${e}`);
-            } finally {
-              if (
-                have($effect`Beaten Up`) ||
-                myHp() === 0 ||
-                !get("_lastCombatWon")
-              ) {
-                cliExecute("hottub");
-              }
+        withProperties({ autoAbortThreshold: -0.05, hpAutoRecoveryTarget: -0.05 }, () => {
+          try {
+            useSkill($skill`Evoke Eldritch Horror`);
+            runCombat();
+          } catch (e) {
+            print(`${e}`);
+          } finally {
+            if (have($effect`Beaten Up`) || myHp() === 0 || !get("_lastCombatWon")) {
+              cliExecute("hottub");
             }
-          },
-        ),
+          }
+        }),
       outfit: () => uniform(),
       combat: new CSStrategy(() => Macro.delevel().candyblast().defaultKill()),
     },
@@ -716,9 +681,7 @@ const Level: CSQuest = {
       completed: () => get("_questPartyFair") !== "unstarted",
       do: (): void => {
         visitUrl("adventure.php?snarfblat=528");
-        const choice = ["food", "booze"].includes(get("_questPartyFairQuest"))
-          ? 1
-          : 2;
+        const choice = ["food", "booze"].includes(get("_questPartyFairQuest")) ? 1 : 2;
         runChoice(choice);
       },
     },
@@ -744,54 +707,6 @@ const Level: CSQuest = {
           .repeat(),
       ),
     },
-    /*{
-      name: "Peridot NEP",
-      completed: () => !PeridotOfPeril.canImperil($location`The Neverending Party`),
-      do: $location`The Neverending Party`,
-      choices: peridotChoice($monster`jock`),
-      outfit: () => {
-
-        return uniform({
-          changes: {
-            acc3: $item`Peridot of Peril`,
-          },
-        });
-      },
-      combat: new CSStrategy(() =>
-        Macro.trySkill($skill`Feel Pride`)
-          .trySkill($skill`Feel Envy`)
-          .trySkill($skill`Bowl Sideways`)
-          .delevel()
-          .defaultKill()
-      ),
-    },
-    {
-      name: "Regular NEP",
-      completed: () => get("_neverendingPartyFreeTurns") >= 10,
-      do: $location`The Neverending Party`,
-      outfit: (): OutfitSpec => {
-
-        return uniform({
-          changes: {
-            shirt: $items`makeshift garbage shirt`,
-            ...(get("_sausageFights") > 4 ? {} : { offhand: $item`Kramco Sausage-o-Matic™` }),
-          },
-        });
-      },
-      combat: new CSStrategy(() =>
-        Macro.if_(
-          $effect`Inner Elf`,
-          Macro.if_(
-            `!hascombatitem ${$item`cosmic bowling ball`}`,
-            Macro.trySkill($skill`Feel Pride`)
-          )
-        )
-          .trySkill($skill`Bowl Sideways`)
-          .delevel()
-          .defaultKill()
-      ),
-      choices: { [1324]: 5 },
-    },*/
   ],
 };
 
